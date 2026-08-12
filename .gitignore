@@ -1,0 +1,24 @@
+# AIXSILICON HW Interface Repository — Git ignore
+
+# 生成产物（是否提交由 CI/红区工具决定，见 plan 第 8 节）
+# generated/docs/
+# generated/ipxact/
+# generated/catalog/
+
+# 临时文件
+*.tmp
+*.bak
+*~
+*.swp
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 构建产物
+build/
+fusesoc_lib/
+*.log

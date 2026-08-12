@@ -1,0 +1,126 @@
+# AIXSILICON HW Interface Contract — reg_native
+# 简化寄存器接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-REG-001
+  name: aix_reg_native
+  family: reg_native
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-REG-001
+  revision: "1.0"
+  note: "语义参考 PULP Register Interface，adapter 归 CBB"
+
+roles:
+  - id: initiator
+    aliases: [master]
+  - id: target
+    aliases: [slave]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: req
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: req_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: addr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: wdata
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+      - id: we
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+        description: "1=write, 0=read"
+      - id: be
+        from: initiator
+        to: target
+        width: "DATA_W / 8"
+        required: true
+        description: "byte enable（写）"
+
+  - id: rsp
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: rsp_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: rsp_ready
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: rdata
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: err
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  response_to_request: "in-order per outstanding"
+  error_encoding: "1 = error response (decerr/slverr aggregated)"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

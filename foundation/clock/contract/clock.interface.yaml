@@ -1,0 +1,76 @@
+# AIXSILICON HW Interface Contract — clock
+# 时钟接口（L0）：主时钟、派生时钟、clock enable、频率属性。
+schema_version: "1.0"
+
+interface:
+  id: IFC-CLK-001
+  name: aix_clock
+  family: clock
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-CLK-001
+  revision: "1.0"
+
+roles:
+  - id: controller
+    aliases: [source]
+  - id: endpoint
+    aliases: [destination]
+
+parameters:
+  - id: FREQ_HZ
+    type: uint
+    default: 0
+    constraints:
+      min: 0
+    description: 标称频率（0 表示未约束/由上层决定）。
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains: []
+
+channels:
+  - id: clock_line
+    handshake: none
+    clock: clk
+    signals:
+      - id: clk
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: clk_en
+        from: controller
+        to: endpoint
+        width: "1"
+        required: false
+        capability: gating
+      - id: clk_gen
+        from: controller
+        to: endpoint
+        width: "1"
+        required: false
+        capability: derived_clock
+
+capabilities:
+  - id: gating
+    default: false
+  - id: derived_clock
+    default: false
+
+semantics:
+  frequency_hz: "FREQ_HZ"
+  gating_off_state: "clock held at inactive level"
+  derived_clock_source: "declared via clk_gen"
+
+views:
+  packed_struct: false
+  sv_interface: true
+  flattened: true
+  ipxact: optional

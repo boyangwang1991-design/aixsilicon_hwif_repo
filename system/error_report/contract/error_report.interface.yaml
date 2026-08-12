@@ -1,0 +1,93 @@
+# AIXSILICON HW Interface Contract — error_report
+# 错误上报接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-ERR-001
+  name: aix_error_report
+  family: error_report
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-ERR-001
+  revision: "1.0"
+
+roles:
+  - id: source
+  - id: receiver
+
+parameters:
+  - id: SYNDROME_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: SOURCE_ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: report
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: err_valid
+        from: source
+        to: receiver
+        width: "1"
+        required: true
+      - id: err_ready
+        from: receiver
+        to: source
+        width: "1"
+        required: true
+      - id: err_severity
+        from: source
+        to: receiver
+        width: "1"
+        required: true
+        description: "0=recoverable, 1=fatal"
+      - id: err_syndrome
+        from: source
+        to: receiver
+        width: "SYNDROME_W"
+        required: true
+      - id: err_source_id
+        from: source
+        to: receiver
+        width: "SOURCE_ID_W"
+        required: false
+        capability: source_id
+
+capabilities:
+  - id: source_id
+    default: false
+
+semantics:
+  transfer: "err_valid && err_ready"
+  severity_encoding: "0=recoverable, 1=fatal"
+  fatal_behavior: "must not be silently dropped"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

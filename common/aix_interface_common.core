@@ -1,0 +1,33 @@
+CAPI=2:
+
+name: aix:interface:common:1.0.0
+description: AIXSILICON common interface types (bool/enum/ID/error code utilities)
+
+filesets:
+  rtl:
+    files:
+      - rtl/aix_common_pkg.sv
+    file_type: systemVerilogSource
+
+  include:
+    files:
+      - rtl/aix_common_typedef.svh:
+          is_include_file: true
+      - rtl/aix_common_assign.svh:
+          is_include_file: true
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/common_types.interface.yaml: {copyto: metadata/common_types.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl, include]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl, include]

@@ -1,0 +1,71 @@
+# AIXSILICON HW Interface Contract — event
+# 事件接口（L0）：pulse / level / toggle。
+schema_version: "1.0"
+
+interface:
+  id: IFC-EVT-001
+  name: aix_event
+  family: event
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-EVT-001
+  revision: "1.0"
+
+roles:
+  - id: source
+  - id: receiver
+
+parameters:
+  - id: EVENT_TYPE
+    type: enum
+    default: pulse
+    constraints:
+      enum: [pulse, level, toggle]
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: event_line
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: event
+        from: source
+        to: receiver
+        width: "1"
+        required: true
+      - id: event_ack
+        from: receiver
+        to: source
+        width: "1"
+        required: false
+        capability: acknowledged
+
+capabilities:
+  - id: acknowledged
+    default: false
+
+semantics:
+  event_type: "EVENT_TYPE"
+  pulse_width: "1 cycle for pulse type"
+  level_assertion: "level held until handled"
+
+views:
+  packed_struct: false
+  sv_interface: true
+  flattened: true
+  ipxact: optional

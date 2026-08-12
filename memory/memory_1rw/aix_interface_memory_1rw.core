@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:memory_1rw:1.0.0
+description: AIXSILICON single-port read/write memory interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_memory_1rw_pkg.sv
+      - rtl/aix_memory_1rw_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/memory_1rw.interface.yaml: {copyto: metadata/memory_1rw.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

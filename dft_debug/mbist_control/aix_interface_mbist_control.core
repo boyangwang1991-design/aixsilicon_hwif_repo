@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:mbist_control:0.1.0
+description: AIXSILICON MBIST control interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/mbist_control.interface.yaml: {copyto: metadata/mbist_control.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

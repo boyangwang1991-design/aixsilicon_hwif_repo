@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:clock_control:0.1.0
+description: AIXSILICON clock control interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/clock_control.interface.yaml: {copyto: metadata/clock_control.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

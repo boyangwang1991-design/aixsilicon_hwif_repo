@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:reset_control:0.1.0
+description: AIXSILICON reset control interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/reset_control.interface.yaml: {copyto: metadata/reset_control.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

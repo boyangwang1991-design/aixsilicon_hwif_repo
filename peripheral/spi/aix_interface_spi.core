@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:spi:0.1.0
+description: AIXSILICON SPI interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/spi.interface.yaml: {copyto: metadata/spi.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

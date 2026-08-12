@@ -1,0 +1,38 @@
+CAPI=2:
+
+name: aix:interface:axi:1.0.0
+description: AIXSILICON AXI4 interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_axi_pkg.sv
+      - rtl/aix_axi_if.sv
+      - rtl/aix_axi_flat_wrapper.sv
+    file_type: systemVerilogSource
+
+  include:
+    files:
+      - rtl/aix_axi_typedef.svh:
+          is_include_file: true
+      - rtl/aix_axi_assign.svh:
+          is_include_file: true
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/axi.interface.yaml: {copyto: metadata/axi.interface.yaml}
+      - contract/axi4_base.profile.yaml: {copyto: metadata/axi4_base.profile.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl, include]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl, include]

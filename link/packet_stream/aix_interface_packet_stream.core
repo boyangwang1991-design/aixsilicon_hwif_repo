@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:packet_stream:1.0.0
+description: AIXSILICON packet stream interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_packet_stream_pkg.sv
+      - rtl/aix_packet_stream_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/packet_stream.interface.yaml: {copyto: metadata/packet_stream.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

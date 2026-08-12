@@ -1,0 +1,64 @@
+# AIXSILICON HW Interface Profile Schema
+# Profile 是对基础接口能力的冻结组合，不得复制基础接口信号，只引用基础接口 ID。
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://aixsilicon.com/schema/interface_profile.schema.yaml"
+title: "AIXSILICON HW Interface Profile"
+description: >-
+  冻结参数/能力组合，供 IP 配置、SoCGen 与 VIP 引用。Profile 必须引用
+  Interface Contract（interface），并仅声明 capabilities / parameter_constraints。
+type: object
+additionalProperties: false
+required:
+  - profile
+properties:
+  profile:
+    type: object
+    additionalProperties: false
+    required:
+      - id
+      - interface
+      - version
+      - capabilities
+      - compatibility_class
+    properties:
+      id:
+        type: string
+        pattern: "^IFC-PROFILE-[A-Z0-9_-]+$"
+        description: 稳定 Profile ID。
+      interface:
+        type: string
+        description: 引用的基础接口 ID（IFC-xxx-001），不复制信号。
+      version:
+        type: string
+        pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+      owner:
+        type: string
+      lifecycle:
+        type: string
+        enum: [draft, reviewed, qualified, proven, deprecated]
+      capabilities:
+        type: object
+        additionalProperties:
+          type: string
+          enum: [required, optional, forbidden]
+        description: 键为 Capability ID，值为冻结状态。
+      parameter_constraints:
+        type: object
+        additionalProperties:
+          oneOf:
+            - type: array
+              description: 允许的取值列表。
+            - type: object
+              additionalProperties: false
+              properties:
+                min: {}
+                max: {}
+                multiple_of: {type: number}
+                fixed: {}
+              description: 范围或固定值约束。
+        description: 键为参数 ID。
+      compatibility_class:
+        type: string
+        description: 兼容性类别标识，例如 packet_stream_v1。
+      description:
+        type: string

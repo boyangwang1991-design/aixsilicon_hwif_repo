@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:uart:0.1.0
+description: AIXSILICON UART pin interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/uart.interface.yaml: {copyto: metadata/uart.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

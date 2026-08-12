@@ -1,0 +1,124 @@
+# AIXSILICON HW Interface Contract — apb
+# AMBA APB 端点契约（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-APB-001
+  name: aix_apb
+  family: apb
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: commercial
+  document_id: AMBA-APB-PROTOCOL
+  revision: "APB4"
+  url: https://developer.arm.com/Architectures/AMBA
+
+roles:
+  - id: initiator
+    aliases: [manager, master]
+  - id: target
+    aliases: [subordinate, slave]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: apb
+    handshake: apb
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: psel
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: penable
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: paddr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: pwrite
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: pwdata
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+      - id: pstrb
+        from: initiator
+        to: target
+        width: "DATA_W / 8"
+        required: false
+        capability: write_strobe
+      - id: pprot
+        from: initiator
+        to: target
+        width: "3"
+        required: false
+        capability: protection
+      - id: prdata
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: pready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: pslverr
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities:
+  - id: write_strobe
+    default: false
+  - id: protection
+    default: false
+
+semantics:
+  transfer: "PSEL && PENABLE && PREADY"
+  setup_phase: "PSEL asserted without PENABLE"
+  access_phase: "PSEL && PENABLE; completes when PREADY"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

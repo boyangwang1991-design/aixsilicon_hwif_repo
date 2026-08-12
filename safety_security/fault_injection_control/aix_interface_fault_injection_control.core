@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:fault_injection_control:0.1.0
+description: AIXSILICON fault injection control interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/fault_injection_control.interface.yaml: {copyto: metadata/fault_injection_control.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

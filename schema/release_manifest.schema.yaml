@@ -1,0 +1,96 @@
+# AIXSILICON HW Interface Release Manifest Schema
+# Release 包元数据：SemVer、来源、质量、SBOM、hash 与兼容性指纹。
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://aixsilicon.com/schema/release_manifest.schema.yaml"
+title: "AIXSILICON HW Interface Release Manifest"
+type: object
+additionalProperties: false
+required:
+  - schema_version
+  - release
+  - assets
+  - quality
+  - provenance
+properties:
+  schema_version:
+    type: string
+    const: "1.0"
+
+  release:
+    type: object
+    additionalProperties: false
+    required: [vlnv, semantic_version, date, lifecycle]
+    properties:
+      vlnv:
+        type: string
+        description: 例如 aix:interface:axi:1.0.0。
+      semantic_version:
+        type: string
+        pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+      date:
+        type: string
+        format: date
+      lifecycle:
+        type: string
+        enum: [draft, reviewed, qualified, proven, deprecated]
+      release_notes:
+        type: string
+
+  assets:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [path, sha256]
+      properties:
+        path: {type: string}
+        type:
+          type: string
+          enum: [contract, profile, rtl, doc, ipxact, binding, core, report, sbom]
+        sha256:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        description: {type: string}
+
+  quality:
+    type: object
+    additionalProperties: false
+    properties:
+      contract_gate: {type: string, enum: [pass, fail, na]}
+      semantic_gate: {type: string, enum: [pass, fail, na]}
+      hdl_gate: {type: string, enum: [pass, fail, na]}
+      roundtrip_gate: {type: string, enum: [pass, fail, na]}
+      consumer_gate: {type: string, enum: [pass, fail, na]}
+      compatibility_gate: {type: string, enum: [pass, fail, na]}
+      tools:
+        type: array
+        items: {type: string}
+        description: 编译/检查工具基线（VCS、Xcelium、Questa、Verilator...）。
+      report_path:
+        type: string
+
+  provenance:
+    type: object
+    additionalProperties: false
+    required: [repository, revision, generator]
+    properties:
+      repository: {type: string}
+      revision:
+        type: string
+        description: 完整 Git commit SHA。
+      generator:
+        type: string
+        description: 生成器/工具名与版本。
+      generated_at: {type: string, format: date-time}
+      sbom_path: {type: string}
+      type_fingerprint:
+        type: string
+        description: 兼容性类型指纹。
+
+  deprecated:
+    type: object
+    additionalProperties: false
+    properties:
+      since: {type: string}
+      replacement: {type: string}
+      migration_guide: {type: string}

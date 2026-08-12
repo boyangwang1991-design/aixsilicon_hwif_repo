@@ -1,0 +1,94 @@
+# AIXSILICON HW Interface Compatibility Schema
+# 定义接口间兼容性规则，Compatibility Checker 仅能输出三类结论：
+# DIRECT / ADAPTER_REQUIRED / INCOMPATIBLE。
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://aixsilicon.com/schema/compatibility.schema.yaml"
+title: "AIXSILICON HW Interface Compatibility"
+type: object
+additionalProperties: false
+required:
+  - source_interface
+  - target_interface
+  - result
+properties:
+  source_interface:
+    type: string
+    description: 源接口 VLNV 或 ID。
+  source_profile:
+    type: string
+  target_interface:
+    type: string
+    description: 目标接口 VLNV 或 ID。
+  target_profile:
+    type: string
+
+  # 三层兼容性判定
+  protocol_compatibility:
+    type: object
+    additionalProperties: false
+    properties:
+      family: {type: string}
+      specification_version: {type: string}
+      compatible:
+        type: boolean
+      notes: {type: string}
+
+  profile_compatibility:
+    type: object
+    additionalProperties: false
+    properties:
+      compatible:
+        type: boolean
+      missing_capabilities:
+        type: array
+        items: {type: string}
+      parameter_mismatches:
+        type: array
+        items: {type: string}
+      notes: {type: string}
+
+  binding_compatibility:
+    type: object
+    additionalProperties: false
+    properties:
+      compatible:
+        type: boolean
+      role_mismatches:
+        type: array
+        items: {type: string}
+      signal_mismatches:
+        type: array
+        items: {type: string}
+      clock_mismatch:
+        type: boolean
+      reset_mismatch:
+        type: boolean
+      power_mismatch:
+        type: boolean
+      notes: {type: string}
+
+  result:
+    type: string
+    enum: [DIRECT, ADAPTER_REQUIRED, INCOMPATIBLE]
+    description: 最终判定结论。
+
+  adapter:
+    type: object
+    additionalProperties: false
+    description: 当 result 为 ADAPTER_REQUIRED 时，必须引用已认证 CBB Adapter。
+    properties:
+      adapter_id: {type: string}
+      cbb_vlnv: {type: string}
+      limitations:
+        type: array
+        items: {type: string}
+
+  evidence:
+    type: array
+    items:
+      type: object
+      additionalProperties: true
+    description: 判定依据与测试证据。
+
+  description:
+    type: string

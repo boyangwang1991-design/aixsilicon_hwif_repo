@@ -1,0 +1,67 @@
+# AIXSILICON HW Interface Contract — reset
+# 复位接口（L0）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-RST-001
+  name: aix_reset
+  family: reset
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-RST-001
+  revision: "1.0"
+
+roles:
+  - id: controller
+    aliases: [source]
+  - id: endpoint
+    aliases: [destination]
+
+parameters:
+  - id: POLARITY
+    type: enum
+    default: active_low
+    constraints:
+      enum: [active_low, active_high]
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: reset_line
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: rst
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  polarity: "POLARITY"
+  assertion: asynchronous
+  deassertion: synchronous
+  output_during_reset: "must be in inactive/safe state"
+  can_interrupt_transactions: true
+
+views:
+  packed_struct: false
+  sv_interface: true
+  flattened: true
+  ipxact: optional

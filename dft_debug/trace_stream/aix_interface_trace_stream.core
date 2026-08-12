@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:trace_stream:0.1.0
+description: AIXSILICON trace stream interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/trace_stream.interface.yaml: {copyto: metadata/trace_stream.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

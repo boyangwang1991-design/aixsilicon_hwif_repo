@@ -1,0 +1,123 @@
+# AIXSILICON HW Interface Contract — obi（骨架）
+# RISC-V OBI 接口（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-OBI-001
+  name: aix_obi
+  family: obi
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: open
+  document_id: OpenHW-OBI
+  revision: "OBI v1.0"
+  url: https://docs.openhwgroup.org/projects/cv32e40p-user-manual/en/latest/intro.html
+
+roles:
+  - id: initiator
+    aliases: [master]
+  - id: target
+    aliases: [slave]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 32
+      multiple_of: 32
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: req
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: req_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: req_addr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: req_wdata
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+      - id: req_we
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: req_be
+        from: initiator
+        to: target
+        width: "DATA_W / 8"
+        required: true
+
+  - id: rsp
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: rsp_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: rsp_ready
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: rsp_rdata
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: rsp_err
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  in_order_single: "single in-order request/response"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

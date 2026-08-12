@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:req_ack:1.0.0
+description: AIXSILICON request/acknowledge interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_req_ack_pkg.sv
+      - rtl/aix_req_ack_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/req_ack.interface.yaml: {copyto: metadata/req_ack.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

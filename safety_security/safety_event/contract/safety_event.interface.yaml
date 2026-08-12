@@ -1,0 +1,109 @@
+# AIXSILICON HW Interface Contract — safety_event
+# 安全事件接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-SAFE-001
+  name: aix_safety_event
+  family: safety_event
+  semantic_version: 1.0.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-SAFE-001
+  revision: "1.0"
+  note: "与 SafeSight / FUSA Skill Suite / PIC / SoCGen 保持 ID 一致"
+
+roles:
+  - id: source
+  - id: receiver
+
+parameters:
+  - id: FAULT_ID_W
+    type: uint
+    default: 16
+    constraints:
+      min: 1
+  - id: TIMESTAMP_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DOMAIN_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: event
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: ev_valid
+        from: source
+        to: receiver
+        width: "1"
+        required: true
+      - id: ev_ready
+        from: receiver
+        to: source
+        width: "1"
+        required: true
+      - id: ev_fault_id
+        from: source
+        to: receiver
+        width: "FAULT_ID_W"
+        required: true
+      - id: ev_severity
+        from: source
+        to: receiver
+        width: "1"
+        required: true
+        description: "0=recoverable, 1=fatal"
+      - id: ev_domain
+        from: source
+        to: receiver
+        width: "DOMAIN_W"
+        required: true
+      - id: ev_timestamp
+        from: source
+        to: receiver
+        width: "TIMESTAMP_W"
+        required: true
+      - id: ev_ack
+        from: receiver
+        to: source
+        width: "1"
+        required: false
+        capability: acknowledged
+
+capabilities:
+  - id: acknowledged
+    default: false
+
+semantics:
+  transfer: "ev_valid && ev_ready"
+  severity: "recoverable vs fatal must not be silently downgraded"
+  fatal: "fatal event must reach a safety endpoint"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

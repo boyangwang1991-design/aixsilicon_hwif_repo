@@ -1,0 +1,78 @@
+# AIXSILICON HW Interface Contract — fault_injection_control（骨架）
+# 故障注入控制接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-FI-001
+  name: aix_fault_injection_control
+  family: fault_injection_control
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-FI-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: inject
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: inject_en
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: inject_type
+        from: controller
+        to: endpoint
+        width: "4"
+        required: true
+      - id: inject_target
+        from: controller
+        to: endpoint
+        width: "32"
+        required: true
+      - id: inject_trigger
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: inject_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  qualified: "injection must be safety-qualified and gated"
+  trigger: "one-shot trigger per injection"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

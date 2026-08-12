@@ -1,0 +1,123 @@
+# AIXSILICON HW Interface Contract — memory_1r1w
+# 独立读写端口内存接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-M1R1W-001
+  name: aix_memory_1r1w
+  family: memory_1r1w
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-M1R1W-001
+  revision: "1.0"
+
+roles:
+  - id: requester
+    aliases: [host]
+  - id: memory
+    aliases: [device]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: write_port
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: wreq_valid
+        from: requester
+        to: memory
+        width: "1"
+        required: true
+      - id: wreq_ready
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: waddr
+        from: requester
+        to: memory
+        width: "ADDR_W"
+        required: true
+      - id: wdata
+        from: requester
+        to: memory
+        width: "DATA_W"
+        required: true
+      - id: wbe
+        from: requester
+        to: memory
+        width: "DATA_W / 8"
+        required: true
+
+  - id: read_port
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: rreq_valid
+        from: requester
+        to: memory
+        width: "1"
+        required: true
+      - id: rreq_ready
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: raddr
+        from: requester
+        to: memory
+        width: "ADDR_W"
+        required: true
+      - id: rdata
+        from: memory
+        to: requester
+        width: "DATA_W"
+        required: true
+      - id: rsp_valid
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  collision_policy: "read-during-write must be declared (old/new data)"
+  independent_ports: true
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

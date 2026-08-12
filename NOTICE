@@ -1,0 +1,19 @@
+AIXSILICON HW Interface Repository
+
+Copyright (c) 2026 AIXSILICON
+
+This repository is the hardware interface contract center for AIXSILICON IP, CBB,
+VIP and SoC integration flows.
+
+Third-party content referenced or derived from open-source projects (including
+but not limited to PULP-platform AXI / register_interface / common_cells /
+axi_stream, lowRISC OpenTitan, OpenHW OBI) must be reviewed file-by-file for
+license compliance before inclusion. See CONTRIBUTING.md and LICENSES/ for
+details.
+
+This product includes software developed by the following projects:
+  - PULP-platform (Solderpad / Apache-2.0, subject to per-file review)
+  - lowRISC / OpenTitan (Apache-2.0, methodology reference only)
+  - OpenHW Group (methodology reference only)
+
+All license texts are located in the LICENSES/ directory.

@@ -1,0 +1,39 @@
+# AIXSILICON Release Manifest 示例 — aix_axi
+# 正式 Release 由 tools/package_release/ 流水线生成，本文件为框架示例。
+schema_version: "1.0"
+
+release:
+  vlnv: aix:interface:axi:1.0.0
+  semantic_version: 1.0.0
+  date: 2026-08-12
+  lifecycle: draft
+  release_notes: "框架初始化示例，尚未满足发布 Gate（G0-G6）。"
+
+assets:
+  - path: contract/axi.interface.yaml
+    type: contract
+    sha256: 0000000000000000000000000000000000000000000000000000000000000000
+  - path: contract/axi4_base.profile.yaml
+    type: profile
+    sha256: 0000000000000000000000000000000000000000000000000000000000000000
+  - path: rtl/aix_axi_pkg.sv
+    type: rtl
+    sha256: 0000000000000000000000000000000000000000000000000000000000000000
+  - path: rtl/aix_axi_if.sv
+    type: rtl
+    sha256: 0000000000000000000000000000000000000000000000000000000000000000
+
+quality:
+  contract_gate: na
+  semantic_gate: na
+  hdl_gate: na
+  roundtrip_gate: na
+  consumer_gate: na
+  compatibility_gate: na
+  tools: []
+
+provenance:
+  repository: controlled-repository-url
+  revision: full-git-commit-sha
+  generator: aix-view-generate/0.0.0
+  type_fingerprint: sha256:0000000000000000000000000000000000000000000000000000000000000000

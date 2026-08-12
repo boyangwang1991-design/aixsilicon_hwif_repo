@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aix:interface:safety_event:1.0.0
+description: AIXSILICON safety event interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_safety_event_pkg.sv
+      - rtl/aix_safety_event_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/safety_event.interface.yaml: {copyto: metadata/safety_event.interface.yaml}
+      - contract/safety_event_v1.profile.yaml: {copyto: metadata/safety_event_v1.profile.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

@@ -1,0 +1,104 @@
+# AIXSILICON HW Interface Contract — ready_valid
+# 就绪/有效流式握手接口（L0）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-RV-001
+  name: aix_ready_valid
+  family: ready_valid
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-RV-001
+  revision: "1.0"
+
+roles:
+  - id: source
+    aliases: [transmitter]
+  - id: sink
+    aliases: [receiver]
+  - id: monitor
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: USER_W
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: payload
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: valid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: ready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: data
+        from: source
+        to: sink
+        width: "DATA_W"
+        required: true
+      - id: keep
+        from: source
+        to: sink
+        width: "DATA_W / 8"
+        capability: byte_keep
+      - id: last
+        from: source
+        to: sink
+        width: "1"
+        capability: packet_boundary
+      - id: user
+        from: source
+        to: sink
+        width: "USER_W"
+        capability: user_sideband
+
+capabilities:
+  - id: byte_keep
+    default: false
+  - id: packet_boundary
+    default: false
+  - id: user_sideband
+    default: false
+
+semantics:
+  transfer: "valid && ready"
+  payload_stable_while_stalled: true
+  combinational_ready_to_valid: forbidden
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

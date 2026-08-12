@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:obi:0.1.0
+description: AIXSILICON RISC-V OBI interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/obi.interface.yaml: {copyto: metadata/obi.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

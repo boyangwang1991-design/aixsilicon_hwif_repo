@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:noc_flit:0.1.0
+description: AIXSILICON NoC flit interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/noc_flit.interface.yaml: {copyto: metadata/noc_flit.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

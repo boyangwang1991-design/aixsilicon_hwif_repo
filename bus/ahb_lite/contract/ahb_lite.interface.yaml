@@ -1,0 +1,121 @@
+# AIXSILICON HW Interface Contract — ahb_lite（骨架）
+# AMBA AHB-Lite 端点契约（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-AHB-001
+  name: aix_ahb_lite
+  family: ahb_lite
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: commercial
+  document_id: AMBA-AHB-PROTOCOL
+  revision: "AHB-Lite"
+  url: https://developer.arm.com/Architectures/AMBA
+
+roles:
+  - id: initiator
+    aliases: [manager, master]
+  - id: target
+    aliases: [subordinate, slave]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: ahb
+    handshake: ahb
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: haddr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: hwrite
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: htrans
+        from: initiator
+        to: target
+        width: "2"
+        required: true
+      - id: hsize
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: hburst
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: hprot
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: hwdata
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+      - id: hready_in
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: hresp
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: hrdata
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: hready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  pipelined: "address phase and data phase overlap"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

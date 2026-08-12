@@ -1,0 +1,17 @@
+# AIXSILICON VIP Binding 示例 — AXI4
+binding:
+  interface: aix:interface:axi:1.0.0
+  target: aix:vip:axi:1.0.0
+  kind: vip
+  role_map:
+    initiator: active_master
+    target: active_slave
+    monitor: passive
+  sv_interface: aix_axi_if
+  transaction_type: aix_axi_item
+  parameters:
+    IdWidth: 8
+    AddrWidth: 64
+    DataWidth: 64
+    UserWidth: 1
+  description: AXI4 VIP 绑定映射示例。

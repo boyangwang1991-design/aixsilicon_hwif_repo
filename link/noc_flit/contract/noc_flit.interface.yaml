@@ -1,0 +1,114 @@
+# AIXSILICON HW Interface Contract — noc_flit（骨架）
+# NoC flit 接口（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-NOC-001
+  name: aix_noc_flit
+  family: noc_flit
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-NOC-001
+  revision: "0.1"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters:
+  - id: FLIT_W
+    type: uint
+    default: 128
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: VC_W
+    type: uint
+    default: 2
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: flit
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: flit_valid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: flit_ready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: flit_data
+        from: source
+        to: sink
+        width: "FLIT_W"
+        required: true
+      - id: flit_type
+        from: source
+        to: sink
+        width: "2"
+        required: true
+        description: "0=header, 1=body, 2=tail"
+      - id: flit_vc
+        from: source
+        to: sink
+        width: "VC_W"
+        required: true
+      - id: flit_route
+        from: source
+        to: sink
+        width: "8"
+        required: false
+        capability: routing
+      - id: flit_error
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: error_sideband
+      - id: flit_poison
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: poison
+
+capabilities:
+  - id: routing
+    default: false
+  - id: error_sideband
+    default: false
+  - id: poison
+    default: false
+
+semantics:
+  flit_sequence: "header ... body ... tail"
+  poison: "marks packet as invalid end-to-end"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

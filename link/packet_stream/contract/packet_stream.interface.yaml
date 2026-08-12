@@ -1,0 +1,127 @@
+# AIXSILICON HW Interface Contract — packet_stream
+# 包流接口（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-PS-001
+  name: aix_packet_stream
+  family: packet_stream
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-PS-001
+  revision: "1.0"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: CHANNEL_W
+    type: uint
+    default: 4
+    constraints:
+      min: 1
+  - id: USER_W
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: packet
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: valid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: ready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: data
+        from: source
+        to: sink
+        width: "DATA_W"
+        required: true
+      - id: sop
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: eop
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: byte_enable
+        from: source
+        to: sink
+        width: "DATA_W / 8"
+        required: false
+        capability: byte_enable
+      - id: channel
+        from: source
+        to: sink
+        width: "CHANNEL_W"
+        required: false
+        capability: channel
+      - id: error
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: error_sideband
+      - id: user
+        from: source
+        to: sink
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+capabilities:
+  - id: byte_enable
+    default: false
+  - id: channel
+    default: false
+  - id: error_sideband
+    default: false
+  - id: user_sideband
+    default: false
+
+semantics:
+  transfer: "valid && ready"
+  packet_boundary: "sop marks start, eop marks end of a packet"
+  error: "error asserted on final beat marks packet as bad"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

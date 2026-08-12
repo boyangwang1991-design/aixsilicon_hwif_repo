@@ -1,0 +1,95 @@
+# AIXSILICON HW Interface Contract — interrupt
+# 中断接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-INT-001
+  name: aix_interrupt
+  family: interrupt
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-INT-001
+  revision: "1.0"
+
+roles:
+  - id: source
+    aliases: [sender, interrupt_source]
+  - id: receiver
+    aliases: [target, interrupt_receiver]
+
+parameters:
+  - id: WIDTH
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+    description: 中断向量宽度（多中断聚合）。
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: interrupt_line
+    handshake: none
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: irq
+        from: source
+        to: receiver
+        width: "WIDTH"
+        required: true
+        description: 中断向量（level 或 pulse，由能力决定）。
+      - id: irq_ack
+        from: receiver
+        to: source
+        width: "WIDTH"
+        required: false
+        capability: acknowledged
+      - id: irq_polarity
+        from: source
+        to: receiver
+        width: "WIDTH"
+        required: false
+        capability: polarity_config
+
+capabilities:
+  - id: level
+    default: false
+    description: level 型中断（保持直到被处理）。
+  - id: pulse
+    default: false
+    description: pulse 型中断（单周期脉冲）。
+  - id: vector
+    default: false
+    description: 支持多比特向量中断。
+  - id: acknowledged
+    default: false
+    description: 提供 irq_ack 应答信号。
+  - id: polarity_config
+    default: false
+    description: 可配置中断极性。
+
+semantics:
+  level_assertion: "level held high/low until handled or acknowledged"
+  pulse_width: "single cycle"
+  vector_bit: "each bit is an independent interrupt"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

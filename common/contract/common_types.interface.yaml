@@ -1,0 +1,49 @@
+# AIXSILICON HW Interface Contract — common_types
+# 所有接口族共用的基础语义类型（bool / enum / ID / error code / 工具）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-COMMON-001
+  name: aix_common
+  family: common
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-COMMON-001
+  revision: "1.0"
+
+roles:
+  - id: generic
+    description: 通用工具接口，无特定角色约束。
+
+parameters: []
+
+clock_domains: []
+
+reset_domains: []
+
+# 本接口主要定义类型字典，而非物理通道。
+# 通道留空由各派生接口按需引用类型定义。
+channels:
+  - id: type_library
+    handshake: none
+    signals: []
+
+capabilities: []
+
+semantics:
+  # bool 定义
+  bool_true: "1'b1"
+  bool_false: "1'b0"
+
+views:
+  packed_struct: true
+  sv_interface: false
+  flattened: false
+  ipxact: none
+  notes: >-
+    common_types 以 SV package 类型字典为 L3 视图；
+    不提供 interface/modport 或扁平端口。

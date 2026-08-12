@@ -1,0 +1,125 @@
+# AIXSILICON HW Interface Contract — fifo_push_pop
+# FIFO 推/弹接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-FIFO-001
+  name: aix_fifo_push_pop
+  family: fifo_push_pop
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-FIFO-001
+  revision: "1.0"
+
+roles:
+  - id: producer
+  - id: consumer
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DEPTH_LOG2
+    type: uint
+    default: 4
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: push
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: push_valid
+        from: producer
+        to: consumer
+        width: "1"
+        required: true
+      - id: push_ready
+        from: consumer
+        to: producer
+        width: "1"
+        required: true
+        description: "0 when full"
+      - id: push_data
+        from: producer
+        to: consumer
+        width: "DATA_W"
+        required: true
+
+  - id: pop
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: pop_valid
+        from: consumer
+        to: producer
+        width: "1"
+        required: true
+      - id: pop_ready
+        from: producer
+        to: consumer
+        width: "1"
+        required: true
+        description: "0 when empty"
+      - id: pop_data
+        from: producer
+        to: consumer
+        width: "DATA_W"
+        required: true
+
+  - id: status
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: full
+        from: consumer
+        to: producer
+        width: "1"
+        required: true
+      - id: empty
+        from: consumer
+        to: producer
+        width: "1"
+        required: true
+      - id: level
+        from: consumer
+        to: producer
+        width: "DEPTH_LOG2 + 1"
+        required: true
+
+capabilities: []
+
+semantics:
+  overflow_policy: "must be declared (drop/error/block)"
+  underflow_policy: "must be declared (stall/error/zero-fill)"
+  push_transfer: "push_valid && push_ready && !full"
+  pop_transfer: "pop_valid && pop_ready && !empty"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

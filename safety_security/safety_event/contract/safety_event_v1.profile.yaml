@@ -1,0 +1,14 @@
+# AIXSILICON HW Interface Profile — Safety Event v1
+profile:
+  id: IFC-PROFILE-SAFE-EVT-1
+  interface: IFC-SAFE-001
+  version: 1.0.0
+  owner: hw-fusa
+  lifecycle: draft
+  capabilities:
+    acknowledged: optional
+  parameter_constraints:
+    FAULT_ID_W: [16]
+    TIMESTAMP_W: [32]
+  compatibility_class: safety_event_v1
+  description: Safety Event v1 Profile（对应 plan 第 12.2 节 safety_event_v1）。

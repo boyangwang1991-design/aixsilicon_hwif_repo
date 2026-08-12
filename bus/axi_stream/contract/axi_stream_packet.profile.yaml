@@ -1,0 +1,16 @@
+# AIXSILICON HW Interface Profile — AXI-Stream Packet
+profile:
+  id: IFC-PROFILE-AXIS-PACKET-1
+  interface: IFC-AXIS-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    byte_keep: required
+    packet_boundary: required
+    user_sideband: optional
+    stream_id: optional
+  parameter_constraints:
+    DATA_W: [32, 64, 128, 256]
+  compatibility_class: axi_stream_packet_v1
+  description: AXI-Stream Packet Profile（对应 plan 第 12.2 节 axi_stream_packet_v1）。

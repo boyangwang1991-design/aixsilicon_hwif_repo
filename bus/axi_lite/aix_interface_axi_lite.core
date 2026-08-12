@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aix:interface:axi_lite:1.0.0
+description: AIXSILICON AXI4-Lite interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_axi_lite_pkg.sv
+      - rtl/aix_axi_lite_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/axi_lite.interface.yaml: {copyto: metadata/axi_lite.interface.yaml}
+      - contract/axi_lite_csr.profile.yaml: {copyto: metadata/axi_lite_csr.profile.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

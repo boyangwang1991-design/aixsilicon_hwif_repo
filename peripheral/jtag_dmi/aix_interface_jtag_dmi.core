@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:jtag_dmi:0.1.0
+description: AIXSILICON JTAG/DMI interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/jtag_dmi.interface.yaml: {copyto: metadata/jtag_dmi.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

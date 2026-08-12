@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:ahb_lite:0.1.0
+description: AIXSILICON AHB-Lite interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/ahb_lite.interface.yaml: {copyto: metadata/ahb_lite.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

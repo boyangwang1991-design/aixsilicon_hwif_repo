@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:power_state:0.1.0
+description: AIXSILICON power state interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/power_state.interface.yaml: {copyto: metadata/power_state.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

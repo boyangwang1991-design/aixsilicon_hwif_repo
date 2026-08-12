@@ -1,0 +1,74 @@
+# AIXSILICON HW Interface Contract — reset_control（骨架）
+# 复位控制接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-RC-001
+  name: aix_reset_control
+  family: reset_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-RC-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: ctrl
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: reset_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: reset_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: reset_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: reset_cause
+        from: endpoint
+        to: controller
+        width: "8"
+        required: false
+        capability: cause_report
+
+capabilities:
+  - id: cause_report
+    default: false
+
+semantics:
+  handshake: "req held until ack; domain reset handshake"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

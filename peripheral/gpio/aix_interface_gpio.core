@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:gpio:0.1.0
+description: AIXSILICON GPIO interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/gpio.interface.yaml: {copyto: metadata/gpio.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

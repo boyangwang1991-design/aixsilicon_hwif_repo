@@ -1,0 +1,131 @@
+# AIXSILICON HW Interface Contract — axi_stream
+# AMBA AXI-Stream 端点契约（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-AXIS-001
+  name: aix_axi_stream
+  family: axi_stream
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: commercial
+  document_id: AMBA-AXI-STREAM-PROTOCOL
+  revision: "AXI-Stream"
+  url: https://developer.arm.com/Architectures/AMBA
+
+roles:
+  - id: source
+    aliases: [transmitter, master]
+  - id: sink
+    aliases: [receiver, slave]
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: DEST_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: USER_W
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: stream
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: tvalid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: tready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: tdata
+        from: source
+        to: sink
+        width: "DATA_W"
+        required: true
+      - id: tkeep
+        from: source
+        to: sink
+        width: "DATA_W / 8"
+        required: false
+        capability: byte_keep
+      - id: tlast
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: packet_boundary
+      - id: tuser
+        from: source
+        to: sink
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+      - id: tid
+        from: source
+        to: sink
+        width: "ID_W"
+        required: false
+        capability: stream_id
+      - id: tdest
+        from: source
+        to: sink
+        width: "DEST_W"
+        required: false
+        capability: stream_id
+
+capabilities:
+  - id: byte_keep
+    default: false
+  - id: packet_boundary
+    default: false
+  - id: user_sideband
+    default: false
+  - id: stream_id
+    default: false
+
+semantics:
+  transfer: "tvalid && tready"
+  payload_stable_while_stalled: true
+  packet_termination: "tlast asserts on final beat of packet"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

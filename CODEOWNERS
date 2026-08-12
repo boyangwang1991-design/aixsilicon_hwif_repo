@@ -1,0 +1,47 @@
+# AIXSILICON HW Interface Repository - Code Owners
+# 规则：越靠后越优先；按计划第 25 节 P0 团队分工预留。
+
+# 全局默认（接口/SoC 架构师）
+* @aixsilicon/hw-interface-arch
+
+# 公共底座与 Schema（架构师 + 工具工程师）
+/schema/            @aixsilicon/hw-interface-arch @aixsilicon/hw-tools
+/common/            @aixsilicon/hw-interface-arch @aixsilicon/hw-rtl
+/tools/             @aixsilicon/hw-tools
+
+# 基础语义接口（L0）
+/foundation/        @aixsilicon/hw-interface-arch @aixsilicon/hw-rtl
+
+# 系统控制接口（L1）
+/system/            @aixsilicon/hw-interface-arch @aixsilicon/hw-rtl
+
+# 存储与寄存器接口（L2）
+/memory/            @aixsilicon/hw-rtl @aixsilicon/hw-verification
+
+# 总线与流接口（L3）
+/bus/               @aixsilicon/hw-rtl @aixsilicon/hw-verification
+
+# 链路接口（L3）
+/link/              @aixsilicon/hw-rtl
+
+# 外设接口（L4）
+/peripheral/        @aixsilicon/hw-rtl
+
+# 调试与测试（L5）
+/dft_debug/         @aixsilicon/hw-dft @aixsilicon/hw-rtl
+
+# 功能安全（L6）
+/safety_security/   @aixsilicon/hw-fusa @aixsilicon/hw-rtl
+
+# Profile / 绑定 / 集成
+/profiles/          @aixsilicon/hw-interface-arch
+/bindings/          @aixsilicon/hw-verification @aixsilicon/hw-tools
+/examples/          @aixsilicon/hw-verification @aixsilicon/hw-tools
+
+# 测试
+/tests/             @aixsilicon/hw-verification @aixsilicon/hw-tools
+
+# 文档
+/docs/              @aixsilicon/hw-interface-arch
+README.md           @aixsilicon/hw-interface-arch
+CONTRIBUTING.md     @aixsilicon/hw-interface-arch

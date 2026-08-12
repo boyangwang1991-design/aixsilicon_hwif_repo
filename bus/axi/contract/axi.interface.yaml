@@ -1,0 +1,349 @@
+# AIXSILICON HW Interface Contract — axi
+# AMBA AXI4 端点契约（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-AXI-001
+  name: aix_axi
+  family: axi
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: commercial
+  document_id: AMBA-AXI-PROTOCOL
+  revision: "AXI4"
+  url: https://developer.arm.com/documentation/102202/latest/AXI-protocol-overview
+  note: "点到点接口协议；Crossbar 拓扑不属于本契约"
+
+roles:
+  - id: initiator
+    aliases: [manager, master]
+  - id: target
+    aliases: [subordinate, slave]
+
+parameters:
+  - id: ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: ADDR_W
+    type: uint
+    default: 64
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 64
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: USER_W
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: aw
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: aw_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: aw_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: aw_id
+        from: initiator
+        to: target
+        width: "ID_W"
+        required: true
+      - id: aw_addr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: aw_len
+        from: initiator
+        to: target
+        width: "8"
+        required: true
+      - id: aw_size
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: aw_burst
+        from: initiator
+        to: target
+        width: "2"
+        required: true
+      - id: aw_lock
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: aw_cache
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: aw_prot
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: aw_qos
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: aw_region
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: aw_atop
+        from: initiator
+        to: target
+        width: "6"
+        required: false
+        capability: atop
+      - id: aw_user
+        from: initiator
+        to: target
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+  - id: w
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: w_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: w_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: w_data
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+      - id: w_strb
+        from: initiator
+        to: target
+        width: "DATA_W / 8"
+        required: true
+      - id: w_last
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: w_user
+        from: initiator
+        to: target
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+  - id: b
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: b_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: b_ready
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: b_id
+        from: target
+        to: initiator
+        width: "ID_W"
+        required: true
+      - id: b_resp
+        from: target
+        to: initiator
+        width: "2"
+        required: true
+      - id: b_user
+        from: target
+        to: initiator
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+  - id: ar
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: ar_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: ar_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: ar_id
+        from: initiator
+        to: target
+        width: "ID_W"
+        required: true
+      - id: ar_addr
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: ar_len
+        from: initiator
+        to: target
+        width: "8"
+        required: true
+      - id: ar_size
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: ar_burst
+        from: initiator
+        to: target
+        width: "2"
+        required: true
+      - id: ar_lock
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: ar_cache
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: ar_prot
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: ar_qos
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: ar_region
+        from: initiator
+        to: target
+        width: "4"
+        required: true
+      - id: ar_user
+        from: initiator
+        to: target
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+  - id: r
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: r_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: r_ready
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: r_id
+        from: target
+        to: initiator
+        width: "ID_W"
+        required: true
+      - id: r_data
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: r_resp
+        from: target
+        to: initiator
+        width: "2"
+        required: true
+      - id: r_last
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: r_user
+        from: target
+        to: initiator
+        width: "USER_W"
+        required: false
+        capability: user_sideband
+
+capabilities:
+  - id: atop
+    default: false
+    description: 原子操作（AW 通道 ATOP 字段）。
+  - id: user_sideband
+    default: false
+  - id: exclusive
+    default: false
+    description: 独占访问支持（Exclusive Access）。
+
+semantics:
+  transfer: "valid && ready"
+  resp_encoding: "00=OKAY, 01=EXOKAY, 10=SLVERR, 11=DECERR"
+  write_ordering: "B response follows final w_last"
+  read_ordering: "R response follows ar"
+  burst_types: "FIXED=00, INCR=01, WRAP=10"
+  exclusive: "paired exclusive read/write, EXOKAY on success"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

@@ -1,0 +1,89 @@
+# AIXSILICON HW Interface Contract — mbist_control（骨架）
+# MBIST 控制接口（L5）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-MBIST-001
+  name: aix_mbist_control
+  family: mbist_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-MBIST-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: mbist
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: start
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: done
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: fail
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: fail_addr
+        from: endpoint
+        to: controller
+        width: "ADDR_W"
+        required: false
+        capability: addr_report
+      - id: syndrome
+        from: endpoint
+        to: controller
+        width: "8"
+        required: false
+        capability: syndrome_report
+
+capabilities:
+  - id: addr_report
+    default: false
+  - id: syndrome_report
+    default: false
+
+semantics:
+  start_done: "start triggers test; done on completion"
+  fail: "asserted when test fails"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

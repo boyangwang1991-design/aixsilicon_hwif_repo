@@ -1,0 +1,64 @@
+# AIXSILICON HW Interface Contract — req_ack
+# request/acknowledge 事件握手（L0）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-RA-001
+  name: aix_req_ack
+  family: req_ack
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-RA-001
+  revision: "1.0"
+
+roles:
+  - id: initiator
+  - id: target
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: handshake
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: ack
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  req_held_until_ack: true
+  ack_release: "ack releases after req deasserts"
+  transfer: "req && ack"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

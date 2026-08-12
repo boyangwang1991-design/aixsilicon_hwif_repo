@@ -1,0 +1,14 @@
+CAPI=2:
+
+name: aix:interface:i2c:0.1.0
+description: AIXSILICON I2C interface contract (skeleton)
+
+filesets:
+  contract:
+    files:
+      - contract/i2c.interface.yaml: {copyto: metadata/i2c.interface.yaml}
+    file_type: user
+
+targets:
+  contract:
+    filesets: [contract]

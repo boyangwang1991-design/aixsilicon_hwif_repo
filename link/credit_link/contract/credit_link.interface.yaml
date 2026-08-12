@@ -1,0 +1,125 @@
+# AIXSILICON HW Interface Contract — credit_link
+# 信用链路接口（L3）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-CL-001
+  name: aix_credit_link
+  family: credit_link
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-CL-001
+  revision: "1.0"
+
+roles:
+  - id: initiator
+  - id: target
+
+parameters:
+  - id: FLIT_W
+    type: uint
+    default: 128
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: VC_W
+    type: uint
+    default: 2
+    constraints:
+      min: 1
+  - id: CREDIT_W
+    type: uint
+    default: 4
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: flit
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: flit_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: flit_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: flit_data
+        from: initiator
+        to: target
+        width: "FLIT_W"
+        required: true
+      - id: flit_vc
+        from: initiator
+        to: target
+        width: "VC_W"
+        required: false
+        capability: vc
+      - id: flit_qos
+        from: initiator
+        to: target
+        width: "4"
+        required: false
+        capability: qos
+      - id: flit_retry
+        from: initiator
+        to: target
+        width: "1"
+        required: false
+        capability: retry
+
+  - id: credit
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: credit_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: credit_return
+        from: target
+        to: initiator
+        width: "CREDIT_W"
+        required: true
+
+capabilities:
+  - id: vc
+    default: false
+  - id: qos
+    default: false
+  - id: retry
+    default: false
+
+semantics:
+  credit_consumed: "each accepted flit consumes one credit"
+  credit_return: "target returns credit after buffer free"
+  no_credit_no_send: "initiator must not send without credit"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

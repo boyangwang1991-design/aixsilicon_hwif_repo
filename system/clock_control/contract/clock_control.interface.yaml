@@ -1,0 +1,80 @@
+# AIXSILICON HW Interface Contract — clock_control（骨架）
+# 时钟控制接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-CC-001
+  name: aix_clock_control
+  family: clock_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-CC-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: ctrl
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: clk_en_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: clk_en_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: clk_gate_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: clk_switch_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: false
+        capability: mux_switch
+      - id: clk_switch_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: false
+        capability: mux_switch
+
+capabilities:
+  - id: mux_switch
+    default: false
+
+semantics:
+  safe_switch: "must avoid glitch; see CBB implementation"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

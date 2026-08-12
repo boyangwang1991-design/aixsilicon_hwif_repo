@@ -1,0 +1,56 @@
+# AIXSILICON HW Interface Binding Schema
+# 描述接口到 VIP / IP-XACT / Legacy / SoCGen 的绑定映射。
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://aixsilicon.com/schema/binding.schema.yaml"
+title: "AIXSILICON HW Interface Binding"
+type: object
+additionalProperties: false
+required:
+  - binding
+properties:
+  binding:
+    type: object
+    additionalProperties: false
+    required:
+      - interface
+      - target
+    properties:
+      interface:
+        type: string
+        description: 引用接口 VLNV，例如 aix:interface:axi_lite:1.0.0。
+      target:
+        type: string
+        description: 绑定目标标识。
+      kind:
+        type: string
+        enum: [vip, ipxact, legacy, socgen, docs]
+      role_map:
+        type: object
+        additionalProperties: {type: string}
+        description: 统一角色到目标原生角色的映射（如 initiator -> active_master）。
+      sv_interface:
+        type: string
+        description: 目标 SV interface 名，如 aix_axi_lite_if。
+      transaction_type:
+        type: string
+        description: VIP transaction 类型名。
+      signal_map:
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required: [contract_signal, target_signal]
+          properties:
+            contract_signal: {type: string}
+            target_signal: {type: string}
+            role: {type: string}
+            direction:
+              type: string
+              enum: [input, output, inout]
+            note: {type: string}
+      parameters:
+        type: object
+        additionalProperties: true
+        description: 绑定层参数覆盖。
+      description:
+        type: string

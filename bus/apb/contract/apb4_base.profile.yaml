@@ -1,0 +1,15 @@
+# AIXSILICON HW Interface Profile — APB4 基础
+profile:
+  id: IFC-PROFILE-APB4-BASE-1
+  interface: IFC-APB-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    write_strobe: optional
+    protection: optional
+  parameter_constraints:
+    ADDR_W: [32]
+    DATA_W: [32, 64]
+  compatibility_class: apb4_base_v1
+  description: AMBA APB4 基础 Profile（PSTRB/PPROT 可选）。
