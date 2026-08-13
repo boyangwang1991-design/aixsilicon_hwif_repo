@@ -341,6 +341,13 @@
 
 ---
 
+## 跨仓一致性修订（2026-08-13）
+
+- [ ] `tools/` 产品级确定性工具分阶段迁入 `aixsilicon_tool_repo`（ADR-0006），本仓保留自维护脚本
+- [ ] `reference/` 治理：排除 fusesoc 正式发现、不发布、不进 Catalog（A2）
+- [ ] VLNV 迁移 `aix:interface:*` → `aixsilicon:interface:*`（deprecated 窗口，ADR-0003）
+- [ ] Techlib binding 指向 `aixsilicon_techlib_repo`（P1 待建，A4）
+
 ## 八、变更记录
 
 | 日期 | 变更内容 | 作者 |

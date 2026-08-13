@@ -1453,3 +1453,16 @@ HW Interface Repo在整个资产体系中的定位应高于普通公共代码库
 
 做到这三点，IP Repo、CBB Repo、VIP Repo和SoC Integration才能真正形成可规模化复用的统一工程体系。
 
+---
+
+## 28. 跨仓一致性修订（2026-08-13）
+
+> 依据 [`plans/cross-repo-architecture-review.md`](../../plans/cross-repo-architecture-review.md)（ADR-0003/0005/0006）。
+
+- 工具边界（R1/ADR-0006）：`tools/` 中产品级确定性工具（contract_validate/view_generate/compatibility_check/package_release 等）分阶段迁入 `aixsilicon_tool_repo`；本仓只保留自维护脚本（测试/CI/文档）；
+- “影响分析”语义（R5）：本仓 `impact_analysis` = 接口变更对消费者影响；workflow `impact.py` = 仓库/依赖图影响；二者不重复、命名可区分；
+- 发布边界（R4）：本仓 `package_release` = 接口仓自身发布；跨仓 Gate/协调/Catalog 更新由 workflow `aix release` 编排；
+- vendored `reference/` 治理（A2）：只读参考/对拍，不发布、不进入 fusesoc 正式发现与 Catalog；
+- techlib 统一（A4）：`hw-techlib` 引用统一为待建 `aixsilicon_techlib_repo`；
+- VLNV 统一 `aixsilicon:interface:*`（ADR-0003，存量 `aix:interface:*` 走 deprecated 迁移窗口）。
+
