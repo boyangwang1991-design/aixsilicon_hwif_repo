@@ -1,14 +1,27 @@
 CAPI=2:
 
 name: aix:interface:jtag_dmi:0.1.0
-description: AIXSILICON JTAG/DMI interface contract (skeleton)
+description: AIXSILICON JTAG/DMI interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_jtag_dmi_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/jtag_dmi.interface.yaml: {copyto: metadata/jtag_dmi.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

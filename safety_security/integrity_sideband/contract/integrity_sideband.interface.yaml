@@ -1,0 +1,91 @@
+# AIXSILICON HW Interface Contract — integrity_sideband
+# 数据完整性侧带接口（L6，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-INT-SB-001
+  name: aix_integrity_sideband
+  family: integrity_sideband
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-INT-SB-001
+  revision: "0.1"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters:
+  - id: WIDTH
+    type: uint
+    default: 64
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: CHECK_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: integrity
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: data
+        from: source
+        to: sink
+        width: "WIDTH"
+        required: true
+      - id: check
+        from: source
+        to: sink
+        width: "CHECK_W"
+        required: true
+      - id: valid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: ready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: poison
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: poison
+
+capabilities:
+  - id: poison
+    default: false
+
+semantics:
+  integrity: "parity/ECC/CRC sideband with validity and poison"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

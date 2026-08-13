@@ -1,0 +1,85 @@
+# AIXSILICON HW Interface Contract — retention
+# 数据保持控制接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-RET-001
+  name: aix_retention
+  family: retention
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-RET-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: RETENTION_CTRL_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: retention
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: save_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: restore_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: retention_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: retention_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: retention_ctrl
+        from: controller
+        to: endpoint
+        width: "RETENTION_CTRL_W"
+        required: false
+        capability: ctrl_override
+
+capabilities:
+  - id: ctrl_override
+    default: false
+
+semantics:
+  save_restore: "save_req / restore_req -> ack/status"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

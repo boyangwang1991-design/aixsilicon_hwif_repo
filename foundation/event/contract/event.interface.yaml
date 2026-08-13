@@ -43,7 +43,7 @@ channels:
     clock: clk
     reset: rst_n
     signals:
-      - id: event
+      - id: event_pulse
         from: source
         to: receiver
         width: "1"

@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:lifecycle_state:0.1.0
+description: AIXSILICON lifecycle state interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_lifecycle_state_pkg.sv
+      - rtl/aix_lifecycle_state_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/lifecycle_state.interface.yaml: {copyto: metadata/lifecycle_state.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

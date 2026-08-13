@@ -1,0 +1,73 @@
+# AIXSILICON HW Interface Contract — debug_request
+# 调试请求抽象接口（L5，P2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-DBG-001
+  name: aix_debug_request
+  family: debug_request
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-DBG-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: debug
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: halt_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: resume_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: step_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: debug_status
+        from: endpoint
+        to: controller
+        width: "2"
+        required: true
+        description: "0=run, 1=halted, 2=stepping"
+
+capabilities: []
+
+semantics:
+  debug: "halt/resume/step abstract; status encoding"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

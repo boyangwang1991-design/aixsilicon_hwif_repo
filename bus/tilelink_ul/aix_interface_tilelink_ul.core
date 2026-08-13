@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:tilelink_ul:0.1.0
+description: AIXSILICON TileLink-UL interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_tilelink_ul_pkg.sv
+      - rtl/aix_tilelink_ul_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/tilelink_ul.interface.yaml: {copyto: metadata/tilelink_ul.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

@@ -1,0 +1,80 @@
+# AIXSILICON HW Interface Contract — status_control
+# 状态/控制基本语义接口（L0，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-STATUS-001
+  name: aix_status_control
+  family: status_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-STATUS-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: ctrl
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: enable
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: busy
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: done
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: idle
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: error
+        from: endpoint
+        to: controller
+        width: "1"
+        required: false
+        capability: error_report
+
+capabilities:
+  - id: error_report
+    default: false
+
+semantics:
+  control: "enable/busy/done/idle/error basic semantics"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

@@ -1,0 +1,82 @@
+# AIXSILICON HW Interface Contract — lockstep_compare
+# 锁步比较接口（L6，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-LSC-001
+  name: aix_lockstep_compare
+  family: lockstep_compare
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-LSC-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: CHANNEL_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: SYNDROME_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: lockstep
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: compare_en
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: mismatch
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: mismatch_syndrome
+        from: endpoint
+        to: controller
+        width: "SYNDROME_W"
+        required: true
+      - id: mismatch_channel
+        from: endpoint
+        to: controller
+        width: "CHANNEL_W"
+        required: true
+
+capabilities: []
+
+semantics:
+  lockstep: "compare enable/mismatch/syndrome/channel"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

@@ -1,0 +1,18 @@
+# AIXSILICON HW Interface Profile — AXI-Stream 基础（plan §12.2 axi_stream_basic_v1）
+profile:
+  id: IFC-PROFILE-AXIS-BASIC-1
+  interface: IFC-AXIS-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    byte_keep: optional
+    packet_boundary: optional
+    user_sideband: forbidden
+  parameter_constraints:
+    DATA_W: [8, 16, 32, 64, 128, 256, 512, 1024]
+    USER_W: [1]
+  compatibility_class: axi_stream_basic_v1
+  description: >-
+    AXI-Stream 基础 Profile：KEEP/TLAST 可选、USER 禁止，
+    用于纯数据流（无元数据）场景（plan §12.2 axi_stream_basic_v1）。

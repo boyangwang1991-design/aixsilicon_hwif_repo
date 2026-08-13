@@ -171,7 +171,9 @@ properties:
 
   channels:
     type: array
-    minItems: 1
+    description: >-
+      通道列表。普通接口必须包含至少一个通道；纯类型/工具接口
+      （如 common_types）允许空数组，以声明"无物理通道"。
     items:
       type: object
       additionalProperties: false
@@ -180,7 +182,11 @@ properties:
         id: {type: string}
         handshake:
           type: string
-          enum: [ready_valid, req_ack, event, none]
+          enum: [ready_valid, req_ack, event, apb, ahb, none]
+          description: >-
+            通道握手机制。ready_valid/req_ack/event 为通用握手；
+            apb/ahb 为相位式协议握手（APB setup/access、AHB 地址/数据相位）；
+            none 表示无显式握手（如纯类型库通道）。
         clock: {type: string}
         reset: {type: string}
         ordering:

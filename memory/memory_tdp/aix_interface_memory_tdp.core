@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:memory_tdp:0.1.0
+description: AIXSILICON true dual port memory interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_memory_tdp_pkg.sv
+      - rtl/aix_memory_tdp_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/memory_tdp.interface.yaml: {copyto: metadata/memory_tdp.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

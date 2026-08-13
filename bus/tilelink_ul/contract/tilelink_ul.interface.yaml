@@ -1,0 +1,164 @@
+# AIXSILICON HW Interface Contract — tilelink_ul
+# TileLink-UL 端点契约（L3，P2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-TL-UL-001
+  name: aix_tilelink_ul
+  family: tilelink_ul
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: open
+  document_id: TILELINK-UL
+  revision: "1.8"
+  url: https://starfivetech.com/uploads/tilelink_spec_1.8.1.pdf
+  note: "TileLink-UL 仅包含 A 通道（无 D 通道释放）"
+
+roles:
+  - id: initiator
+    aliases: [manager, master]
+  - id: target
+    aliases: [subordinate, slave]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 64
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: SOURCE_W
+    type: uint
+    default: 4
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: a
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: a_valid
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: a_ready
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: a_opcode
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: a_param
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: a_size
+        from: initiator
+        to: target
+        width: "3"
+        required: true
+      - id: a_source
+        from: initiator
+        to: target
+        width: "SOURCE_W"
+        required: true
+      - id: a_address
+        from: initiator
+        to: target
+        width: "ADDR_W"
+        required: true
+      - id: a_mask
+        from: initiator
+        to: target
+        width: "DATA_W / 8"
+        required: true
+      - id: a_data
+        from: initiator
+        to: target
+        width: "DATA_W"
+        required: true
+
+  - id: d
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: d_valid
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+      - id: d_ready
+        from: initiator
+        to: target
+        width: "1"
+        required: true
+      - id: d_opcode
+        from: target
+        to: initiator
+        width: "2"
+        required: true
+      - id: d_param
+        from: target
+        to: initiator
+        width: "2"
+        required: true
+      - id: d_size
+        from: target
+        to: initiator
+        width: "3"
+        required: true
+      - id: d_source
+        from: target
+        to: initiator
+        width: "SOURCE_W"
+        required: true
+      - id: d_data
+        from: target
+        to: initiator
+        width: "DATA_W"
+        required: true
+      - id: d_error
+        from: target
+        to: initiator
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  tilelink_ul: "uncached light; A+D channels only, single outstanding"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

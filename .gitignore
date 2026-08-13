@@ -1,8 +1,11 @@
 # AIXSILICON HW Interface Repository — Git ignore
 
 # 生成产物（是否提交由 CI/红区工具决定，见 plan 第 8 节）
-# generated/docs/
-# generated/ipxact/
+# 由 tools/view_generate 生成的派生视图，与手工 rtl/ 同名或可再生成，忽略以避免重复编译
+generated/**/aix_*_if.sv
+generated/**/aix_*_flat_wrapper.sv
+generated/docs/**/*_spec.md
+generated/ipxact/**/*.xml
 # generated/catalog/
 
 # 临时文件
@@ -22,3 +25,13 @@ venv/
 build/
 fusesoc_lib/
 *.log
+
+# VCS / Synopsys 工具产物
+AN.DB/
+csrc/
+simv*
+*.vpd
+*.vcd
+
+# 第三方参考仓库（plan §21，仅供实现参考，不作为本仓资产提交）
+reference/

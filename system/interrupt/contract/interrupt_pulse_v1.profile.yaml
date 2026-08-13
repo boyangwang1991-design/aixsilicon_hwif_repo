@@ -1,0 +1,19 @@
+# AIXSILICON HW Interface Profile — Interrupt Pulse（plan §12.2 interrupt_pulse_v1）
+profile:
+  id: IFC-PROFILE-INT-PULSE-1
+  interface: IFC-INT-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    level: forbidden
+    pulse: required
+    vector: optional
+    acknowledged: forbidden
+    polarity_config: optional
+  parameter_constraints:
+    WIDTH: [1, 8, 16, 32]
+  compatibility_class: interrupt_pulse_v1
+  description: >-
+    中断 Pulse Profile：脉冲型中断（单周期），
+    可选向量与极性配置（plan §12.2 interrupt_pulse_v1）。

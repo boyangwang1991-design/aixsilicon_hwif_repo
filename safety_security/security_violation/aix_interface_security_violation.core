@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:security_violation:0.1.0
+description: AIXSILICON security violation interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_security_violation_pkg.sv
+      - rtl/aix_security_violation_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/security_violation.interface.yaml: {copyto: metadata/security_violation.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

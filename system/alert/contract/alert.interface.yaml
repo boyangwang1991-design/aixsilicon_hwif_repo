@@ -1,0 +1,83 @@
+# AIXSILICON HW Interface Contract — alert
+# 安全敏感事件上报接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-ALERT-001
+  name: aix_alert
+  family: alert
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-ALERT-001
+  revision: "0.1"
+
+roles:
+  - id: source
+  - id: receiver
+
+parameters:
+  - id: ALERT_W
+    type: uint
+    default: 1
+    constraints:
+      min: 1
+      max: 32
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: alert_line
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: alert_valid
+        from: source
+        to: receiver
+        width: "ALERT_W"
+        required: true
+      - id: alert_ack
+        from: receiver
+        to: source
+        width: "ALERT_W"
+        required: true
+      - id: alert_ping
+        from: receiver
+        to: source
+        width: "ALERT_W"
+        required: false
+        capability: heartbeat
+      - id: alert_heartbeat_ok
+        from: source
+        to: receiver
+        width: "ALERT_W"
+        required: false
+        capability: heartbeat
+
+capabilities:
+  - id: heartbeat
+    default: false
+
+semantics:
+  alert_handshake: "valid held until ack; ping checks liveness"
+  severity: "safety-sensitive; see FUSA integration"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

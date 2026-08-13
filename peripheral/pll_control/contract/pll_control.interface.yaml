@@ -1,0 +1,83 @@
+# AIXSILICON HW Interface Contract — pll_control
+# PLL 控制抽象接口（L4，P2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-PLL-001
+  name: aix_pll_control
+  family: pll_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-PLL-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: pll
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: pll_ref_clk
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: pll_enable
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: pll_lock
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: pll_bypass
+        from: controller
+        to: endpoint
+        width: "1"
+        required: false
+        capability: bypass
+      - id: pll_cfg
+        from: controller
+        to: endpoint
+        width: "32"
+        required: false
+        capability: config
+
+capabilities:
+  - id: bypass
+    default: false
+  - id: config
+    default: false
+
+semantics:
+  pll: "ref/enable/lock/bypass/config abstract control; analog model in techlib"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

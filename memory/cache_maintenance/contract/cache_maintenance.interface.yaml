@@ -1,0 +1,88 @@
+# AIXSILICON HW Interface Contract — cache_maintenance
+# 缓存维护抽象控制接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-CM-001
+  name: aix_cache_maintenance
+  family: cache_maintenance
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-CM-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: TAG_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: OP_W
+    type: uint
+    default: 4
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: maint
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: maint_op
+        from: controller
+        to: endpoint
+        width: "OP_W"
+        required: true
+        description: "invalidate/clean/fence encoding"
+      - id: maint_tag
+        from: controller
+        to: endpoint
+        width: "TAG_W"
+        required: true
+      - id: maint_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: maint_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: maint_done
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  op_encoding: "invalidate/clean/fence abstract ops"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

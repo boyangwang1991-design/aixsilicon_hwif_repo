@@ -1,0 +1,17 @@
+# AIXSILICON HW Interface Profile — APB CSR 基础（plan §12.2 apb_csr_v1）
+profile:
+  id: IFC-PROFILE-APB-CSR-1
+  interface: IFC-APB-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    write_strobe: required
+    protection: forbidden
+  parameter_constraints:
+    ADDR_W: [32, 64]
+    DATA_W: [32, 64]
+  compatibility_class: apb_csr_v1
+  description: >-
+    APB 寄存器访问基础 Profile：写使能必选、保护信号禁止，
+    用于 CSR/IP 寄存器接口（对应 plan §12.2 apb_csr_v1）。

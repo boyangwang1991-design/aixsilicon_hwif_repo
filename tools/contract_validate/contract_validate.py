@@ -29,7 +29,12 @@ except ImportError:  # pragma: no cover
 
 try:
     import jsonschema
-    from jsonschema import Draft202012Validator
+    # 优先使用 2020-12（jsonschema>=4.0）；旧版本 jsonschema 3.x 仅支持到 draft-07，
+    # 在此环境下回退到 Draft7Validator，避免 Python 版本受限时无法执行 schema 校验。
+    try:
+        from jsonschema import Draft202012Validator as _SchemaValidator
+    except ImportError:  # pragma: no cover
+        from jsonschema import Draft7Validator as _SchemaValidator
     HAVE_JSONSCHEMA = True
 except ImportError:  # pragma: no cover
     HAVE_JSONSCHEMA = False
@@ -98,7 +103,7 @@ def validate_against_schema(contract, schema):
     """使用 jsonschema 校验；返回错误列表。"""
     if not HAVE_JSONSCHEMA:
         return _basic_check(contract, "<input>")
-    validator = Draft202012Validator(schema)
+    validator = _SchemaValidator(schema)
     errors = []
     for err in sorted(validator.iter_errors(contract), key=lambda e: list(e.path)):
         errors.append(f"schema violation at {list(err.path)}: {err.message}")

@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:dfx_override:0.1.0
+description: AIXSILICON DFX override interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_dfx_override_pkg.sv
+      - rtl/aix_dfx_override_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/dfx_override.interface.yaml: {copyto: metadata/dfx_override.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

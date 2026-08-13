@@ -1,0 +1,18 @@
+# AIXSILICON HW Interface Profile — Ready/Valid 包（plan §12.2 ready_valid_packet_v1）
+profile:
+  id: IFC-PROFILE-RV-PACKET-1
+  interface: IFC-RV-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    byte_keep: required
+    packet_boundary: required
+    user_sideband: optional
+  parameter_constraints:
+    DATA_W: [32, 64, 128, 256]
+    USER_W: [1, 8]
+  compatibility_class: ready_valid_packet_v1
+  description: >-
+    Ready/Valid 包 Profile：KEEP/TLAST 必选、USER 可选，
+    用于包边界数据流（plan §12.2 ready_valid_packet_v1）。

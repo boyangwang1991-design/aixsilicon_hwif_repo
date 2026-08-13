@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:domain_health:0.1.0
+description: AIXSILICON domain health interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_domain_health_pkg.sv
+      - rtl/aix_domain_health_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/domain_health.interface.yaml: {copyto: metadata/domain_health.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

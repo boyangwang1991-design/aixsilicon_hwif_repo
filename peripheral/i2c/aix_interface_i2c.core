@@ -1,14 +1,27 @@
 CAPI=2:
 
 name: aix:interface:i2c:0.1.0
-description: AIXSILICON I2C interface contract (skeleton)
+description: AIXSILICON I2C interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_i2c_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/i2c.interface.yaml: {copyto: metadata/i2c.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

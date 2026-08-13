@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:isolation:0.1.0
+description: AIXSILICON isolation interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_isolation_pkg.sv
+      - rtl/aix_isolation_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/isolation.interface.yaml: {copyto: metadata/isolation.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

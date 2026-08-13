@@ -1,0 +1,27 @@
+CAPI=2:
+
+name: aix:interface:scan_control:0.1.0
+description: AIXSILICON scan control interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_scan_control_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/scan_control.interface.yaml: {copyto: metadata/scan_control.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

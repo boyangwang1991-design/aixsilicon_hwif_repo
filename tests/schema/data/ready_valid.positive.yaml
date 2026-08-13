@@ -1,0 +1,71 @@
+# Positive test: 合法 Contract 应通过 schema 校验
+schema_version: "1.0"
+
+interface:
+  id: IFC-STREAM-001
+  name: aix_stream
+  family: stream
+  semantic_version: 1.0.0
+  owner: hw-platform
+  lifecycle: reviewed
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-STREAM-001
+  revision: "1.0"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: payload
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: valid
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: ready
+        from: sink
+        to: source
+        width: "1"
+        required: true
+      - id: data
+        from: source
+        to: sink
+        width: "DATA_W"
+        required: true
+
+capabilities: []
+
+semantics:
+  transfer: "valid && ready"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true

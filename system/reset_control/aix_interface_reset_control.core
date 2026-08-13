@@ -1,14 +1,28 @@
 CAPI=2:
 
 name: aix:interface:reset_control:0.1.0
-description: AIXSILICON reset control interface contract (skeleton)
+description: AIXSILICON reset control interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_reset_control_pkg.sv
+      - rtl/aix_reset_control_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/reset_control.interface.yaml: {copyto: metadata/reset_control.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

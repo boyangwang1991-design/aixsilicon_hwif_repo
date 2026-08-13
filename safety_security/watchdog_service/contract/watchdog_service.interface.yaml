@@ -1,0 +1,77 @@
+# AIXSILICON HW Interface Contract — watchdog_service
+# 看门狗服务接口（L6，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-WDG-001
+  name: aix_watchdog_service
+  family: watchdog_service
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-WDG-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: CHALLENGE_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: watchdog
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: service_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: challenge
+        from: endpoint
+        to: controller
+        width: "CHALLENGE_W"
+        required: true
+      - id: response
+        from: controller
+        to: endpoint
+        width: "CHALLENGE_W"
+        required: true
+      - id: wdg_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  watchdog: "service/challenge/response/status"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

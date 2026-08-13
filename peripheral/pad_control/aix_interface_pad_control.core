@@ -1,0 +1,27 @@
+CAPI=2:
+
+name: aix:interface:pad_control:0.1.0
+description: AIXSILICON pad control interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_pad_control_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/pad_control.interface.yaml: {copyto: metadata/pad_control.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

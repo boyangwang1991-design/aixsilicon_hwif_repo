@@ -1,0 +1,82 @@
+# AIXSILICON HW Interface Contract — lbist_control
+# 逻辑 BIST 控制接口（L5，P2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-LBIST-001
+  name: aix_lbist_control
+  family: lbist_control
+  semantic_version: 0.1.0
+  owner: hw-dft
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-LBIST-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: SIGNATURE_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: lbist
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: start
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: done
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: pass
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: fail
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: signature
+        from: endpoint
+        to: controller
+        width: "SIGNATURE_W"
+        required: true
+
+capabilities: []
+
+semantics:
+  lbist: "start/done/pass/fail/signature"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

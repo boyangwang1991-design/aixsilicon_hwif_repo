@@ -1,0 +1,77 @@
+# AIXSILICON HW Interface Contract — lifecycle_state
+# 安全生命周期状态抽象接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-LS-001
+  name: aix_lifecycle_state
+  family: lifecycle_state
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-LS-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: STATE_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: lifecycle
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: lc_state_req
+        from: controller
+        to: endpoint
+        width: "STATE_W"
+        required: true
+      - id: lc_state_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: lc_state
+        from: endpoint
+        to: controller
+        width: "STATE_W"
+        required: true
+      - id: lc_state_valid
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  lifecycle: "abstract lifecycle state encoding; validity signal"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

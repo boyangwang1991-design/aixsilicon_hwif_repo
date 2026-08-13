@@ -1,0 +1,75 @@
+# AIXSILICON HW Interface Contract — isolation
+# 电源隔离控制接口（L1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-ISO-001
+  name: aix_isolation
+  family: isolation
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-ISO-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: iso
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: isolate_req
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: isolate_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: isolate_status
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: clamp_policy
+        from: controller
+        to: endpoint
+        width: "4"
+        required: false
+        capability: clamp_policy
+
+capabilities:
+  - id: clamp_policy
+    default: false
+
+semantics:
+  isolation_flow: "isolate_req -> ack/status; clamp policy metadata"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

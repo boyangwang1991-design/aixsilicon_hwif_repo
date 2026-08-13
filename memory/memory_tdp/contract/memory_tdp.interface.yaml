@@ -1,0 +1,131 @@
+# AIXSILICON HW Interface Contract — memory_tdp
+# 真双端口存储接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-MEM-TDP-001
+  name: aix_memory_tdp
+  family: memory_tdp
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-MEM-TDP-001
+  revision: "0.1"
+
+roles:
+  - id: requester_a
+  - id: requester_b
+  - id: memory
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 64
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: port_a
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: a_valid
+        from: requester_a
+        to: memory
+        width: "1"
+        required: true
+      - id: a_ready
+        from: memory
+        to: requester_a
+        width: "1"
+        required: true
+      - id: a_addr
+        from: requester_a
+        to: memory
+        width: "ADDR_W"
+        required: true
+      - id: a_we
+        from: requester_a
+        to: memory
+        width: "1"
+        required: true
+      - id: a_wdata
+        from: requester_a
+        to: memory
+        width: "DATA_W"
+        required: true
+      - id: a_rdata
+        from: memory
+        to: requester_a
+        width: "DATA_W"
+        required: true
+
+  - id: port_b
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: b_valid
+        from: requester_b
+        to: memory
+        width: "1"
+        required: true
+      - id: b_ready
+        from: memory
+        to: requester_b
+        width: "1"
+        required: true
+      - id: b_addr
+        from: requester_b
+        to: memory
+        width: "ADDR_W"
+        required: true
+      - id: b_we
+        from: requester_b
+        to: memory
+        width: "1"
+        required: true
+      - id: b_wdata
+        from: requester_b
+        to: memory
+        width: "DATA_W"
+        required: true
+      - id: b_rdata
+        from: memory
+        to: requester_b
+        width: "DATA_W"
+        required: true
+
+capabilities: []
+
+semantics:
+  collision: "same-address dual-port collision policy in profile"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

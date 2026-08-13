@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:debug_request:0.1.0
+description: AIXSILICON debug request interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_debug_request_pkg.sv
+      - rtl/aix_debug_request_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/debug_request.interface.yaml: {copyto: metadata/debug_request.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

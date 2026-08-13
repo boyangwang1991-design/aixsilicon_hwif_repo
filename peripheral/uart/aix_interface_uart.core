@@ -1,14 +1,27 @@
 CAPI=2:
 
 name: aix:interface:uart:0.1.0
-description: AIXSILICON UART pin interface contract (skeleton)
+description: AIXSILICON UART interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_uart_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/uart.interface.yaml: {copyto: metadata/uart.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

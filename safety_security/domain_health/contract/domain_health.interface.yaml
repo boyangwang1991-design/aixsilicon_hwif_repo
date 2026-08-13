@@ -1,0 +1,74 @@
+# AIXSILICON HW Interface Contract — domain_health
+# 域健康状态接口（L6，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-DH-001
+  name: aix_domain_health
+  family: domain_health
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-DH-001
+  revision: "0.1"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: health
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: alive
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: degraded
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: failed
+        from: source
+        to: sink
+        width: "1"
+        required: true
+      - id: recovery_in_progress
+        from: source
+        to: sink
+        width: "1"
+        required: false
+        capability: recovery
+
+capabilities:
+  - id: recovery
+    default: false
+
+semantics:
+  health: "alive/degraded/failed/recovery states"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

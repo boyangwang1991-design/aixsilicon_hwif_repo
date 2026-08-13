@@ -27,10 +27,7 @@ reset_domains: []
 
 # 本接口主要定义类型字典，而非物理通道。
 # 通道留空由各派生接口按需引用类型定义。
-channels:
-  - id: type_library
-    handshake: none
-    signals: []
+channels: []
 
 capabilities: []
 

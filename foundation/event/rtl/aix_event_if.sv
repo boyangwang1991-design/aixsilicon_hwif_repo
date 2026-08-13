@@ -9,10 +9,10 @@ interface aix_event_if (
   input logic rst_n
 );
 
-  logic event;
+  logic event_pulse;
   logic event_ack;
 
-  modport source   (output event, input  event_ack);
-  modport receiver (input  event, output event_ack);
+  modport source   (output event_pulse, input  event_ack);
+  modport receiver (input  event_pulse, output event_ack);
 
 endinterface : aix_event_if

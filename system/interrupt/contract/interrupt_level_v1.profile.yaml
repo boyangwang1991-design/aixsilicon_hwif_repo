@@ -1,0 +1,19 @@
+# AIXSILICON HW Interface Profile — Interrupt Level（plan §12.2 interrupt_level_v1）
+profile:
+  id: IFC-PROFILE-INT-LEVEL-1
+  interface: IFC-INT-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    level: required
+    pulse: forbidden
+    vector: optional
+    acknowledged: optional
+    polarity_config: forbidden
+  parameter_constraints:
+    WIDTH: [1, 8, 16, 32]
+  compatibility_class: interrupt_level_v1
+  description: >-
+    中断 Level Profile：电平型中断（保持直到被处理），
+    可选向量与 ack（plan §12.2 interrupt_level_v1）。

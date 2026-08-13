@@ -1,0 +1,15 @@
+# AIXSILICON HW Interface Profile — Memory 1RW 同步（plan §12.2 memory_1rw_sync_v1）
+profile:
+  id: IFC-PROFILE-MEM1RW-SYNC-1
+  interface: IFC-M1RW-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities: {}
+  parameter_constraints:
+    ADDR_W: [16, 32, 48, 64]
+    DATA_W: [8, 16, 32, 64, 128, 256]
+  compatibility_class: memory_1rw_sync_v1
+  description: >-
+    单端口同步存储 Profile：单周期读写，latency=1，
+    用于同步 SRAM/寄存器文件（plan §12.2 memory_1rw_sync_v1）。

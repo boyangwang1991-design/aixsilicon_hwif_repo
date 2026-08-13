@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:watchdog_service:0.1.0
+description: AIXSILICON watchdog service interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_watchdog_service_pkg.sv
+      - rtl/aix_watchdog_service_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/watchdog_service.interface.yaml: {copyto: metadata/watchdog_service.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

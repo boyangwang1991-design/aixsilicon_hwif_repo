@@ -1,0 +1,18 @@
+# AIXSILICON HW Interface Profile — Ready/Valid 标量（plan §12.2 ready_valid_scalar_v1）
+profile:
+  id: IFC-PROFILE-RV-SCALAR-1
+  interface: IFC-RV-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    byte_keep: forbidden
+    packet_boundary: forbidden
+    user_sideband: forbidden
+  parameter_constraints:
+    DATA_W: [8, 16, 32, 64]
+    USER_W: [1]
+  compatibility_class: ready_valid_scalar_v1
+  description: >-
+    Ready/Valid 标量握手 Profile：仅 valid/ready/data，
+    用于单拍标量传输（plan §12.2 ready_valid_scalar_v1）。

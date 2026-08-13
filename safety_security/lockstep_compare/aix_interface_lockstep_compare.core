@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aix:interface:lockstep_compare:0.1.0
+description: AIXSILICON lockstep compare interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_lockstep_compare_pkg.sv
+      - rtl/aix_lockstep_compare_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/lockstep_compare.interface.yaml: {copyto: metadata/lockstep_compare.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

@@ -1,0 +1,19 @@
+# AIXSILICON HW Interface Profile — AXI4 Memory 基础（plan §12.2 axi_memory_basic_v1）
+profile:
+  id: IFC-PROFILE-AXI4-MEM-BASIC-1
+  interface: IFC-AXI-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    atop: forbidden
+    user_sideband: optional
+    exclusive: forbidden
+  parameter_constraints:
+    DATA_W: [32, 64, 128, 256, 512, 1024]
+    ID_W: [1, 2, 4, 8, 12, 16]
+    ADDR_W: [32, 64]
+  compatibility_class: axi_memory_basic_v1
+  description: >-
+    AXI4 内存访问基础 Profile：无 ATOP、无 Exclusive，USER 可选
+    （与 axi4_base 对齐，用于内存/IP 数据通路，plan §12.2）。

@@ -1,0 +1,77 @@
+# AIXSILICON HW Interface Contract — dfx_override
+# DFX 覆盖控制接口（L5，P2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-DFX-001
+  name: aix_dfx_override
+  family: dfx_override
+  semantic_version: 0.1.0
+  owner: hw-dft
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-DFX-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters: []
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: dfx
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: clk_override
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: rst_override
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: iso_override
+        from: controller
+        to: endpoint
+        width: "1"
+        required: true
+      - id: dfx_override_ack
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+      - id: safety_qualified
+        from: endpoint
+        to: controller
+        width: "1"
+        required: true
+
+capabilities: []
+
+semantics:
+  dfx_override: "clock/reset/isolation override with safety qualification"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

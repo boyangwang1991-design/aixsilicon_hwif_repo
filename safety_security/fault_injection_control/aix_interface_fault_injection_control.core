@@ -1,14 +1,28 @@
 CAPI=2:
 
 name: aix:interface:fault_injection_control:0.1.0
-description: AIXSILICON fault injection control interface contract (skeleton)
+description: AIXSILICON fault injection control interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_fault_injection_control_pkg.sv
+      - rtl/aix_fault_injection_control_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/fault_injection_control.interface.yaml: {copyto: metadata/fault_injection_control.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

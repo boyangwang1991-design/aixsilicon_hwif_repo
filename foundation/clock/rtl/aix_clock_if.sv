@@ -11,7 +11,8 @@ interface aix_clock_if (
   logic clk_en;  // 1: 时钟运行；0: 时钟保持无效电平（门控）
   logic clk_gen; // 1: 该时钟为派生时钟
 
-  modport controller (output clk, clk_en, clk_gen);
-  modport endpoint   (input  clk, clk_en, clk_gen);
+  // clk 为 interface 端口（input），两端 modport 均不重声明其方向
+  modport controller (output clk_en, clk_gen);
+  modport endpoint   (input  clk_en, clk_gen);
 
 endinterface : aix_clock_if

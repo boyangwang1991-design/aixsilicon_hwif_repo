@@ -1,0 +1,79 @@
+# AIXSILICON HW Interface Contract — performance_event
+# 性能事件接口（L5，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-PERF-001
+  name: aix_performance_event
+  family: performance_event
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-PERF-001
+  revision: "0.1"
+
+roles:
+  - id: source
+  - id: sink
+
+parameters:
+  - id: EVENT_ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: EVENT_NUM
+    type: uint
+    default: 16
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: perf
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: event_id
+        from: source
+        to: sink
+        width: "EVENT_ID_W"
+        required: true
+      - id: event_pulse
+        from: source
+        to: sink
+        width: "EVENT_NUM"
+        required: true
+      - id: event_count
+        from: source
+        to: sink
+        width: "EVENT_NUM"
+        required: false
+        capability: count_events
+
+capabilities:
+  - id: count_events
+    default: false
+
+semantics:
+  perf: "event id/count/level/pulse; domain metadata"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

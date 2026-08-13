@@ -1,14 +1,27 @@
 CAPI=2:
 
 name: aix:interface:spi:0.1.0
-description: AIXSILICON SPI interface contract (skeleton)
+description: AIXSILICON SPI interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_spi_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/spi.interface.yaml: {copyto: metadata/spi.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

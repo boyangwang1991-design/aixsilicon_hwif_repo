@@ -1,0 +1,93 @@
+# AIXSILICON HW Interface Contract — rom
+# 只读存储请求/响应接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-ROM-001
+  name: aix_rom
+  family: rom
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-ROM-001
+  revision: "0.1"
+
+roles:
+  - id: requester
+  - id: memory
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 32
+    constraints:
+      min: 8
+      multiple_of: 8
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: read
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req_valid
+        from: requester
+        to: memory
+        width: "1"
+        required: true
+      - id: req_ready
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: req_addr
+        from: requester
+        to: memory
+        width: "ADDR_W"
+        required: true
+      - id: rsp_valid
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: rsp_ready
+        from: requester
+        to: memory
+        width: "1"
+        required: true
+      - id: rsp_data
+        from: memory
+        to: requester
+        width: "DATA_W"
+        required: true
+
+capabilities: []
+
+semantics:
+  read_only: "no write; fixed/variable latency per profile"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

@@ -1,0 +1,90 @@
+# AIXSILICON HW Interface Contract — ecc_memory_sideband
+# 存储 ECC 侧带接口（L2）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-ECC-SB-001
+  name: aix_ecc_memory_sideband
+  family: ecc_memory_sideband
+  semantic_version: 0.1.0
+  owner: hw-fusa
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-ECC-SB-001
+  revision: "0.1"
+
+roles:
+  - id: requester
+  - id: memory
+
+parameters:
+  - id: SYNDROME_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: ecc
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: ecc_valid
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: ecc_ready
+        from: requester
+        to: memory
+        width: "1"
+        required: true
+      - id: ecc_corrected
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: ecc_uncorrectable
+        from: memory
+        to: requester
+        width: "1"
+        required: true
+      - id: ecc_syndrome
+        from: memory
+        to: requester
+        width: "SYNDROME_W"
+        required: true
+      - id: ecc_inject
+        from: requester
+        to: memory
+        width: "1"
+        required: false
+        capability: injection
+
+capabilities:
+  - id: injection
+    default: false
+
+semantics:
+  ecc_events: "corrected / uncorrectable / syndrome sideband"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

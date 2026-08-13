@@ -1,14 +1,28 @@
 CAPI=2:
 
 name: aix:interface:power_state:0.1.0
-description: AIXSILICON power state interface contract (skeleton)
+description: AIXSILICON power state interface contract and SystemVerilog views
 
 filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - rtl/aix_power_state_pkg.sv
+      - rtl/aix_power_state_if.sv
+    file_type: systemVerilogSource
+
   contract:
     files:
       - contract/power_state.interface.yaml: {copyto: metadata/power_state.interface.yaml}
     file_type: user
 
 targets:
+  default:
+    filesets: [rtl]
+
   contract:
     filesets: [contract]
+
+  lint:
+    filesets: [rtl]

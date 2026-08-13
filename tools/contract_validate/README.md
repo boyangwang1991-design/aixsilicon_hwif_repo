@@ -5,7 +5,8 @@
 ## 依赖
 
 - Python 3.8+；
-- 可选：`pyyaml`、`jsonschema`（未安装时退化为基础结构检查）。
+- 可选：`pyyaml`、`jsonschema`（未安装时退化为基础结构检查）；
+- `jsonschema` 支持 4.x（Draft 2020-12）与 3.x（Draft 7）自动回退，兼容旧版 Python。
 
 ## 用法
 

@@ -1,0 +1,103 @@
+# AIXSILICON HW Interface Contract — pad_control
+# Pad 控制接口（L4，P1）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-PAD-001
+  name: aix_pad_control
+  family: pad_control
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-IF-PAD-001
+  revision: "0.1"
+
+roles:
+  - id: controller
+  - id: endpoint
+
+parameters:
+  - id: PAD_W
+    type: uint
+    default: 32
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: pad
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: pad_i
+        from: endpoint
+        to: controller
+        width: "PAD_W"
+        required: true
+      - id: pad_o
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: true
+      - id: pad_oe_o
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: true
+      - id: pad_pull_en
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: false
+        capability: pull_control
+      - id: pad_drive
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: false
+        capability: drive_config
+      - id: pad_schmitt
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: false
+        capability: schmitt
+      - id: pad_slew
+        from: controller
+        to: endpoint
+        width: "PAD_W"
+        required: false
+        capability: slew_control
+
+capabilities:
+  - id: pull_control
+    default: false
+  - id: drive_config
+    default: false
+  - id: schmitt
+    default: false
+  - id: slew_control
+    default: false
+
+semantics:
+  pad: "input/output/OE + pull/drive/schmitt/slew control"
+
+views:
+  packed_struct: false
+  sv_interface: true
+  flattened: true
+  ipxact: optional

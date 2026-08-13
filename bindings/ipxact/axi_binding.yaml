@@ -1,0 +1,29 @@
+# AIXSILICON IP-XACT Binding 示例 — AXI4
+# 映射接口契约到 IP-XACT 交换视图（plan §20）。
+binding:
+  interface: aix:interface:axi:1.0.0
+  target: aix:ipxact:axi:1.0.0
+  kind: ipxact
+  role_map:
+    initiator: master
+    target: slave
+  sv_interface: aix_axi_if
+  parameters:
+    bus_definition: aixsilicon:interface:axi:1.0.0
+    abstraction_definition: aixsilicon:interface:axi_abs:1.0.0
+  signal_map:
+    - {contract_signal: aw_valid, target_signal: AWVALID}
+    - {contract_signal: aw_ready, target_signal: AWREADY}
+    - {contract_signal: aw_addr, target_signal: AWADDR}
+    - {contract_signal: w_valid, target_signal: WVALID}
+    - {contract_signal: w_ready, target_signal: WREADY}
+    - {contract_signal: w_data, target_signal: WDATA}
+    - {contract_signal: b_valid, target_signal: BVALID}
+    - {contract_signal: b_ready, target_signal: BREADY}
+    - {contract_signal: ar_valid, target_signal: ARVALID}
+    - {contract_signal: ar_ready, target_signal: ARREADY}
+    - {contract_signal: ar_addr, target_signal: ARADDR}
+    - {contract_signal: r_valid, target_signal: RVALID}
+    - {contract_signal: r_ready, target_signal: RREADY}
+    - {contract_signal: r_data, target_signal: RDATA}
+  description: AXI4 到 IP-XACT 的交换视图映射（派生，不取代 YAML SSOT）。

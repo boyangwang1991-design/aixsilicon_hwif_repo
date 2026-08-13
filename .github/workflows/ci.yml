@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  contract-validate:
+    name: Contract schema validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+      - name: Validate all contracts
+        run: python3 tools/contract_validate/contract_validate.py --all --root .
+      - name: Run schema positive/negative tests
+        run: python3 tests/schema/run_schema_tests.py
+      - name: Check generated views up-to-date
+        run: python3 tools/view_generate/view_generate.py --all --root . --out generated --check-only
+      - name: Run compatibility tests
+        run: python3 tests/compatibility/run_compat_tests.py
+      - name: Run structural tests
+        run: python3 tests/structural/run_structural_tests.py
+      - name: Run consumer tests
+        run: python3 tests/consumer/run_consumer_tests.py
+
+  sv-consistency:
+    name: SV vs YAML consistency
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install pyyaml
+      - name: Check SV consistency
+        run: python3 tools/sv_consistency_check/sv_consistency_check.py --all --root .
+
+  sv-compile-smoke:
+    name: SV compile smoke (vlogan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run compile smoke script
+        run: bash tools/compile_smoke.sh
