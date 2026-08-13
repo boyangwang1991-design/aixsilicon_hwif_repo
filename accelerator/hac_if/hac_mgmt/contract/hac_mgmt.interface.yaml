@@ -1,0 +1,123 @@
+# AIXSILICON HW Interface Contract — hac_mgmt
+# HAC-MGMT 管理接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-HAC-MGMT-001
+  name: aix_hac_mgmt
+  family: hac_mgmt
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-HAC-IF-006
+  revision: "0.1"
+
+roles:
+  - id: shell
+    aliases: [manager, hac_shell]
+  - id: core
+    aliases: [hac_core]
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: reset_ctrl
+    handshake: req_ack
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: reset_req
+        from: shell
+        to: core
+        width: "1"
+        required: true
+      - id: reset_ack
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: drain_req
+        from: shell
+        to: core
+        width: "1"
+        required: false
+        capability: drain
+      - id: drain_ack
+        from: core
+        to: shell
+        width: "1"
+        required: false
+        capability: drain
+      - id: isolate_req
+        from: shell
+        to: core
+        width: "1"
+        required: false
+        capability: isolation
+      - id: isolate_ack
+        from: core
+        to: shell
+        width: "1"
+        required: false
+        capability: isolation
+
+  - id: status
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: quiescent
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: idle
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: clock_gate_ok
+        from: core
+        to: shell
+        width: "1"
+        required: false
+        capability: clock_gating
+      - id: fatal_state
+        from: core
+        to: shell
+        width: "1"
+        required: true
+
+capabilities:
+  - id: drain
+    default: true
+  - id: isolation
+    default: false
+  - id: clock_gating
+    default: true
+
+semantics:
+  drain_flow: "drain_req stops new job acceptance; core returns quiescent then drain_ack"
+  soft_reset_flow: "reset_req after drain; reset_ack confirms safe reset"
+  quiescent_safe: "quiescent indicates safe to gate clock / power off"
+  fatal_system_recovery: "fatal_state requires system-level recovery"
+  low_power: "support idle indication, clock-gate indication, retention capability, transaction drain, wake source, isolation"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

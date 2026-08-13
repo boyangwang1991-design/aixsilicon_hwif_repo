@@ -1,0 +1,123 @@
+# AIXSILICON HW Interface Contract — hac_stream
+# HAC-STREAM 流式数据接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-HAC-STRM-001
+  name: aix_hac_stream
+  family: hac_stream
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-HAC-IF-002
+  revision: "0.1"
+
+roles:
+  - id: producer
+    aliases: [source]
+  - id: consumer
+    aliases: [sink]
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 128
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: ID_W
+    type: uint
+    default: 4
+    constraints:
+      min: 0
+  - id: USER_W
+    type: uint
+    default: 8
+    constraints:
+      min: 0
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: data
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: valid
+        from: producer
+        to: consumer
+        width: "1"
+        required: true
+      - id: ready
+        from: consumer
+        to: producer
+        width: "1"
+        required: true
+      - id: data
+        from: producer
+        to: consumer
+        width: "DATA_W"
+        required: true
+      - id: keep
+        from: producer
+        to: consumer
+        width: "DATA_W/8"
+        required: false
+        capability: keep
+      - id: last
+        from: producer
+        to: consumer
+        width: "1"
+        required: false
+        capability: last
+      - id: id
+        from: producer
+        to: consumer
+        width: "ID_W"
+        required: false
+        capability: id
+      - id: user
+        from: producer
+        to: consumer
+        width: "USER_W"
+        required: false
+        capability: user
+
+capabilities:
+  - id: keep
+    default: true
+  - id: last
+    default: true
+  - id: id
+    default: false
+  - id: user
+    default: false
+
+semantics:
+  handshake: "valid/ready same-cycle handshake"
+  backpressure: "valid and payload stable while valid=1 && ready=0"
+  keep_byte: "keep valid per byte; may be trimmed in non-packet mode"
+  last_boundary: "last marks frame/packet/tensor-tile/task data boundary"
+  id_stream: "id associates task, virtual channel or data stream"
+  user_documented: "user carries only protocol-defined sideband fields"
+  no_bidir: "independent input and output channels; no bidirectional single channel"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

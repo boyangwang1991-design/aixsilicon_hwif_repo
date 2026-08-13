@@ -1,0 +1,262 @@
+# AIXSILICON HW Interface Contract — hac_mem
+# HAC-MEM 系统访存接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-HAC-MEM-001
+  name: aix_hac_mem
+  family: hac_mem
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-HAC-IF-003
+  revision: "0.1"
+
+roles:
+  - id: core
+    aliases: [initiator, hac_core]
+  - id: adapter
+    aliases: [target, hac_shell]
+
+parameters:
+  - id: ADDR_W
+    type: uint
+    default: 64
+    constraints:
+      min: 1
+  - id: DATA_W
+    type: uint
+    default: 128
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: LEN_W
+    type: uint
+    default: 16
+    constraints:
+      min: 1
+  - id: TAG_W
+    type: uint
+    default: 6
+    constraints:
+      min: 1
+  - id: JOB_ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 0
+  - id: ATTR_W
+    type: uint
+    default: 8
+    constraints:
+      min: 0
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: read_req
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req_valid
+        from: core
+        to: adapter
+        width: "1"
+        required: true
+      - id: req_ready
+        from: adapter
+        to: core
+        width: "1"
+        required: true
+      - id: req_opcode
+        from: core
+        to: adapter
+        width: "3"
+        required: true
+      - id: req_addr
+        from: core
+        to: adapter
+        width: "ADDR_W"
+        required: true
+      - id: req_len
+        from: core
+        to: adapter
+        width: "LEN_W"
+        required: true
+      - id: req_tag
+        from: core
+        to: adapter
+        width: "TAG_W"
+        required: true
+      - id: req_job_id
+        from: core
+        to: adapter
+        width: "JOB_ID_W"
+        required: false
+        capability: job_id
+      - id: req_attr
+        from: core
+        to: adapter
+        width: "ATTR_W"
+        required: false
+        capability: attr
+
+  - id: read_rsp
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: per_tag
+    signals:
+      - id: rsp_valid
+        from: adapter
+        to: core
+        width: "1"
+        required: true
+      - id: rsp_ready
+        from: core
+        to: adapter
+        width: "1"
+        required: true
+      - id: rsp_data
+        from: adapter
+        to: core
+        width: "DATA_W"
+        required: true
+      - id: rsp_tag
+        from: adapter
+        to: core
+        width: "TAG_W"
+        required: true
+      - id: rsp_last
+        from: adapter
+        to: core
+        width: "1"
+        required: true
+      - id: rsp_status
+        from: adapter
+        to: core
+        width: "4"
+        required: true
+
+  - id: write_req
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: wreq_valid
+        from: core
+        to: adapter
+        width: "1"
+        required: true
+      - id: wreq_ready
+        from: adapter
+        to: core
+        width: "1"
+        required: true
+      - id: wreq_opcode
+        from: core
+        to: adapter
+        width: "3"
+        required: true
+      - id: wreq_addr
+        from: core
+        to: adapter
+        width: "ADDR_W"
+        required: true
+      - id: wreq_len
+        from: core
+        to: adapter
+        width: "LEN_W"
+        required: true
+      - id: wreq_tag
+        from: core
+        to: adapter
+        width: "TAG_W"
+        required: true
+      - id: wreq_last
+        from: core
+        to: adapter
+        width: "1"
+        required: true
+      - id: wdata
+        from: core
+        to: adapter
+        width: "DATA_W"
+        required: false
+        capability: data_with_req
+      - id: wstrb
+        from: core
+        to: adapter
+        width: "DATA_W/8"
+        required: false
+        capability: data_with_req
+
+  - id: write_rsp
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: per_tag
+    signals:
+      - id: wrsp_valid
+        from: adapter
+        to: core
+        width: "1"
+        required: true
+      - id: wrsp_ready
+        from: core
+        to: adapter
+        width: "1"
+        required: true
+      - id: wrsp_tag
+        from: adapter
+        to: core
+        width: "TAG_W"
+        required: true
+      - id: wrsp_status
+        from: adapter
+        to: core
+        width: "4"
+        required: true
+
+capabilities:
+  - id: job_id
+    default: false
+  - id: attr
+    default: true
+  - id: data_with_req
+    default: true
+  - id: out_of_order
+    default: false
+  - id: unaligned_access
+    default: false
+
+semantics:
+  byte_addressing: "address is byte addressed"
+  len_bytes: "len_bytes is total valid bytes of the request"
+  tag_unique: "same tag must not be reused before completion"
+  rsp_ooo: "responses of different tags may be out of order"
+  rsp_in_order_per_tag: "responses within same tag must stay in order"
+  wdata_after_req: "write data must not precede accepted write request unless explicitly allowed"
+  core_abstract_status: "core sees abstract status only, never raw AXI BRESP/RRESP"
+  partial_completion: "partial completion must define committed range and recovery policy"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

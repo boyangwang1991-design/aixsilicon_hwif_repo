@@ -1,0 +1,66 @@
+CAPI=2:
+
+name: aix:interface:hac_if:0.1.0
+description: AIXSILICON HAC-IF (Hardware Accelerator Core Interface) contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+      - aix:interface:ready_valid:1.0.0
+      - aix:interface:event:1.0.0
+      - aix:interface:reset:1.0.0
+    files:
+      - rtl/aix_hac_if_pkg.sv
+      - hac_ctrl/rtl/aix_hac_ctrl_pkg.sv
+      - hac_ctrl/rtl/aix_hac_ctrl_if.sv
+      - hac_stream/rtl/aix_hac_stream_pkg.sv
+      - hac_stream/rtl/aix_hac_stream_if.sv
+      - hac_mem/rtl/aix_hac_mem_pkg.sv
+      - hac_mem/rtl/aix_hac_mem_if.sv
+      - hac_lmem/rtl/aix_hac_lmem_pkg.sv
+      - hac_lmem/rtl/aix_hac_lmem_if.sv
+      - hac_event/rtl/aix_hac_event_pkg.sv
+      - hac_event/rtl/aix_hac_event_if.sv
+      - hac_mgmt/rtl/aix_hac_mgmt_pkg.sv
+      - hac_mgmt/rtl/aix_hac_mgmt_if.sv
+    file_type: systemVerilogSource
+
+  sva:
+    depend:
+      - aix:interface:common:1.0.0
+    files:
+      - sva/aix_hac_if_assertions.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/hac_if.interface.yaml: {copyto: metadata/hac_if.interface.yaml}
+      - contract/hac_p0.profile.yaml: {copyto: metadata/hac_p0.profile.yaml}
+      - contract/hac_p1.profile.yaml: {copyto: metadata/hac_p1.profile.yaml}
+      - contract/hac_p2.profile.yaml: {copyto: metadata/hac_p2.profile.yaml}
+    file_type: user
+
+  spec:
+    files:
+      - spec/hac_if_spec.md: {copyto: doc/hac_if_spec.md}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]
+
+  lint_sva:
+    filesets: [rtl, sva]
+
+  spec:
+    filesets: [spec]
+
+  doc:
+    filesets: [spec]

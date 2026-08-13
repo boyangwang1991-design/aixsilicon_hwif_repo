@@ -1,0 +1,166 @@
+# AIXSILICON HW Interface Contract — hac_lmem
+# HAC-LMEM 本地存储接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-HAC-LMEM-001
+  name: aix_hac_lmem
+  family: hac_lmem
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-HAC-IF-004
+  revision: "0.1"
+
+roles:
+  - id: core
+    aliases: [initiator]
+  - id: lmem
+    aliases: [target, sram_wrapper]
+
+parameters:
+  - id: DATA_W
+    type: uint
+    default: 64
+    constraints:
+      min: 8
+      multiple_of: 8
+  - id: ADDR_W
+    type: uint
+    default: 16
+    constraints:
+      min: 1
+  - id: BANK_W
+    type: uint
+    default: 0
+    constraints:
+      min: 0
+  - id: TAG_W
+    type: uint
+    default: 4
+    constraints:
+      min: 0
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: req
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: req_valid
+        from: core
+        to: lmem
+        width: "1"
+        required: true
+      - id: req_ready
+        from: lmem
+        to: core
+        width: "1"
+        required: true
+      - id: write
+        from: core
+        to: lmem
+        width: "1"
+        required: true
+      - id: bank
+        from: core
+        to: lmem
+        width: "BANK_W"
+        required: false
+        capability: multi_bank
+      - id: addr
+        from: core
+        to: lmem
+        width: "ADDR_W"
+        required: true
+      - id: wdata
+        from: core
+        to: lmem
+        width: "DATA_W"
+        required: true
+      - id: wstrb
+        from: core
+        to: lmem
+        width: "DATA_W/8"
+        required: true
+      - id: tag
+        from: core
+        to: lmem
+        width: "TAG_W"
+        required: false
+        capability: decoupled
+
+  - id: rsp
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: per_tag
+    signals:
+      - id: rsp_valid
+        from: lmem
+        to: core
+        width: "1"
+        required: true
+      - id: rsp_ready
+        from: core
+        to: lmem
+        width: "1"
+        required: true
+      - id: rdata
+        from: lmem
+        to: core
+        width: "DATA_W"
+        required: true
+      - id: tag
+        from: lmem
+        to: core
+        width: "TAG_W"
+        required: false
+        capability: decoupled
+      - id: ecc_corrected
+        from: lmem
+        to: core
+        width: "1"
+        required: false
+        capability: ecc
+      - id: ecc_uncorrectable
+        from: lmem
+        to: core
+        width: "1"
+        required: false
+        capability: ecc
+
+capabilities:
+  - id: multi_bank
+    default: false
+  - id: decoupled
+    default: false
+  - id: ecc
+    default: false
+
+semantics:
+  fixed_profile: "LMEM-FIXED returns in fixed 1 or 2 cycles, tightly coupled single-bank SRAM"
+  decoupled_profile: "LMEM-DECOUPLED decouples request/response for arbitration, multi-bank, variable latency"
+  no_macro_binding: "HAC Core must not bind Foundry macro ports directly; LMEM Adapter handles macro adaptation/ECC/repair"
+  sleep_retention_wrapper: "sleep/retention appear only on the Memory Wrapper side"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

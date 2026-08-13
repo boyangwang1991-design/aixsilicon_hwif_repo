@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/boyangwang1991-design/aixsilicon_hwif_repo/blob/main/accelerator/hac_if/schema/hac_if.schema.json",
+  "title": "HAC-IF Configuration SSOT Schema",
+  "description": "HAC-IF 配置元数据 Schema（V1.0）。用于描述一个硬件加速核的 HAC-IF 配置，作为 RTL/接口/寄存器/文档/验证资产生成的唯一事实源。",
+  "type": "object",
+  "required": ["hac_if"],
+  "properties": {
+    "hac_if": {
+      "type": "object",
+      "required": ["version", "profile", "core"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "HAC-IF 规范版本（MAJOR.MINOR）",
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "examples": ["1.0"]
+        },
+        "profile": {
+          "type": "string",
+          "description": "HAC Profile：P0/P1/P2/P3/P4",
+          "enum": ["HAC-P0", "HAC-P1", "HAC-P2", "HAC-P3", "HAC-P4"]
+        },
+        "core": {
+          "type": "object",
+          "required": ["name", "vendor"],
+          "properties": {
+            "name": { "type": "string" },
+            "vendor": { "type": "string", "enum": ["aixsilicon"] },
+            "clock_domains": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "control": {
+          "type": "object",
+          "properties": {
+            "job_id_width": { "type": "integer", "minimum": 0 },
+            "opcode_width": { "type": "integer", "minimum": 1 },
+            "max_inflight_jobs": { "type": "integer", "minimum": 1 },
+            "cancel": { "type": "boolean" },
+            "ap_compatibility": {
+              "type": "string",
+              "enum": ["none", "ap_ctrl_hs", "ap_ctrl_chain", "ap_ctrl_none"]
+            }
+          }
+        },
+        "memory": {
+          "type": "object",
+          "properties": {
+            "ports": { "type": "integer", "minimum": 0 },
+            "address_width": { "type": "integer", "minimum": 1 },
+            "data_width": { "type": "integer", "minimum": 8 },
+            "tag_width": { "type": "integer", "minimum": 1 },
+            "out_of_order": { "type": "boolean" },
+            "max_read_outstanding": { "type": "integer", "minimum": 1 },
+            "max_write_outstanding": { "type": "integer", "minimum": 1 },
+            "max_request_bytes": { "type": "integer", "minimum": 1 },
+            "unaligned_access": { "type": "boolean" }
+          }
+        },
+        "stream": {
+          "type": "object",
+          "properties": {
+            "inputs": { "type": "integer", "minimum": 0 },
+            "outputs": { "type": "integer", "minimum": 0 },
+            "data_width": { "type": "integer", "minimum": 8 },
+            "id_width": { "type": "integer", "minimum": 0 },
+            "user_width": { "type": "integer", "minimum": 0 },
+            "packet_mode": { "type": "boolean" },
+            "fixed_frame": { "type": "boolean" }
+          }
+        },
+        "lmem": {
+          "type": "object",
+          "properties": {
+            "banks": { "type": "integer", "minimum": 0 },
+            "data_width": { "type": "integer", "minimum": 8 },
+            "profile": { "type": "string", "enum": ["LMEM-FIXED", "LMEM-DECOUPLED"] },
+            "ecc": { "type": "boolean" }
+          }
+        },
+        "event": {
+          "type": "object",
+          "properties": {
+            "severity": { "type": "boolean" },
+            "irq_outputs": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "management": {
+          "type": "object",
+          "properties": {
+            "soft_reset": { "type": "boolean" },
+            "drain": { "type": "boolean" },
+            "clock_gating": { "type": "boolean" },
+            "retention": { "type": "boolean" },
+            "isolation": { "type": "boolean" }
+          }
+        },
+        "capabilities": {
+          "type": "object",
+          "description": "扩展能力显式声明",
+          "properties": {
+            "multi_job": { "type": "boolean" },
+            "max_inflight_jobs": { "type": "integer" },
+            "mem_out_of_order": { "type": "boolean" },
+            "unaligned_access": { "type": "boolean" },
+            "stream_packet": { "type": "boolean" },
+            "soft_reset": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

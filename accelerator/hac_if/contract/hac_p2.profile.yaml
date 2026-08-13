@@ -1,0 +1,39 @@
+# AIXSILICON HW Interface Profile — hac_p2
+# HAC-P2 Memory Profile：GEMM、FFT、压缩、批处理（主动访存型默认 Profile）。
+schema_version: "1.0"
+
+profile:
+  id: PRO-HAC-P2-001
+  name: hac_p2
+  family: hac_if
+  semantic_version: 0.1.0
+  description: |
+    HAC-P2 Memory — 必选 CTRL + MEM + EVENT，推荐系统侧接口 AXI4-Lite + AXI4 Master。
+
+required_families:
+  - hac_ctrl
+  - hac_mem
+  - hac_event
+
+optional_families:
+  - hac_stream
+  - hac_lmem
+  - hac_mgmt
+
+defaults:
+  ctrl:
+    max_inflight_jobs: 4
+    ap_compatibility: ap_ctrl_hs
+  memory:
+    address_width: 64
+    data_width: 128
+    out_of_order: false
+    unaligned_access: false
+  system_side: AXI4-Lite + AXI4 Master
+
+compatibility:
+  base_families: [hac_ctrl, hac_event]
+  rules:
+    - "advanced profiles do not need to mechanically include all optional signals of lower profiles at port level"
+    - "base fields of the same family must stay backward compatible"
+    - "unsupported optional inputs must be explicitly tied-off"

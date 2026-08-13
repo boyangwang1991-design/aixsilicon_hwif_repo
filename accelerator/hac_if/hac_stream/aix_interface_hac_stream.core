@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aix:interface:hac_stream:0.1.0
+description: AIXSILICON HAC-STREAM streaming data interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aix:interface:common:1.0.0
+      - aix:interface:hac_if:0.1.0
+    files:
+      - rtl/aix_hac_stream_pkg.sv
+      - rtl/aix_hac_stream_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/hac_stream.interface.yaml: {copyto: metadata/hac_stream.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

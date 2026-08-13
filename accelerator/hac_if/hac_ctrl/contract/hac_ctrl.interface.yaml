@@ -1,0 +1,192 @@
+# AIXSILICON HW Interface Contract — hac_ctrl
+# HAC-CTRL 任务控制接口（L6）。
+schema_version: "1.0"
+
+interface:
+  id: IFC-HAC-CTRL-001
+  name: aix_hac_ctrl
+  family: hac_ctrl
+  semantic_version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+
+protocol_reference:
+  kind: internal
+  document_id: AIX-HAC-IF-001
+  revision: "0.1"
+
+roles:
+  - id: core
+    aliases: [target, hac_core]
+  - id: shell
+    aliases: [initiator, hac_shell]
+
+parameters:
+  - id: JOB_ID_W
+    type: uint
+    default: 8
+    constraints:
+      min: 0
+  - id: OPCODE_W
+    type: uint
+    default: 8
+    constraints:
+      min: 1
+  - id: ADDR_W
+    type: uint
+    default: 64
+    constraints:
+      min: 1
+  - id: FLAGS_W
+    type: uint
+    default: 16
+    constraints:
+      min: 0
+  - id: STATUS_W
+    type: uint
+    default: 16
+    constraints:
+      min: 1
+
+clock_domains:
+  - id: clk
+    edge: rising
+
+reset_domains:
+  - id: rst_n
+    polarity: active_low
+    assertion: asynchronous
+    deassertion: synchronous
+    clock: clk
+
+channels:
+  - id: cmd
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: cmd_valid
+        from: shell
+        to: core
+        width: "1"
+        required: true
+      - id: cmd_ready
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: cmd_job_id
+        from: shell
+        to: core
+        width: "JOB_ID_W"
+        required: true
+      - id: cmd_opcode
+        from: shell
+        to: core
+        width: "OPCODE_W"
+        required: true
+      - id: cmd_desc_addr
+        from: shell
+        to: core
+        width: "ADDR_W"
+        required: true
+      - id: cmd_flags
+        from: shell
+        to: core
+        width: "FLAGS_W"
+        required: false
+        capability: cmd_flags
+
+  - id: cpl
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: cpl_valid
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: cpl_ready
+        from: shell
+        to: core
+        width: "1"
+        required: true
+      - id: cpl_job_id
+        from: core
+        to: shell
+        width: "JOB_ID_W"
+        required: true
+      - id: cpl_status
+        from: core
+        to: shell
+        width: "STATUS_W"
+        required: true
+
+  - id: cancel
+    handshake: ready_valid
+    clock: clk
+    reset: rst_n
+    ordering: in_order
+    signals:
+      - id: cancel_valid
+        from: shell
+        to: core
+        width: "1"
+        required: false
+        capability: cancel
+      - id: cancel_ready
+        from: core
+        to: shell
+        width: "1"
+        required: false
+        capability: cancel
+      - id: cancel_job_id
+        from: shell
+        to: core
+        width: "JOB_ID_W"
+        required: false
+        capability: cancel
+
+  - id: status
+    handshake: none
+    clock: clk
+    reset: rst_n
+    signals:
+      - id: busy
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: idle
+        from: core
+        to: shell
+        width: "1"
+        required: true
+      - id: quiescent
+        from: core
+        to: shell
+        width: "1"
+        required: true
+
+capabilities:
+  - id: cancel
+    default: false
+  - id: cmd_flags
+    default: true
+
+semantics:
+  cmd_accept: "command accepted when cmd_valid && cmd_ready"
+  cmd_stable: "all command payload stable while cmd_valid=1 && cmd_ready=0"
+  one_completion: "each accepted job produces exactly one completion unless reset-aborted"
+  job_id_unique: "job_id unique within outstanding job set"
+  cpl_stable: "completion payload stable while cpl_valid=1 && cpl_ready=0"
+  idle_vs_quiescent: "idle means no active compute; quiescent additionally means no outstanding memory/stream/event"
+
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

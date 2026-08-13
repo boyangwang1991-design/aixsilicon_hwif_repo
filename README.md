@@ -49,6 +49,7 @@ hw-interfaces/
 ├── peripheral/      # L4：uart / spi / i2c / gpio / jtag_dmi
 ├── dft_debug/       # L5：trace / perf_event / scan / mbist / lbist ...
 ├── safety_security/ # L6：integrity / safety_event / fault_injection / lockstep ...
+├── accelerator/     # L6：hac_if（HAC-CTRL / STREAM / MEM / LMEM / EVENT / MGMT）
 ├── profiles/        # 组织级 / 项目级 Profile
 ├── bindings/        # VIP / IP-XACT / Legacy 绑定映射
 ├── generated/       # 派生视图（禁止手工修改）
