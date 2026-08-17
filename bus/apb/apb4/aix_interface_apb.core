@@ -1,7 +1,7 @@
 CAPI=2:
 
 name: aix:interface:apb:1.0.0
-description: AIXSILICON AMBA APB interface contract and SystemVerilog views
+description: AIXSILICON AMBA APB4 interface contract and SystemVerilog views
 
 filesets:
   rtl:

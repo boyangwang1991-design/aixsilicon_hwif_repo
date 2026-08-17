@@ -1,6 +1,6 @@
 # apb4 — AMBA APB4 接口（L3）
 
-AMBA APB4 端点契约（`aix:interface:apb:1.0.0`）。API4 相对 APB3 新增 PREADY/PSLVERR/PPROT/PSTRB/PWAKEUP。
+AMBA APB4 端点契约（`aix:interface:apb:1.0.0`）。APB4 相对 APB3 新增 PREADY/PSLVERR/PPROT/PSTRB/PWAKEUP。
 
 ## 资产
 
