@@ -1,13 +1,14 @@
-# AIXSILICON Legacy Binding 示例 — APB
+# AIXSILICON Legacy Binding — APB3
 # 映射统一角色到历史/第三方资产的原生端口（plan §11.1 角色别名）。
+# 严格 APB3 信号集：无 PSTRB/PPROT/PWAKEUP（APB4 专属）。
 binding:
-  interface: aix:interface:apb:1.0.0
+  interface: aix:interface:apb3:1.0.0
   target: legacy:apb_bus:1.0.0
   kind: legacy
   role_map:
     initiator: master
     target: slave
-  sv_interface: aix_apb_if
+  sv_interface: aix_apb3_if
   parameters:
     naming_convention: legacy_upper
   signal_map:
@@ -16,10 +17,7 @@ binding:
     - {contract_signal: paddr, target_signal: PADDR}
     - {contract_signal: pwrite, target_signal: PWRITE}
     - {contract_signal: pwdata, target_signal: PWDATA}
-    - {contract_signal: pstrb, target_signal: PSTRB}
-    - {contract_signal: pprot, target_signal: PPROT}
-    - {contract_signal: pwakeup, target_signal: PWAKEUP}
     - {contract_signal: prdata, target_signal: PRDATA}
     - {contract_signal: pready, target_signal: PREADY}
     - {contract_signal: pslverr, target_signal: PSLVERR}
-  description: APB 到历史资产端口名的别名映射（别名不作为新接口类型）。
+  description: APB3 到历史资产端口名的别名映射（别名不作为新接口类型）。

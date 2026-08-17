@@ -1,0 +1,13 @@
+# AIXSILICON HW Interface Profile — APB3 基础
+profile:
+  id: IFC-PROFILE-APB3-BASE-1
+  interface: IFC-APB3-001
+  version: 1.0.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities: {}
+  parameter_constraints:
+    ADDR_W: [32]
+    DATA_W: [8, 16, 32, 64]
+  compatibility_class: apb3_base_v1
+  description: AMBA APB3 基础 Profile（严格 APB3 信号集，无 PSTRB/PPROT/PWAKEUP）。
