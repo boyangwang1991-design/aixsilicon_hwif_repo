@@ -1,37 +1,30 @@
 # AIXSILICON HW Interface Profile — hac_p1
 # HAC-P1 Stream Profile：视频、音频、包处理、滤波。
+# 标准 profile 结构（引用基础接口 ID，冻结 capability；不复制信号）。
 schema_version: "1.0"
 
 profile:
-  id: PRO-HAC-P1-001
-  name: hac_p1
-  family: hac_if
-  semantic_version: 0.1.0
+  id: IFC-PROFILE-HAC-P1-001
+  interface: IFC-HAC-STRM-001
+  version: 0.1.0
+  owner: hw-platform
+  lifecycle: draft
+  capabilities:
+    event: required
+    ctrl_ap_hs: required
+    stream_packet: required
+    mem: optional
+    lmem: optional
+    mgmt: optional
+  parameter_constraints:
+    max_inflight_jobs:
+      min: 1
+      max: 1
+    data_width:
+      fixed: 128
+    packet_mode:
+      fixed: true
+  compatibility_class: hac_p1_v1
   description: |
     HAC-P1 Stream — 必选 CTRL + STREAM + EVENT，推荐系统侧接口 AXI4-Lite + AXI4-Stream。
-
-required_families:
-  - hac_ctrl
-  - hac_stream
-  - hac_event
-
-optional_families:
-  - hac_mem
-  - hac_lmem
-  - hac_mgmt
-
-defaults:
-  ctrl:
-    max_inflight_jobs: 1
-    ap_compatibility: ap_ctrl_hs
-  stream:
-    data_width: 128
-    packet_mode: true
-  system_side: AXI4-Lite + AXI4-Stream
-
-compatibility:
-  base_families: [hac_ctrl, hac_event]
-  rules:
-    - "advanced profiles do not need to mechanically include all optional signals of lower profiles at port level"
-    - "base fields of the same family must stay backward compatible"
-    - "unsupported optional inputs must be explicitly tied-off"
+    required_families: hac_ctrl + hac_stream + hac_event；其余为可选族。

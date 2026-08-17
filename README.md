@@ -54,9 +54,12 @@ hw-interfaces/
 ├── bindings/        # VIP / IP-XACT / Legacy 绑定映射
 ├── generated/       # 派生视图（禁止手工修改）
 ├── examples/        # 消费者示例
-├── tests/           # schema / compile / structural / compatibility / consumer
-└── tools/           # contract_validate / sv_consistency_check / view_generate / ...
+└── archived/        # 历史 plan.md / todo.md（仅存档，不再维护）
 ```
+
+> **确定性工具不保存在本仓库**：生成/校验/兼容/影响/打包统一走
+> **私有 skill `hwif-development-suite`**（`aixsilicon_skill_repo`，唯一入口 `hwif_tool.py`）。
+> 本仓库只存契约 SSOT（`schema/`、`contract/`）+ 生成结果（`generated/`）+ 手写 RTL/SV/`.core`。
 
 ## 4. 接口依赖层级
 
@@ -76,27 +79,41 @@ Subsystem / SoC Top
 
 ## 5. 快速开始
 
+确定性入口统一在 `hwif-development-suite`（`aixsilicon_skill_repo`）：
+
 ```bash
-# 校验所有 Contract YAML 是否符合 Schema
-python3 tools/contract_validate/contract_validate.py --schema schema/interface_contract.schema.yaml
+# 套件路径
+SUITE_DIR="${SUITE_DIR:-.roo/skills/hwif-development-suite}"
 
-# 列出 FuseSoC 可用的接口 Core
+# 校验所有 Contract YAML（Schema + 语义门禁）
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py validate --root . [--json=evidence.json]
+
+# 多视图生成 + drift 检查
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py generate --root . --views if,flat,doc,ipxact
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py generate --root . --check-only
+
+# 兼容判定 / SV 一致性 / core / package
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py compat --a bus/axi/contract/axi.interface.yaml --b bus/apb/contract/apb.interface.yaml
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py consistency --root .
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py core --root .
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py package --root . --family apb --dry-run
+
+# FuseSoC 直接消费接口 Core
 fusesoc core list | grep aix:interface
-
-# 构建某接口族的 RTL 视图（示例）
-fusesoc run --target=lint aix:interface:axi:1.0.0
 ```
 
 ## 6. 文档入口
 
 | 文档 | 路径 |
 |---|---|
-| 完整规划 | [`plan.md`](plan.md:1) |
+| HWIF 域总入口（当前设计） | workflow 仓 `docs/hwif/README.md`（+`repo-architecture.md`+`skill.md`） |
+| 历史设计/收敛规划（存档） | [`archived/docs/design-reference.md`](archived/docs/design-reference.md)、[`archived/docs/aix-hwif-gen-unified-plan.md`](archived/docs/aix-hwif-gen-unified-plan.md) |
 | 架构指南 | [`docs/architecture/README.md`](docs/architecture/README.md:1) |
 | 建模指南 | [`docs/modeling-guide/README.md`](docs/modeling-guide/README.md:1) |
 | 命名规范 | [`docs/naming-convention/README.md`](docs/naming-convention/README.md:1) |
 | 兼容性指南 | [`docs/compatibility-guide/README.md`](docs/compatibility-guide/README.md:1) |
 | 集成指南 | [`docs/integration-guide/README.md`](docs/integration-guide/README.md:1) |
+| 历史规划（存档） | [`archived/plan.md`](archived/plan.md)、`archived/todo.md` |
 
 ## 7. 许可与合规
 
@@ -106,5 +123,5 @@ fusesoc run --target=lint aix:interface:axi:1.0.0
 
 ## 8. 状态
 
-- 一期目标：YAML Contract 成为唯一事实源；P0 接口具备稳定 ID/VLNV/SemVer/Owner/成熟度；struct/interface/flat 三视图一致；FuseSoC 依赖稳定；Compatibility Checker 可判定 DIRECT / ADAPTER_REQUIRED / INCOMPATIBLE。
-- 详细 TODO 与验收标准见 [`plan.md`](plan.md:1370) 第 25/26 节。
+- **准入能力已达**：64 接口 `.core`、62 Contract、18 Profile、56+ 派生视图；validate/generate/consistency/compat/core/package 门禁由 `hwif-development-suite` 唯一入口提供（P1–P4 收敛完成，2026-08-17）。
+- 组合优先级、里程碑与任务状态以 workflow 仓 [`docs/todo.md`](../../docs/todo.md) 为准。
