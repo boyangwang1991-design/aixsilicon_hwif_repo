@@ -90,6 +90,12 @@ channels:
         width: "3"
         required: false
         capability: protection
+      - id: pwakeup
+        from: initiator
+        to: target
+        width: "1"
+        required: false
+        capability: wakeup
       - id: prdata
         from: target
         to: initiator
@@ -111,6 +117,9 @@ capabilities:
     default: false
   - id: protection
     default: false
+  - id: wakeup
+    default: false
+    description: "APB4 PWAKEUP：manager 在低功耗唤醒时置位，向当事组件表明即将发起传输（AMBA APB4）"
 
 semantics:
   transfer: "PSEL && PENABLE && PREADY"

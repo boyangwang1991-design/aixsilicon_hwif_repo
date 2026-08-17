@@ -89,11 +89,11 @@ SUITE_DIR="${SUITE_DIR:-.roo/skills/hwif-development-suite}"
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py validate --root . [--json=evidence.json]
 
 # 多视图生成 + drift 检查
-uv run python ${SUITE_DIR}/scripts/hwif_tool.py generate --root . --views if,flat,doc,ipxact
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py generate --root . --views flat,doc,ipxact
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py generate --root . --check-only
 
 # 兼容判定 / SV 一致性 / core / package
-uv run python ${SUITE_DIR}/scripts/hwif_tool.py compat --a bus/axi/contract/axi.interface.yaml --b bus/apb/contract/apb.interface.yaml
+uv run python ${SUITE_DIR}/scripts/hwif_tool.py compat --a bus/axi/contract/axi.interface.yaml --b bus/apb/apb4/contract/apb.interface.yaml
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py consistency --root .
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py core --root .
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py package --root . --family apb --dry-run

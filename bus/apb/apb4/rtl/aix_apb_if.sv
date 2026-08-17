@@ -18,16 +18,17 @@ interface aix_apb_if #(
   logic [DATA_W-1:0]       pwdata;
   logic [DATA_W/8-1:0]     pstrb;
   logic [2:0]              pprot;
+  logic                    pwakeup;  // APB4 PWAKEUP（capability: wakeup）
   logic [DATA_W-1:0]       prdata;
   logic                    pready;
   logic                    pslverr;
 
   modport initiator (
-    output psel, penable, paddr, pwrite, pwdata, pstrb, pprot,
+    output psel, penable, paddr, pwrite, pwdata, pstrb, pprot, pwakeup,
     input  prdata, pready, pslverr
   );
   modport target (
-    input  psel, penable, paddr, pwrite, pwdata, pstrb, pprot,
+    input  psel, penable, paddr, pwrite, pwdata, pstrb, pprot, pwakeup,
     output prdata, pready, pslverr
   );
 

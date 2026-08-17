@@ -20,6 +20,7 @@ package aix_apb_pkg;
     logic [APB_DATA_W-1:0]  pwdata;
     logic [APB_DATA_W/8-1:0] pstrb;  // capability: write_strobe
     logic [2:0]             pprot;   // capability: protection
+    logic                   pwakeup; // capability: wakeup (APB4)
   } apb_req_t;
 
   // APB 响应（target -> initiator）

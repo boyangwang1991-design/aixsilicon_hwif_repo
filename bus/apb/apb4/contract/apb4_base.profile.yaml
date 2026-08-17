@@ -8,8 +8,9 @@ profile:
   capabilities:
     write_strobe: optional
     protection: optional
+    wakeup: optional
   parameter_constraints:
     ADDR_W: [32]
     DATA_W: [32, 64]
   compatibility_class: apb4_base_v1
-  description: AMBA APB4 基础 Profile（PSTRB/PPROT 可选）。
+  description: AMBA APB4 基础 Profile（PSTRB/PPROT/PWAKEUP 可选）。
