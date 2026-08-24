@@ -1,9 +1,9 @@
 name: CI
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
+  # CI disabled (2026-08): local-first workflow; restore push/pull_request
+  # triggers to re-enable.
+  workflow_dispatch:
 
 jobs:
   contract-structure:
