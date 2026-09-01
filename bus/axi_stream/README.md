@@ -8,9 +8,9 @@ AMBA AXI-Stream 端点契约，支持 Basic / Packet / Metadata Profile。
 |---|---|
 | YAML Contract | [`contract/axi_stream.interface.yaml`](contract/axi_stream.interface.yaml:1) |
 | Packet Profile | [`contract/axi_stream_packet.profile.yaml`](contract/axi_stream_packet.profile.yaml:1) |
-| SV Package（View A） | [`rtl/aix_axi_stream_pkg.sv`](rtl/aix_axi_stream_pkg.sv:1) |
-| SV Interface（View B） | [`rtl/aix_axi_stream_if.sv`](rtl/aix_axi_stream_if.sv:1) |
-| FuseSoC Core | [`aix_interface_axi_stream.core`](aix_interface_axi_stream.core:1) |
+| SV Package（View A） | [`rtl/axi_stream_pkg.sv`](rtl/axi_stream_pkg.sv:1) |
+| SV Interface（View B） | [`rtl/axi_stream_if.sv`](rtl/axi_stream_if.sv:1) |
+| FuseSoC Core | [`interface_axi_stream.core`](interface_axi_stream.core:1) |
 
 ## 语义要点
 
@@ -22,5 +22,5 @@ AMBA AXI-Stream 端点契约，支持 Basic / Packet / Metadata Profile。
 ## 依赖
 
 ```text
-aix:interface:common → aix:interface:axi_stream
+aixsilicon:interface:common → aixsilicon:interface:axi_stream
 ```

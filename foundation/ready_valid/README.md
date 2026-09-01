@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/ready_valid.interface.yaml`](contract/ready_valid.interface.yaml:1) |
-| SV Package（packed req/rsp struct，View A） | [`rtl/aix_ready_valid_pkg.sv`](rtl/aix_ready_valid_pkg.sv:1) |
-| SV Interface（source/sink/monitor modport，View B） | [`rtl/aix_ready_valid_if.sv`](rtl/aix_ready_valid_if.sv:1) |
-| FuseSoC Core | [`aix_interface_ready_valid.core`](aix_interface_ready_valid.core:1) |
+| SV Package（packed req/rsp struct，View A） | [`rtl/ready_valid_pkg.sv`](rtl/ready_valid_pkg.sv:1) |
+| SV Interface（source/sink/monitor modport，View B） | [`rtl/ready_valid_if.sv`](rtl/ready_valid_if.sv:1) |
+| FuseSoC Core | [`interface_ready_valid.core`](interface_ready_valid.core:1) |
 
 ## 语义要点
 
@@ -22,5 +22,5 @@
 ## 依赖
 
 ```text
-aix:interface:common:1.0.0  →  aix:interface:ready_valid:1.0.0
+aixsilicon:interface:common:1.0.0  →  aixsilicon:interface:ready_valid:1.0.0
 ```

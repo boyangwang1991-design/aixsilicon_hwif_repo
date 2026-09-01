@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/jtag_dmi.interface.yaml`](contract/jtag_dmi.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_jtag_dmi.core`](aix_interface_jtag_dmi.core:1) |
+| FuseSoC Core | [`interface_jtag_dmi.core`](interface_jtag_dmi.core:1) |
 
 ## 状态
 

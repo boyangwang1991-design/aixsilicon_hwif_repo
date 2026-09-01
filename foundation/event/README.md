@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/event.interface.yaml`](contract/event.interface.yaml:1) |
-| SV Package | [`rtl/aix_event_pkg.sv`](rtl/aix_event_pkg.sv:1) |
-| SV Interface | [`rtl/aix_event_if.sv`](rtl/aix_event_if.sv:1) |
-| FuseSoC Core | [`aix_interface_event.core`](aix_interface_event.core:1) |
+| SV Package | [`rtl/event_pkg.sv`](rtl/event_pkg.sv:1) |
+| SV Interface | [`rtl/event_if.sv`](rtl/event_if.sv:1) |
+| FuseSoC Core | [`interface_event.core`](interface_event.core:1) |
 
 ## 语义要点
 

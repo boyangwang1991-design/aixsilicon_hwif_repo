@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-AHB-001
-  name: aix_ahb_lite
+  name: ahb_lite
   family: ahb_lite
   semantic_version: 0.1.0
   owner: hw-platform

@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/reg_native.interface.yaml`](contract/reg_native.interface.yaml:1) |
-| SV Package（req/rsp struct，View A） | [`rtl/aix_reg_native_pkg.sv`](rtl/aix_reg_native_pkg.sv:1) |
-| SV Interface（View B） | [`rtl/aix_reg_native_if.sv`](rtl/aix_reg_native_if.sv:1) |
-| FuseSoC Core | [`aix_interface_reg_native.core`](aix_interface_reg_native.core:1) |
+| SV Package（req/rsp struct，View A） | [`rtl/reg_native_pkg.sv`](rtl/reg_native_pkg.sv:1) |
+| SV Interface（View B） | [`rtl/reg_native_if.sv`](rtl/reg_native_if.sv:1) |
+| FuseSoC Core | [`interface_reg_native.core`](interface_reg_native.core:1) |
 
 ## 语义要点
 
@@ -21,5 +21,5 @@
 ## 依赖
 
 ```text
-aix:interface:common → aix:interface:reg_native
+aixsilicon:interface:common → aixsilicon:interface:reg_native
 ```

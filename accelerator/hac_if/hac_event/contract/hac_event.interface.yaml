@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-HAC-EVT-001
-  name: aix_hac_event
+  name: hac_event
   family: hac_event
   semantic_version: 0.1.0
   owner: hw-platform

@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/trace_stream.interface.yaml`](contract/trace_stream.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_trace_stream.core`](aix_interface_trace_stream.core:1) |
+| FuseSoC Core | [`interface_trace_stream.core`](interface_trace_stream.core:1) |
 
 ## 状态
 

@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-RST-001
-  name: aix_reset
+  name: reset
   family: reset
   semantic_version: 1.0.0
   owner: hw-platform

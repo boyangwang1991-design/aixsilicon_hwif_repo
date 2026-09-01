@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-DH-001
-  name: aix_domain_health
+  name: domain_health
   family: domain_health
   semantic_version: 0.1.0
   owner: hw-fusa

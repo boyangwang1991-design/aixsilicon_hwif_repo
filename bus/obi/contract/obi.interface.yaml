@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-OBI-001
-  name: aix_obi
+  name: obi
   family: obi
   semantic_version: 0.1.0
   owner: hw-platform

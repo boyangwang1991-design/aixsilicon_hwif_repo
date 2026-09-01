@@ -1,12 +1,12 @@
 CAPI=2:
 
-name: aix:example:apb_target:0.1.0
+name: aixsilicon:example:apb_target:0.1.0
 description: Minimal APB target consumer example (skeleton)
 
 filesets:
   rtl:
     depend:
-      - aix:interface:apb:1.0.0
+      - aixsilicon:interface:apb:1.0.0
     files:
       - rtl/apb_target_example.sv
     file_type: systemVerilogSource

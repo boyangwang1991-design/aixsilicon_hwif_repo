@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-FI-001
-  name: aix_fault_injection_control
+  name: fault_injection_control
   family: fault_injection_control
   semantic_version: 0.1.0
   owner: hw-fusa

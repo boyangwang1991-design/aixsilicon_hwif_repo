@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/hac_stream.interface.yaml`](contract/hac_stream.interface.yaml:1) |
-| SV Package | [`rtl/aix_hac_stream_pkg.sv`](rtl/aix_hac_stream_pkg.sv:1) |
-| SV Interface | [`rtl/aix_hac_stream_if.sv`](rtl/aix_hac_stream_if.sv:1) |
-| FuseSoC Core | [`aix_interface_hac_stream.core`](aix_interface_hac_stream.core:1) |
+| SV Package | [`rtl/hac_stream_pkg.sv`](rtl/hac_stream_pkg.sv:1) |
+| SV Interface | [`rtl/hac_stream_if.sv`](rtl/hac_stream_if.sv:1) |
+| FuseSoC Core | [`interface_hac_stream.core`](interface_hac_stream.core:1) |
 
 ## 基线信号
 

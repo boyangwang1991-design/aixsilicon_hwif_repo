@@ -1,6 +1,6 @@
 # apb4 — AMBA APB4 接口（L3）
 
-AMBA APB4 端点契约（`aix:interface:apb:1.0.0`）。APB4 相对 APB3 新增 PREADY/PSLVERR/PPROT/PSTRB/PWAKEUP。
+AMBA APB4 端点契约（`aixsilicon:interface:apb:1.0.0`）。APB4 相对 APB3 新增 PREADY/PSLVERR/PPROT/PSTRB/PWAKEUP。
 
 ## 资产
 
@@ -9,10 +9,10 @@ AMBA APB4 端点契约（`aix:interface:apb:1.0.0`）。APB4 相对 APB3 新增 
 | YAML Contract | [`contract/apb.interface.yaml`](contract/apb.interface.yaml:1) |
 | APB4 基础 Profile | [`contract/apb4_base.profile.yaml`](contract/apb4_base.profile.yaml:1) |
 | APB CSR Profile | [`contract/apb_csr_v1.profile.yaml`](contract/apb_csr_v1.profile.yaml:1) |
-| 接口文档 | [`doc/aix_apb_interface.md`](doc/aix_apb_interface.md:1) |
-| SV Package（View A） | [`rtl/aix_apb_pkg.sv`](rtl/aix_apb_pkg.sv:1) |
-| SV Interface（View B） | [`rtl/aix_apb_if.sv`](rtl/aix_apb_if.sv:1) |
-| FuseSoC Core | [`aix_interface_apb.core`](aix_interface_apb.core:1) |
+| 接口文档 | [`doc/apb_interface.md`](doc/apb_interface.md:1) |
+| SV Package（View A） | [`rtl/apb_pkg.sv`](rtl/apb_pkg.sv:1) |
+| SV Interface（View B） | [`rtl/apb_if.sv`](rtl/apb_if.sv:1) |
+| FuseSoC Core | [`interface_apb.core`](interface_apb.core:1) |
 
 ## 语义要点
 
@@ -25,4 +25,4 @@ AMBA APB4 端点契约（`aix:interface:apb:1.0.0`）。APB4 相对 APB3 新增 
 ## 依赖
 
 ```text
-aix:interface:common → aix:interface:apb
+aixsilicon:interface:common → aixsilicon:interface:apb

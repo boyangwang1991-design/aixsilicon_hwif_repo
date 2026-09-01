@@ -7,9 +7,9 @@ fault ID、severity、domain、timestamp、ack。功能安全核心事件通道�
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/safety_event.interface.yaml`](contract/safety_event.interface.yaml:1) |
-| SV Package | [`rtl/aix_safety_event_pkg.sv`](rtl/aix_safety_event_pkg.sv:1) |
-| SV Interface | [`rtl/aix_safety_event_if.sv`](rtl/aix_safety_event_if.sv:1) |
-| FuseSoC Core | [`aix_interface_safety_event.core`](aix_interface_safety_event.core:1) |
+| SV Package | [`rtl/safety_event_pkg.sv`](rtl/safety_event_pkg.sv:1) |
+| SV Interface | [`rtl/safety_event_if.sv`](rtl/safety_event_if.sv:1) |
+| FuseSoC Core | [`interface_safety_event.core`](interface_safety_event.core:1) |
 
 ## 语义要点
 

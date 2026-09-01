@@ -7,9 +7,9 @@ push/pop、full/empty、level、overflow/underflow。
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/fifo_push_pop.interface.yaml`](contract/fifo_push_pop.interface.yaml:1) |
-| SV Package | [`rtl/aix_fifo_push_pop_pkg.sv`](rtl/aix_fifo_push_pop_pkg.sv:1) |
-| SV Interface | [`rtl/aix_fifo_push_pop_if.sv`](rtl/aix_fifo_push_pop_if.sv:1) |
-| FuseSoC Core | [`aix_interface_fifo_push_pop.core`](aix_interface_fifo_push_pop.core:1) |
+| SV Package | [`rtl/fifo_push_pop_pkg.sv`](rtl/fifo_push_pop_pkg.sv:1) |
+| SV Interface | [`rtl/fifo_push_pop_if.sv`](rtl/fifo_push_pop_if.sv:1) |
+| FuseSoC Core | [`interface_fifo_push_pop.core`](interface_fifo_push_pop.core:1) |
 
 ## 语义要点
 

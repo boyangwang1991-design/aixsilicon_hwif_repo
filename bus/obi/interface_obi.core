@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:obi:0.1.0
+description: AIXSILICON RISC-V OBI interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/obi_pkg.sv
+      - rtl/obi_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/obi.interface.yaml: {copyto: metadata/obi.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

@@ -2,13 +2,13 @@
 # 映射统一角色到历史/第三方资产的原生端口（plan §11.1 角色别名）。
 # 严格 APB3 信号集：无 PSTRB/PPROT/PWAKEUP（APB4 专属）。
 binding:
-  interface: aix:interface:apb3:1.0.0
+  interface: aixsilicon:interface:apb3:1.0.0
   target: legacy:apb_bus:1.0.0
   kind: legacy
   role_map:
     initiator: master
     target: slave
-  sv_interface: aix_apb3_if
+  sv_interface: apb3_if
   parameters:
     naming_convention: legacy_upper
   signal_map:

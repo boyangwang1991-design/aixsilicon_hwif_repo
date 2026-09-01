@@ -54,7 +54,7 @@ flowchart TD
 ## 5. FuseSoC 定位
 
 FuseSoC 负责依赖、编译顺序、fileset 与 target，**不承担接口语义建模**。
-每个接口族作为独立 Core 发布（`aix:interface:<name>:<semver>`）。
+每个接口族作为独立 Core 发布（`aixsilicon:interface:<name>:<semver>`）。
 
 ## 6. 目标 Target
 

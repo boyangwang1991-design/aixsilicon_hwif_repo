@@ -27,10 +27,10 @@
 HAC-IF 接口 Core 依赖公共类型底座：
 
 ```text
-aix:interface:common:1.0.0
-aix:interface:ready_valid:1.0.0
-aix:interface:event:1.0.0
-aix:interface:reset:1.0.0
+aixsilicon:interface:common:1.0.0
+aixsilicon:interface:ready_valid:1.0.0
+aixsilicon:interface:event:1.0.0
+aixsilicon:interface:reset:1.0.0
 ```
 
 ## 相关文档

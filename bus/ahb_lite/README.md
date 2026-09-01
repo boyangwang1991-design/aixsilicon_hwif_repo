@@ -7,7 +7,7 @@ AMBA AHB-Lite 目标 Profile。按项目需要建设。
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/ahb_lite.interface.yaml`](contract/ahb_lite.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_ahb_lite.core`](aix_interface_ahb_lite.core:1) |
+| FuseSoC Core | [`interface_ahb_lite.core`](interface_ahb_lite.core:1) |
 
 ## 状态
 

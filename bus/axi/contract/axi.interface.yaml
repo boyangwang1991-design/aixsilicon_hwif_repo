@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-AXI-001
-  name: aix_axi
+  name: axi
   family: axi
   semantic_version: 1.0.0
   owner: hw-platform
@@ -64,73 +64,73 @@ channels:
     reset: rst_n
     ordering: in_order
     signals:
-      - id: aw_valid
+      - id: awvalid
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: aw_ready
+      - id: awready
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: aw_id
+      - id: awid
         from: initiator
         to: target
         width: "ID_W"
         required: true
-      - id: aw_addr
+      - id: awaddr
         from: initiator
         to: target
         width: "ADDR_W"
         required: true
-      - id: aw_len
+      - id: awlen
         from: initiator
         to: target
         width: "8"
         required: true
-      - id: aw_size
+      - id: awsize
         from: initiator
         to: target
         width: "3"
         required: true
-      - id: aw_burst
+      - id: awburst
         from: initiator
         to: target
         width: "2"
         required: true
-      - id: aw_lock
+      - id: awlock
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: aw_cache
+      - id: awcache
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: aw_prot
+      - id: awprot
         from: initiator
         to: target
         width: "3"
         required: true
-      - id: aw_qos
+      - id: awqos
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: aw_region
+      - id: awregion
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: aw_atop
+      - id: awatop
         from: initiator
         to: target
         width: "6"
         required: false
         capability: atop
-      - id: aw_user
+      - id: awuser
         from: initiator
         to: target
         width: "USER_W"
@@ -143,32 +143,32 @@ channels:
     reset: rst_n
     ordering: in_order
     signals:
-      - id: w_valid
+      - id: wvalid
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: w_ready
+      - id: wready
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: w_data
+      - id: wdata
         from: initiator
         to: target
         width: "DATA_W"
         required: true
-      - id: w_strb
+      - id: wstrb
         from: initiator
         to: target
         width: "DATA_W / 8"
         required: true
-      - id: w_last
+      - id: wlast
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: w_user
+      - id: wuser
         from: initiator
         to: target
         width: "USER_W"
@@ -181,27 +181,27 @@ channels:
     reset: rst_n
     ordering: in_order
     signals:
-      - id: b_valid
+      - id: bvalid
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: b_ready
+      - id: bready
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: b_id
+      - id: bid
         from: target
         to: initiator
         width: "ID_W"
         required: true
-      - id: b_resp
+      - id: bresp
         from: target
         to: initiator
         width: "2"
         required: true
-      - id: b_user
+      - id: buser
         from: target
         to: initiator
         width: "USER_W"
@@ -214,67 +214,67 @@ channels:
     reset: rst_n
     ordering: in_order
     signals:
-      - id: ar_valid
+      - id: arvalid
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: ar_ready
+      - id: arready
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: ar_id
+      - id: arid
         from: initiator
         to: target
         width: "ID_W"
         required: true
-      - id: ar_addr
+      - id: araddr
         from: initiator
         to: target
         width: "ADDR_W"
         required: true
-      - id: ar_len
+      - id: arlen
         from: initiator
         to: target
         width: "8"
         required: true
-      - id: ar_size
+      - id: arsize
         from: initiator
         to: target
         width: "3"
         required: true
-      - id: ar_burst
+      - id: arburst
         from: initiator
         to: target
         width: "2"
         required: true
-      - id: ar_lock
+      - id: arlock
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: ar_cache
+      - id: arcache
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: ar_prot
+      - id: arprot
         from: initiator
         to: target
         width: "3"
         required: true
-      - id: ar_qos
+      - id: arqos
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: ar_region
+      - id: arregion
         from: initiator
         to: target
         width: "4"
         required: true
-      - id: ar_user
+      - id: aruser
         from: initiator
         to: target
         width: "USER_W"
@@ -287,37 +287,37 @@ channels:
     reset: rst_n
     ordering: in_order
     signals:
-      - id: r_valid
+      - id: rvalid
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: r_ready
+      - id: rready
         from: initiator
         to: target
         width: "1"
         required: true
-      - id: r_id
+      - id: rid
         from: target
         to: initiator
         width: "ID_W"
         required: true
-      - id: r_data
+      - id: rdata
         from: target
         to: initiator
         width: "DATA_W"
         required: true
-      - id: r_resp
+      - id: rresp
         from: target
         to: initiator
         width: "2"
         required: true
-      - id: r_last
+      - id: rlast
         from: target
         to: initiator
         width: "1"
         required: true
-      - id: r_user
+      - id: ruser
         from: target
         to: initiator
         width: "USER_W"

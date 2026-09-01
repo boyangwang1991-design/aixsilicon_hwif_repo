@@ -7,7 +7,7 @@ power request/accept/state、wake event 抽象。
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/power_state.interface.yaml`](contract/power_state.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_power_state.core`](aix_interface_power_state.core:1) |
+| FuseSoC Core | [`interface_power_state.core`](interface_power_state.core:1) |
 
 ## 状态
 

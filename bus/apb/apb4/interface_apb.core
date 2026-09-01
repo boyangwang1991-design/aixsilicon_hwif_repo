@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aixsilicon:interface:apb:1.0.0
+description: AIXSILICON AMBA APB4 interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/apb_pkg.sv
+      - rtl/apb_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/apb.interface.yaml: {copyto: metadata/apb.interface.yaml}
+      - contract/apb4_base.profile.yaml: {copyto: metadata/apb4_base.profile.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

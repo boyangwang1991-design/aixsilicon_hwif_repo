@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-CC-001
-  name: aix_clock_control
+  name: clock_control
   family: clock_control
   semantic_version: 0.1.0
   owner: hw-platform

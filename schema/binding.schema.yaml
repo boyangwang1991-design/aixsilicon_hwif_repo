@@ -17,7 +17,7 @@ properties:
     properties:
       interface:
         type: string
-        description: 引用接口 VLNV，例如 aix:interface:axi_lite:1.0.0。
+        description: 引用接口 VLNV，例如 aixsilicon:interface:axi_lite:1.0.0。
       target:
         type: string
         description: 绑定目标标识。
@@ -30,7 +30,7 @@ properties:
         description: 统一角色到目标原生角色的映射（如 initiator -> active_master）。
       sv_interface:
         type: string
-        description: 目标 SV interface 名，如 aix_axi_lite_if。
+        description: 目标 SV interface 名，如 axi_lite_if。
       transaction_type:
         type: string
         description: VIP transaction 类型名。

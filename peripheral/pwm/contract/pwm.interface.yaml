@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-PWM-001
-  name: aix_pwm
+  name: pwm
   family: pwm
   semantic_version: 0.1.0
   owner: hw-platform

@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:ready_valid:1.0.0
+description: AIXSILICON ready/valid stream interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/ready_valid_pkg.sv
+      - rtl/ready_valid_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/ready_valid.interface.yaml: {copyto: metadata/ready_valid.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

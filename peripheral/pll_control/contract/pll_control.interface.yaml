@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-PLL-001
-  name: aix_pll_control
+  name: pll_control
   family: pll_control
   semantic_version: 0.1.0
   owner: hw-platform

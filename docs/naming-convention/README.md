@@ -16,8 +16,8 @@
 
 | 对象 | 规则 | 示例 |
 |---|---|---|
-| Package | `aix_<interface>_pkg` | `aix_axi_pkg` |
-| Interface | `aix_<interface>_if` | `aix_axi_if` |
+| Package | `aix_<interface>_pkg` | `axi_pkg` |
+| Interface | `aix_<interface>_if` | `axi_if` |
 | Request 类型 | `<interface>_req_t` | `axi_req_t` |
 | Response 类型 | `<interface>_rsp_t` | `axi_rsp_t` |
 | Channel 类型 | 协议标准简称 | `aw_t`、`w_t`、`b_t` |

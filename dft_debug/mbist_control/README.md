@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/mbist_control.interface.yaml`](contract/mbist_control.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_mbist_control.core`](aix_interface_mbist_control.core:1) |
+| FuseSoC Core | [`interface_mbist_control.core`](interface_mbist_control.core:1) |
 
 ## 状态
 

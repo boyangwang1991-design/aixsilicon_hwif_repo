@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-INT-001
-  name: aix_interrupt
+  name: interrupt
   family: interrupt
   semantic_version: 1.0.0
   owner: hw-platform

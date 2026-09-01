@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/memory_1rw.interface.yaml`](contract/memory_1rw.interface.yaml:1) |
-| SV Package | [`rtl/aix_memory_1rw_pkg.sv`](rtl/aix_memory_1rw_pkg.sv:1) |
-| SV Interface | [`rtl/aix_memory_1rw_if.sv`](rtl/aix_memory_1rw_if.sv:1) |
-| FuseSoC Core | [`aix_interface_memory_1rw.core`](aix_interface_memory_1rw.core:1) |
+| SV Package | [`rtl/memory_1rw_pkg.sv`](rtl/memory_1rw_pkg.sv:1) |
+| SV Interface | [`rtl/memory_1rw_if.sv`](rtl/memory_1rw_if.sv:1) |
+| FuseSoC Core | [`interface_memory_1rw.core`](interface_memory_1rw.core:1) |
 
 ## 语义要点
 

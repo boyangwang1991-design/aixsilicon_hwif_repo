@@ -23,7 +23,7 @@ properties:
     properties:
       vlnv:
         type: string
-        description: 例如 aix:interface:axi:1.0.0。
+        description: 例如 aixsilicon:interface:axi:1.0.0。
       semantic_version:
         type: string
         pattern: "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"

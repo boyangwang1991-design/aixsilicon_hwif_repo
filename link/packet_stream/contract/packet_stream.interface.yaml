@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-PS-001
-  name: aix_packet_stream
+  name: packet_stream
   family: packet_stream
   semantic_version: 1.0.0
   owner: hw-platform

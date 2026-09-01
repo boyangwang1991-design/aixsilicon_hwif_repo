@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:clock:1.0.0
+description: AIXSILICON clock interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/clock_pkg.sv
+      - rtl/clock_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/clock.interface.yaml: {copyto: metadata/clock.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

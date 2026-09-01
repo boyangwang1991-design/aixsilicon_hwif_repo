@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-MEM-TDP-001
-  name: aix_memory_tdp
+  name: memory_tdp
   family: memory_tdp
   semantic_version: 0.1.0
   owner: hw-platform

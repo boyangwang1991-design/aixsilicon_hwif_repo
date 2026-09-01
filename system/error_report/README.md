@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/error_report.interface.yaml`](contract/error_report.interface.yaml:1) |
-| SV Package | [`rtl/aix_error_report_pkg.sv`](rtl/aix_error_report_pkg.sv:1) |
-| SV Interface | [`rtl/aix_error_report_if.sv`](rtl/aix_error_report_if.sv:1) |
-| FuseSoC Core | [`aix_interface_error_report.core`](aix_interface_error_report.core:1) |
+| SV Package | [`rtl/error_report_pkg.sv`](rtl/error_report_pkg.sv:1) |
+| SV Interface | [`rtl/error_report_if.sv`](rtl/error_report_if.sv:1) |
+| FuseSoC Core | [`interface_error_report.core`](interface_error_report.core:1) |
 
 ## 语义要点
 

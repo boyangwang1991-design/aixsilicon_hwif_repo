@@ -7,9 +7,9 @@ SOP/EOP/byte enable/channel/error。用于数据包级流接口（区别于 flit
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/packet_stream.interface.yaml`](contract/packet_stream.interface.yaml:1) |
-| SV Package | [`rtl/aix_packet_stream_pkg.sv`](rtl/aix_packet_stream_pkg.sv:1) |
-| SV Interface | [`rtl/aix_packet_stream_if.sv`](rtl/aix_packet_stream_if.sv:1) |
-| FuseSoC Core | [`aix_interface_packet_stream.core`](aix_interface_packet_stream.core:1) |
+| SV Package | [`rtl/packet_stream_pkg.sv`](rtl/packet_stream_pkg.sv:1) |
+| SV Interface | [`rtl/packet_stream_if.sv`](rtl/packet_stream_if.sv:1) |
+| FuseSoC Core | [`interface_packet_stream.core`](interface_packet_stream.core:1) |
 
 ## 语义要点
 

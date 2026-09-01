@@ -34,13 +34,13 @@
 ├── tests/              # compile / type_roundtrip / flat_roundtrip / compatibility
 ├── examples/
 ├── metadata/           # release_manifest.yaml / provenance.yaml
-└── aix_interface_<name>.core
+└── interface_<name>.core
 ```
 
 ## 4. ID、VLNV 与版本
 
 - 稳定 ID：`IFC-<FAMILY>-<NNN>`，例如 `IFC-STREAM-001`；
-- VLNV：`aix:interface:<name>:<major>.<minor>.<patch>`；
+- VLNV：`aixsilicon:interface:<name>:<major>.<minor>.<patch>`；
 - SemVer 规则见 [`plan.md`](plan.md:952) 第 16.1 节；packed struct 字段增删视为破坏性变更。
 
 ## 5. 成熟度状态

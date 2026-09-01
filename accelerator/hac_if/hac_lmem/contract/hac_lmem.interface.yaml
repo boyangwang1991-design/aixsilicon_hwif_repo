@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-HAC-LMEM-001
-  name: aix_hac_lmem
+  name: hac_lmem
   family: hac_lmem
   semantic_version: 0.1.0
   owner: hw-platform

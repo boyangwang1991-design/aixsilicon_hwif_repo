@@ -7,7 +7,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/reset_control.interface.yaml`](contract/reset_control.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_reset_control.core`](aix_interface_reset_control.core:1) |
+| FuseSoC Core | [`interface_reset_control.core`](interface_reset_control.core:1) |
 
 ## 状态
 

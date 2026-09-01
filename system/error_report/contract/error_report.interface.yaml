@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-ERR-001
-  name: aix_error_report
+  name: error_report
   family: error_report
   semantic_version: 1.0.0
   owner: hw-platform

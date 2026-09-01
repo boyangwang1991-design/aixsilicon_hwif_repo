@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-REG-001
-  name: aix_reg_native
+  name: reg_native
   family: reg_native
   semantic_version: 1.0.0
   owner: hw-platform

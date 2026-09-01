@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:interrupt:1.0.0
+description: AIXSILICON interrupt interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/interrupt_pkg.sv
+      - rtl/interrupt_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/interrupt.interface.yaml: {copyto: metadata/interrupt.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

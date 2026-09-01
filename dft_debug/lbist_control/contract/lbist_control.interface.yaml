@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-LBIST-001
-  name: aix_lbist_control
+  name: lbist_control
   family: lbist_control
   semantic_version: 0.1.0
   owner: hw-dft

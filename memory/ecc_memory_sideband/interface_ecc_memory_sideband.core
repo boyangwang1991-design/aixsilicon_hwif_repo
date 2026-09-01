@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:ecc_memory_sideband:0.1.0
+description: AIXSILICON ECC memory sideband interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/ecc_memory_sideband_pkg.sv
+      - rtl/ecc_memory_sideband_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/ecc_memory_sideband.interface.yaml: {copyto: metadata/ecc_memory_sideband.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/uart.interface.yaml`](contract/uart.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_uart.core`](aix_interface_uart.core:1) |
+| FuseSoC Core | [`interface_uart.core`](interface_uart.core:1) |
 
 ## 状态
 

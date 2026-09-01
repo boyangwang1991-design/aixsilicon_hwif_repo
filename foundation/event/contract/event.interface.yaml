@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-EVT-001
-  name: aix_event
+  name: event
   family: event
   semantic_version: 1.0.0
   owner: hw-platform

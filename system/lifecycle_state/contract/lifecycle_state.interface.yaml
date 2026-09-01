@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-LS-001
-  name: aix_lifecycle_state
+  name: lifecycle_state
   family: lifecycle_state
   semantic_version: 0.1.0
   owner: hw-fusa

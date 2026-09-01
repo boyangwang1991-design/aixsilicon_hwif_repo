@@ -7,7 +7,7 @@ RISC-V CPU/加速器 OBI 接口，按项目需要建设（OpenHW OBI 规范）�
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/obi.interface.yaml`](contract/obi.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_obi.core`](aix_interface_obi.core:1) |
+| FuseSoC Core | [`interface_obi.core`](interface_obi.core:1) |
 
 ## 状态
 

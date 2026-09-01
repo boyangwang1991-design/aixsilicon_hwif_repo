@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/hac_mem.interface.yaml`](contract/hac_mem.interface.yaml:1) |
-| SV Package | [`rtl/aix_hac_mem_pkg.sv`](rtl/aix_hac_mem_pkg.sv:1) |
-| SV Interface | [`rtl/aix_hac_mem_if.sv`](rtl/aix_hac_mem_if.sv:1) |
-| FuseSoC Core | [`aix_interface_hac_mem.core`](aix_interface_hac_mem.core:1) |
+| SV Package | [`rtl/hac_mem_pkg.sv`](rtl/hac_mem_pkg.sv:1) |
+| SV Interface | [`rtl/hac_mem_if.sv`](rtl/hac_mem_if.sv:1) |
+| FuseSoC Core | [`interface_hac_mem.core`](interface_hac_mem.core:1) |
 
 ## 逻辑通道
 

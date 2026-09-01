@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:ahb_lite:0.1.0
+description: AIXSILICON AHB-Lite interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/ahb_lite_pkg.sv
+      - rtl/ahb_lite_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/ahb_lite.interface.yaml: {copyto: metadata/ahb_lite.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

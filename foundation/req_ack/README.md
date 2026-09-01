@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/req_ack.interface.yaml`](contract/req_ack.interface.yaml:1) |
-| SV Package | [`rtl/aix_req_ack_pkg.sv`](rtl/aix_req_ack_pkg.sv:1) |
-| SV Interface | [`rtl/aix_req_ack_if.sv`](rtl/aix_req_ack_if.sv:1) |
-| FuseSoC Core | [`aix_interface_req_ack.core`](aix_interface_req_ack.core:1) |
+| SV Package | [`rtl/req_ack_pkg.sv`](rtl/req_ack_pkg.sv:1) |
+| SV Interface | [`rtl/req_ack_if.sv`](rtl/req_ack_if.sv:1) |
+| FuseSoC Core | [`interface_req_ack.core`](interface_req_ack.core:1) |
 
 ## 语义要点
 

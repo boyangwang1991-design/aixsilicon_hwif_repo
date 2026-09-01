@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-RA-001
-  name: aix_req_ack
+  name: req_ack
   family: req_ack
   semantic_version: 1.0.0
   owner: hw-platform

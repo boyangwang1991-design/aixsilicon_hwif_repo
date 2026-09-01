@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-PAD-001
-  name: aix_pad_control
+  name: pad_control
   family: pad_control
   semantic_version: 0.1.0
   owner: hw-platform

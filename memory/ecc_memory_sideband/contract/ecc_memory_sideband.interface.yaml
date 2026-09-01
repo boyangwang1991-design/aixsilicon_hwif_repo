@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-ECC-SB-001
-  name: aix_ecc_memory_sideband
+  name: ecc_memory_sideband
   family: ecc_memory_sideband
   semantic_version: 0.1.0
   owner: hw-fusa

@@ -1,7 +1,7 @@
 // Copyright (c) 2026 AIXSILICON
 // SPDX-License-Identifier: Apache-2.0
 //
-// apb_target_example: 消费 aix:interface:apb 的最小 target 示例（骨架）。
+// apb_target_example: 消费 aixsilicon:interface:apb 的最小 target 示例（骨架）。
 // 使用 View A（packed struct apb_req_t / apb_rsp_t）。
 
 module apb_target_example #(
@@ -20,7 +20,7 @@ module apb_target_example #(
   output logic                    pslverr_o
 );
 
-  import aix_apb_pkg::*;
+  import apb_pkg::*;
 
   apb_req_t req;
   apb_rsp_t rsp;

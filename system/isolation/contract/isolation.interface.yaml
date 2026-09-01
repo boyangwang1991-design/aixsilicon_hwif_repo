@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-ISO-001
-  name: aix_isolation
+  name: isolation
   family: isolation
   semantic_version: 0.1.0
   owner: hw-platform

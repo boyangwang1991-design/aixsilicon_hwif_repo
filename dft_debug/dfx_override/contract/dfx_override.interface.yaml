@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-DFX-001
-  name: aix_dfx_override
+  name: dfx_override
   family: dfx_override
   semantic_version: 0.1.0
   owner: hw-dft

@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-AXIL-001
-  name: aix_axi_lite
+  name: axi_lite
   family: axi_lite
   semantic_version: 1.0.0
   owner: hw-platform

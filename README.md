@@ -66,11 +66,11 @@ hw-interfaces/
 接口 Core **不能反向依赖** 具体 IP、CBB 或 VIP，以防形成依赖环：
 
 ```text
-aix:interface:common
+aixsilicon:interface:common
         ↓
-aix:interface:ready_valid / interrupt / memory
+aixsilicon:interface:ready_valid / interrupt / memory
         ↓
-aix:interface:apb / axi_lite / axi / axi_stream
+aixsilicon:interface:apb / axi_lite / axi / axi_stream
         ↓
 IP / CBB / VIP
         ↓
@@ -99,7 +99,7 @@ uv run python ${SUITE_DIR}/scripts/hwif_tool.py core --root .
 uv run python ${SUITE_DIR}/scripts/hwif_tool.py package --root . --family apb --dry-run
 
 # FuseSoC 直接消费接口 Core
-fusesoc core list | grep aix:interface
+fusesoc core list | grep aixsilicon:interface
 ```
 
 ## 6. 文档入口

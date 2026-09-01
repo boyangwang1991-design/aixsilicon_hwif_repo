@@ -8,9 +8,9 @@ AMBA AXI4-Lite 端点契约。AXI4-Lite 基础 Profile，可选 USER/PROT。
 |---|---|
 | YAML Contract | [`contract/axi_lite.interface.yaml`](contract/axi_lite.interface.yaml:1) |
 | AXI4-Lite CSR Profile | [`contract/axi_lite_csr.profile.yaml`](contract/axi_lite_csr.profile.yaml:1) |
-| SV Package（View A） | [`rtl/aix_axi_lite_pkg.sv`](rtl/aix_axi_lite_pkg.sv:1) |
-| SV Interface（View B） | [`rtl/aix_axi_lite_if.sv`](rtl/aix_axi_lite_if.sv:1) |
-| FuseSoC Core | [`aix_interface_axi_lite.core`](aix_interface_axi_lite.core:1) |
+| SV Package（View A） | [`rtl/axi_lite_pkg.sv`](rtl/axi_lite_pkg.sv:1) |
+| SV Interface（View B） | [`rtl/axi_lite_if.sv`](rtl/axi_lite_if.sv:1) |
+| FuseSoC Core | [`interface_axi_lite.core`](interface_axi_lite.core:1) |
 
 ## 语义要点
 
@@ -23,5 +23,5 @@ AMBA AXI4-Lite 端点契约。AXI4-Lite 基础 Profile，可选 USER/PROT。
 ## 依赖
 
 ```text
-aix:interface:common → aix:interface:axi_lite
+aixsilicon:interface:common → aixsilicon:interface:axi_lite
 ```

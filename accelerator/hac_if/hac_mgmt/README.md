@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/hac_mgmt.interface.yaml`](contract/hac_mgmt.interface.yaml:1) |
-| SV Package | [`rtl/aix_hac_mgmt_pkg.sv`](rtl/aix_hac_mgmt_pkg.sv:1) |
-| SV Interface | [`rtl/aix_hac_mgmt_if.sv`](rtl/aix_hac_mgmt_if.sv:1) |
-| FuseSoC Core | [`aix_interface_hac_mgmt.core`](aix_interface_hac_mgmt.core:1) |
+| SV Package | [`rtl/hac_mgmt_pkg.sv`](rtl/hac_mgmt_pkg.sv:1) |
+| SV Interface | [`rtl/hac_mgmt_if.sv`](rtl/hac_mgmt_if.sv:1) |
+| FuseSoC Core | [`interface_hac_mgmt.core`](interface_hac_mgmt.core:1) |
 
 ## 复位与生命周期
 

@@ -3,11 +3,11 @@
 本接口族提供所有接口共用的类型与工具，是依赖层级的最底层：
 
 ```text
-aix:interface:common
+aixsilicon:interface:common
         ↓
-aix:interface:ready_valid / interrupt / memory
+aixsilicon:interface:ready_valid / interrupt / memory
         ↓
-aix:interface:apb / axi_lite / axi / axi_stream
+aixsilicon:interface:apb / axi_lite / axi / axi_stream
 ```
 
 ## 内容
@@ -15,10 +15,10 @@ aix:interface:apb / axi_lite / axi / axi_stream
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/common_types.interface.yaml`](contract/common_types.interface.yaml:1) |
-| SV Package（bool/enum/ID/error code/工具） | [`rtl/aix_common_pkg.sv`](rtl/aix_common_pkg.sv:1) |
-| typedef 宏（include） | [`rtl/aix_common_typedef.svh`](rtl/aix_common_typedef.svh:1) |
-| assign 宏（include） | [`rtl/aix_common_assign.svh`](rtl/aix_common_assign.svh:1) |
-| FuseSoC Core | [`aix_interface_common.core`](aix_interface_common.core:1) |
+| SV Package（bool/enum/ID/error code/工具） | [`rtl/common_pkg.sv`](rtl/common_pkg.sv:1) |
+| typedef 宏（include） | [`rtl/common_typedef.svh`](rtl/common_typedef.svh:1) |
+| assign 宏（include） | [`rtl/common_assign.svh`](rtl/common_assign.svh:1) |
+| FuseSoC Core | [`interface_common.core`](interface_common.core:1) |
 
 ## 边界
 

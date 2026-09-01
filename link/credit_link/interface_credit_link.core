@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aixsilicon:interface:credit_link:1.0.0
+description: AIXSILICON credit link interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/credit_link_pkg.sv
+      - rtl/credit_link_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/credit_link.interface.yaml: {copyto: metadata/credit_link.interface.yaml}
+      - contract/credit_link_basic.profile.yaml: {copyto: metadata/credit_link_basic.profile.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

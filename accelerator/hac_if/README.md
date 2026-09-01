@@ -39,9 +39,9 @@
 |---|---|
 | 协议规格 | [`spec/hac_if_spec.md`](spec/hac_if_spec.md:1) |
 | 配置 SSOT Schema | [`schema/hac_if.schema.json`](schema/hac_if.schema.json:1) |
-| 公共类型包 | [`rtl/aix_hac_if_pkg.sv`](rtl/aix_hac_if_pkg.sv:1) |
-| SVA 基线 | [`sva/aix_hac_if_assertions.sv`](sva/aix_hac_if_assertions.sv:1) |
-| FuseSoC 聚合 Core | [`aix_interface_hac_if.core`](aix_interface_hac_if.core:1) |
+| 公共类型包 | [`rtl/hac_if_pkg.sv`](rtl/hac_if_pkg.sv:1) |
+| SVA 基线 | [`sva/hac_if_assertions.sv`](sva/hac_if_assertions.sv:1) |
+| FuseSoC 聚合 Core | [`interface_hac_if.core`](interface_hac_if.core:1) |
 
 ## 验证归属
 
@@ -52,10 +52,10 @@
 ## 依赖
 
 ```text
-aix:interface:common:1.0.0
-aix:interface:ready_valid:1.0.0
-aix:interface:event:1.0.0
-aix:interface:reset:1.0.0
+aixsilicon:interface:common:1.0.0
+aixsilicon:interface:ready_valid:1.0.0
+aixsilicon:interface:event:1.0.0
+aixsilicon:interface:reset:1.0.0
 ```
 
 > 依赖方向单向：`IP Repo → CBB Repo → HWIF Repo`，验证依赖 `DV COMMON / VIP`。

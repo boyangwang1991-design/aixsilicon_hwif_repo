@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/i2c.interface.yaml`](contract/i2c.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_i2c.core`](aix_interface_i2c.core:1) |
+| FuseSoC Core | [`interface_i2c.core`](interface_i2c.core:1) |
 
 ## 状态
 

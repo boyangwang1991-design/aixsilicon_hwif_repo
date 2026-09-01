@@ -14,6 +14,6 @@
 
 ## 待添加
 
-- `hac_p0_aes_crc.core`：接入 `aix:interface:hac_ctrl` + `aix:interface:hac_event`；
+- `hac_p0_aes_crc.core`：接入 `aixsilicon:interface:hac_ctrl` + `aixsilicon:interface:hac_event`；
 - `hac_p1_fir.core`：接入 `hac_ctrl` + `hac_stream` + `hac_event`；
 - `hac_p2_conv2d.core`：接入 `hac_ctrl` + `hac_mem` + `hac_event`。

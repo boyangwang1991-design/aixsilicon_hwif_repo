@@ -7,9 +7,9 @@ SoC 公共中断控制接口，覆盖 level/pulse、polarity、vector、source/s
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/interrupt.interface.yaml`](contract/interrupt.interface.yaml:1) |
-| SV Package | [`rtl/aix_interrupt_pkg.sv`](rtl/aix_interrupt_pkg.sv:1) |
-| SV Interface | [`rtl/aix_interrupt_if.sv`](rtl/aix_interrupt_if.sv:1) |
-| FuseSoC Core | [`aix_interface_interrupt.core`](aix_interface_interrupt.core:1) |
+| SV Package | [`rtl/interrupt_pkg.sv`](rtl/interrupt_pkg.sv:1) |
+| SV Interface | [`rtl/interrupt_if.sv`](rtl/interrupt_if.sv:1) |
+| FuseSoC Core | [`interface_interrupt.core`](interface_interrupt.core:1) |
 
 ## 语义要点
 
@@ -21,5 +21,5 @@ SoC 公共中断控制接口，覆盖 level/pulse、polarity、vector、source/s
 ## 依赖
 
 ```text
-aix:interface:common → aix:interface:interrupt
+aixsilicon:interface:common → aixsilicon:interface:interrupt
 ```

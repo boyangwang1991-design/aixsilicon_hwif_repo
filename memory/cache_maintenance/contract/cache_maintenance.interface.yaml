@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-CM-001
-  name: aix_cache_maintenance
+  name: cache_maintenance
   family: cache_maintenance
   semantic_version: 0.1.0
   owner: hw-platform

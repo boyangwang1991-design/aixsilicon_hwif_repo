@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:trace_stream:0.1.0
+description: AIXSILICON trace stream interface contract and SystemVerilog views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/trace_stream_pkg.sv
+      - rtl/trace_stream_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/trace_stream.interface.yaml: {copyto: metadata/trace_stream.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

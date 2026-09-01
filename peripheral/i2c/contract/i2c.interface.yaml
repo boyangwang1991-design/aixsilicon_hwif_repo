@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-I2C-001
-  name: aix_i2c
+  name: i2c
   family: i2c
   semantic_version: 0.1.0
   owner: hw-platform

@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-MBIST-001
-  name: aix_mbist_control
+  name: mbist_control
   family: mbist_control
   semantic_version: 0.1.0
   owner: hw-platform

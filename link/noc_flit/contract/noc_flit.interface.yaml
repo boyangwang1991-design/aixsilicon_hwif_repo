@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-NOC-001
-  name: aix_noc_flit
+  name: noc_flit
   family: noc_flit
   semantic_version: 0.1.0
   owner: hw-platform

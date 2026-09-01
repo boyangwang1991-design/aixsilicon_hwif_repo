@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-SECV-001
-  name: aix_security_violation
+  name: security_violation
   family: security_violation
   semantic_version: 0.1.0
   owner: hw-fusa

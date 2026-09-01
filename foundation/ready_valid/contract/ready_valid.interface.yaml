@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-RV-001
-  name: aix_ready_valid
+  name: ready_valid
   family: ready_valid
   semantic_version: 1.0.0
   owner: hw-platform

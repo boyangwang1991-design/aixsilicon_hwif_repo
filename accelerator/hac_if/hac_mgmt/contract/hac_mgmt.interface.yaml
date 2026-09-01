@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-HAC-MGMT-001
-  name: aix_hac_mgmt
+  name: hac_mgmt
   family: hac_mgmt
   semantic_version: 0.1.0
   owner: hw-platform

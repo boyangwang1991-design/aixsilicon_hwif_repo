@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-SAFE-001
-  name: aix_safety_event
+  name: safety_event
   family: safety_event
   semantic_version: 1.0.0
   owner: hw-fusa

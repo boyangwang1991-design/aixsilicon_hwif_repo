@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-M1R1W-001
-  name: aix_memory_1r1w
+  name: memory_1r1w
   family: memory_1r1w
   semantic_version: 1.0.0
   owner: hw-platform

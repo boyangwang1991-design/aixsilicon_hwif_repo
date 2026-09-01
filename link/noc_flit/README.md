@@ -7,7 +7,7 @@ header/body/tail、VC、route、error、poison。
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/noc_flit.interface.yaml`](contract/noc_flit.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_noc_flit.core`](aix_interface_noc_flit.core:1) |
+| FuseSoC Core | [`interface_noc_flit.core`](interface_noc_flit.core:1) |
 
 ## 状态
 

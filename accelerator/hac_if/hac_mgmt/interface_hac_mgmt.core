@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aixsilicon:interface:hac_mgmt:0.1.0
+description: AIXSILICON HAC-MGMT management interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+      - aixsilicon:interface:hac_if:0.1.0
+    files:
+      - rtl/hac_mgmt_pkg.sv
+      - rtl/hac_mgmt_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/hac_mgmt.interface.yaml: {copyto: metadata/hac_mgmt.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

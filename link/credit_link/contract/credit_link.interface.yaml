@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-CL-001
-  name: aix_credit_link
+  name: credit_link
   family: credit_link
   semantic_version: 1.0.0
   owner: hw-platform

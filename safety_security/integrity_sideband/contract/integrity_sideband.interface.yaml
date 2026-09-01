@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-INT-SB-001
-  name: aix_integrity_sideband
+  name: integrity_sideband
   family: integrity_sideband
   semantic_version: 0.1.0
   owner: hw-fusa

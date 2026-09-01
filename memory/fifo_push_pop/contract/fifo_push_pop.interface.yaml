@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-FIFO-001
-  name: aix_fifo_push_pop
+  name: fifo_push_pop
   family: fifo_push_pop
   semantic_version: 1.0.0
   owner: hw-platform

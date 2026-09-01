@@ -6,7 +6,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-APB3-001
-  name: aix_apb3
+  name: apb3
   family: apb
   semantic_version: 1.0.0
   owner: hw-platform

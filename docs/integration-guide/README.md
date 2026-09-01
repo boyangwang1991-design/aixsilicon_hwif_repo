@@ -9,7 +9,7 @@ IP 侧在自身 metadata 中声明实例级接口绑定：
 ```yaml
 interfaces:
   - instance_id: s_ctrl
-    contract: aix:interface:axi_lite:1.0.0
+    contract: aixsilicon:interface:axi_lite:1.0.0
     profile: axi_lite_csr_v1
     role: target
     parameters:
@@ -20,7 +20,7 @@ interfaces:
     power_domain: pd_peri
 
   - instance_id: irq_done
-    contract: aix:interface:interrupt:1.0.0
+    contract: aixsilicon:interface:interrupt:1.0.0
     profile: interrupt_level_v1
     role: source
     width: 1
@@ -30,14 +30,14 @@ interfaces:
 
 ```yaml
 binding:
-  interface: aix:interface:axi_lite:1.0.0
+  interface: aixsilicon:interface:axi_lite:1.0.0
   vip: aix:vip:axi_lite:1.0.0
   role_map:
     initiator: active_master
     target: active_slave
     monitor: passive
-  sv_interface: aix_axi_lite_if
-  transaction_type: aix_axi_lite_item
+  sv_interface: axi_lite_if
+  transaction_type: axi_lite_item
 ```
 
 ## 3. CBB Adapter 声明
@@ -45,8 +45,8 @@ binding:
 ```yaml
 adapter:
   id: CBB-AXI-DW-001
-  input_contract: aix:interface:axi:1.x
-  output_contract: aix:interface:axi:1.x
+  input_contract: aixsilicon:interface:axi:1.x
+  output_contract: aixsilicon:interface:axi:1.x
   transforms:
     - DataWidth
   limitations:
@@ -55,13 +55,13 @@ adapter:
 
 ## 4. FuseSoC 依赖方式
 
-每个接口族作为独立 Core 发布（`aix:interface:<name>:<semver>`），消费者在
+每个接口族作为独立 Core 发布（`aixsilicon:interface:<name>:<semver>`），消费者在
 `filesets.*.depend` 中声明依赖，例如：
 
 ```yaml
 depend:
-  - aix:interface:common:1.0.0
-  - aix:interface:axi:1.0.0
+  - aixsilicon:interface:common:1.0.0
+  - aixsilicon:interface:axi:1.0.0
 ```
 
 正式项目基线应精确锁定 Catalog commit、Interface VLNV、Git SHA 与生成器版本；

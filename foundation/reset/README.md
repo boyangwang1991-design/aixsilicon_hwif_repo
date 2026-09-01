@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/reset.interface.yaml`](contract/reset.interface.yaml:1) |
-| SV Package | [`rtl/aix_reset_pkg.sv`](rtl/aix_reset_pkg.sv:1) |
-| SV Interface | [`rtl/aix_reset_if.sv`](rtl/aix_reset_if.sv:1) |
-| FuseSoC Core | [`aix_interface_reset.core`](aix_interface_reset.core:1) |
+| SV Package | [`rtl/reset_pkg.sv`](rtl/reset_pkg.sv:1) |
+| SV Interface | [`rtl/reset_if.sv`](rtl/reset_if.sv:1) |
+| FuseSoC Core | [`interface_reset.core`](interface_reset.core:1) |
 
 ## 语义要点（详见 [`docs/modeling-guide/README.md`](../../docs/modeling-guide/README.md:1)）
 

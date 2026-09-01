@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-PERF-001
-  name: aix_performance_event
+  name: performance_event
   family: performance_event
   semantic_version: 0.1.0
   owner: hw-platform

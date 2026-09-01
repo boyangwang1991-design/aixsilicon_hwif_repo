@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-UART-001
-  name: aix_uart
+  name: uart
   family: uart
   semantic_version: 0.1.0
   owner: hw-platform

@@ -7,9 +7,9 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/clock.interface.yaml`](contract/clock.interface.yaml:1) |
-| SV Package | [`rtl/aix_clock_pkg.sv`](rtl/aix_clock_pkg.sv:1) |
-| SV Interface | [`rtl/aix_clock_if.sv`](rtl/aix_clock_if.sv:1) |
-| FuseSoC Core | [`aix_interface_clock.core`](aix_interface_clock.core:1) |
+| SV Package | [`rtl/clock_pkg.sv`](rtl/clock_pkg.sv:1) |
+| SV Interface | [`rtl/clock_if.sv`](rtl/clock_if.sv:1) |
+| FuseSoC Core | [`interface_clock.core`](interface_clock.core:1) |
 
 ## 语义要点
 

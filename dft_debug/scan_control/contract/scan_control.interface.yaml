@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-SCAN-001
-  name: aix_scan_control
+  name: scan_control
   family: scan_control
   semantic_version: 0.1.0
   owner: hw-dft

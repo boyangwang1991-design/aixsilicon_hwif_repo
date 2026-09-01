@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/gpio.interface.yaml`](contract/gpio.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_gpio.core`](aix_interface_gpio.core:1) |
+| FuseSoC Core | [`interface_gpio.core`](interface_gpio.core:1) |
 
 ## 状态
 

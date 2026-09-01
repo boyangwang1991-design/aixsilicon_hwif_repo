@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-HAC-STRM-001
-  name: aix_hac_stream
+  name: hac_stream
   family: hac_stream
   semantic_version: 0.1.0
   owner: hw-platform

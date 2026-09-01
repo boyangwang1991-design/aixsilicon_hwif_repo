@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+### Changed
+- **命名规范统一（全仓重构）**：
+  - 文件/模块名去除 `aix_` 前缀：`aix_<name>_if.sv` → `<name>_if.sv`、`aix_<name>_pkg.sv` → `<name>_pkg.sv`、
+    `aix_interface_<family>.core` → `interface_<family>.core`、`aix_<name>_interface.md` → `<name>_interface.md`；
+  - 契约 `interface.name` 去前缀（`aix_axi` → `axi` 等），派生视图（rtl/pkg/core/doc/generated）同步；
+  - VLNV vendor 统一为 `aixsilicon:`（`aix:interface:*` → `aixsilicon:interface:*`）；
+  - 工具链（hwif-development-suite scaffold/view_generate/consistency/core/impact/package）同步命名派生规则。
+
 ### Added
 - 初始化仓库骨架，覆盖 [`plan.md`](plan.md:398) 第 8 节推荐结构：
   - `schema/`：Interface Contract / Profile / Binding / Compatibility / Release Manifest 5 个 YAML Schema；

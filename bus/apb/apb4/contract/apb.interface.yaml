@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-APB-001
-  name: aix_apb
+  name: apb
   family: apb
   semantic_version: 1.0.0
   owner: hw-platform

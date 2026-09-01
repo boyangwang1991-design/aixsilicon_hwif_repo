@@ -1,0 +1,28 @@
+CAPI=2:
+
+name: aixsilicon:interface:event:1.0.0
+description: AIXSILICON event interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+    files:
+      - rtl/event_pkg.sv
+      - rtl/event_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/event.interface.yaml: {copyto: metadata/event.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

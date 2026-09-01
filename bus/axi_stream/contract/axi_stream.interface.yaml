@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-AXIS-001
-  name: aix_axi_stream
+  name: axi_stream
   family: axi_stream
   semantic_version: 1.0.0
   owner: hw-platform

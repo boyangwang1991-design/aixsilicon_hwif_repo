@@ -4,7 +4,7 @@ schema_version: "1.0"
 
 interface:
   id: IFC-WDG-001
-  name: aix_watchdog_service
+  name: watchdog_service
   family: watchdog_service
   semantic_version: 0.1.0
   owner: hw-fusa

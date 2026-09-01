@@ -5,7 +5,7 @@
 | 资产 | 路径 |
 |---|---|
 | YAML Contract | [`contract/spi.interface.yaml`](contract/spi.interface.yaml:1) |
-| FuseSoC Core | [`aix_interface_spi.core`](aix_interface_spi.core:1) |
+| FuseSoC Core | [`interface_spi.core`](interface_spi.core:1) |
 
 ## 状态
 

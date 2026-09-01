@@ -1,6 +1,6 @@
 # apb_target — APB target 最小消费者（示例）
 
-展示一个 IP 如何通过 FuseSoC 依赖 `aix:interface:apb` 并使用 View A（packed struct）。
+展示一个 IP 如何通过 FuseSoC 依赖 `aixsilicon:interface:apb` 并使用 View A（packed struct）。
 
 ## 结构
 
