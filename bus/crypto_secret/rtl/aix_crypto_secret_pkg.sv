@@ -13,6 +13,8 @@ package aix_crypto_secret_pkg;
   localparam int unsigned ROLE_USAGE_RESERVE = 8;
   localparam int unsigned ROLE_QUERY = 9;
   localparam int unsigned ROLE_NONCE_RESERVE = 10;
+  localparam int unsigned ROLE_DECRYPT_RESERVE = 11;
+  localparam int unsigned ROLE_DECRYPT_SETTLE = 12;
   localparam int unsigned USE_MAC = 1;
   localparam int unsigned USE_ENCRYPT = 2;
   localparam int unsigned USE_DECRYPT = 3;

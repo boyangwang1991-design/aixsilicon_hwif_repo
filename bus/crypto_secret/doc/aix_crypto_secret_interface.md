@@ -47,10 +47,10 @@ req/rsp是按两个角色发送方向聚合的结构，包含各通道的valid/r
 - **ordering**：每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
 - **units**：长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
 - **version**：service_version=0x0200；所有其他版本拒绝。状态码与IFC-CCI-001 status_codes共用编号。
-- **role_codes**：['1=KEY_LOAD', '2=SECRET_MESSAGE_READ', '3=RESULT_PREPARE', '4=RESULT_WRITE', '5=RESULT_COMMIT', '6=RESULT_ABORT', '7=REVOKE', '8=USAGE_RESERVE', '9=QUERY', '10=NONCE_RESERVE']
+- **role_codes**：['1=KEY_LOAD', '2=SECRET_MESSAGE_READ', '3=RESULT_PREPARE', '4=RESULT_WRITE', '5=RESULT_COMMIT', '6=RESULT_ABORT', '7=REVOKE', '8=USAGE_RESERVE', '9=QUERY', '10=NONCE_RESERVE', '11=DECRYPT_RESERVE', '12=DECRYPT_SETTLE']
 - **use_codes**：['1=MAC', '2=ENCRYPT', '3=DECRYPT', '4=DERIVE', '5=WRAP', '6=UNWRAP', '7=HP']
 - **object_state_codes**：['0=NONE', '1=PREPARED', '2=WRITTEN', '3=ACTIVE', '4=ABORTED', '5=UNKNOWN']
-- **control**：COMMIT/ABORT/REVOKE/QUERY仅control_req/control_rsp，其他role仅req/rsp；至少一个独立control credit，不能由普通请求占尽。
+- **control**：COMMIT/ABORT/REVOKE/QUERY/DECRYPT_SETTLE仅control_req/control_rsp，其他role仅req/rsp；至少一个独立control credit，不能由普通请求占尽。
 - **authorization**：每请求检查owner/use/operation/mode/policy_epoch/key_epoch和parent完整identity；offset+length防溢出并在对象范围内；未知role不降级KEY_LOAD。
 - **fragmentation**：read每片由rsp元数据先成功握手，再传fragment_length字节，last终结该片，offset连续；end=1表示最后片；总量等于请求length后才使用。写请求接受后write按offset连续传length字节，last终结写请求；完成后rsp确认。长度0不传数据。
 - **lifecycle**：PREPARE返回不可见object_ref；WRITE完成形成WRITTEN；COMMIT由可信端点复核总长/权限后原子ACTIVE。QUERY使用原事务request_id；重试COMMIT/ABORT/QUERY幂等且内容相同，身份或参数不符拒绝。
@@ -60,3 +60,4 @@ req/rsp是按两个角色发送方向聚合的结构，包含各通道的valid/r
 - **secret_boundary**：read/write仅物理受保护互联，禁止连普通CCI/dma/pio；取消迟到片进入清除域；length/offset/总长匹配后才使用。
 - **key_load_length**：KEY_LOAD必须offset=0且length等于对象完整实际字节数，响应total_length为该对象完整长度；不匹配KEY_DENIED且不交付秘密。不得把范围读取或前缀截断作为KEY_LOAD成功；调用方由公开cmd_key_bits确定精确长度。
 - **first_batch**：首批KEY_LOAD、REVOKE、QUERY及按nonce策略所需预留；secret-message/result角色供后续扩展，不自动宣称KDF secure_service：还需独立MAC子调用profile。
+- **decrypt_budget**：Ascon受信服务按实际key身份跨owner/alias/instance管理F(已结算失败)与R(未结算解密预留)。DECRYPT_RESERVE仅req/rsp，object_ref为key，length=0，原子检查F+R<2^32后R+=1并返回独立票据object_ref；额度耗尽KEY_DENIED并要求平台rekey。DECRYPT_SETTLE仅control_req/control_rsp，object_ref为票据、usage_amount=0表示已认证成功、1表示失败或取消，其他值INVALID_PARAM；原子R-=1且F+=usage_amount，饱和并持久化。相同request_id重试幂等。未结算票据在reset/失联后保守记失败，不能无条件退款；成功只退失败预算预留，不退字节用量。若平台不能证明票据最终结算则隔离并拒绝旧key新解密。
