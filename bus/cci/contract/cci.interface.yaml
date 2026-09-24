@@ -1,0 +1,748 @@
+schema_version: '1.0'
+interface:
+  id: IFC-CCI-001
+  name: aix_cci
+  family: cci
+  semantic_version: 0.2.0
+  owner: security-crypto
+  lifecycle: draft
+protocol_reference:
+  kind: internal
+  document_id: CCS-CONTRACT-0.2
+  revision: '0.2'
+  note: 首批 SM3/HMAC-SM3、AES-GCM 的 CCI-M0-0.2.0 草案；不是 AMBA AXI4-Stream 完整协议声明。
+roles:
+- id: client
+- id: component
+parameters:
+- id: DATA_W
+  type: uint
+  default: 128
+  constraints:
+    enum:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+clock_domains:
+- id: clk
+  edge: rising
+reset_domains:
+- id: reset_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  can_interrupt_transactions: true
+  output_during_reset: 所有 valid=0；结果不可访问；释放后擦除/KAT 完成才能准入
+channels:
+- id: cmd
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: cmd_valid
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cmd_ready
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cmd_owner_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_instance_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: cmd_epoch
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_task_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_request_seq
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: cmd_context_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: cmd_generation
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_operation
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: cmd_mode
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: cmd_direction
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: cmd_action
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: cmd_inherit
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cmd_policy_epoch
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_key_count
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: cmd_key_bits
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_key_bindings
+    from: client
+    to: component
+    width: '416'
+    required: true
+  - id: cmd_out_len
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: cmd_tag_len
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cmd_message_total_known
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cmd_message_total_len
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: cmd_aad_total_known
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cmd_aad_total_len
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: cmd_segment_count
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: cmd_segments
+    from: client
+    to: component
+    width: '1456'
+    required: true
+- id: din
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: din_valid
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: din_ready
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: din_owner_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: din_instance_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: din_epoch
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: din_task_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: din_request_seq
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: din_context_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: din_generation
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: din_segment_index
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: din_data
+    from: client
+    to: component
+    width: DATA_W
+    required: true
+  - id: din_keep
+    from: client
+    to: component
+    width: DATA_W/8
+    required: true
+  - id: din_last
+    from: client
+    to: component
+    width: '1'
+    required: true
+- id: dout
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: dout_valid
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: dout_ready
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: dout_owner_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: dout_instance_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: dout_epoch
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: dout_task_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: dout_request_seq
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: dout_context_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: dout_generation
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: dout_segment_index
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: dout_segment_kind
+    from: component
+    to: client
+    width: '8'
+    required: true
+  - id: dout_data
+    from: component
+    to: client
+    width: DATA_W
+    required: true
+  - id: dout_keep
+    from: component
+    to: client
+    width: DATA_W/8
+    required: true
+  - id: dout_last
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: dout_provisional
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: dout_secret
+    from: component
+    to: client
+    width: '1'
+    required: true
+- id: cpl
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: cpl_valid
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cpl_ready
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cpl_owner_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cpl_instance_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: cpl_epoch
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cpl_task_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cpl_request_seq
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_context_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: cpl_generation
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cpl_status
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: cpl_detail
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: cpl_auth_valid
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cpl_auth_ok
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cpl_consumed
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_produced
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_delivered
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_context_alive
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cpl_cleanup_done
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cpl_result_ref
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_secret_result_bytes
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: cpl_replay_bytes
+    from: component
+    to: client
+    width: '64'
+    required: true
+- id: mgmt_req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: mgmt_req_valid
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: mgmt_req_ready
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: mgmt_req_owner_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: mgmt_req_instance_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: mgmt_req_epoch
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: mgmt_req_task_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: mgmt_req_request_seq
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: mgmt_req_context_id
+    from: client
+    to: component
+    width: '16'
+    required: true
+  - id: mgmt_req_generation
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: mgmt_req_request_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: mgmt_req_operation
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: mgmt_req_scope
+    from: client
+    to: component
+    width: '8'
+    required: true
+  - id: mgmt_req_key_ref
+    from: client
+    to: component
+    width: '64'
+    required: true
+  - id: mgmt_req_key_epoch
+    from: client
+    to: component
+    width: '32'
+    required: true
+- id: mgmt_rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: mgmt_rsp_valid
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: mgmt_rsp_ready
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: mgmt_rsp_owner_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: mgmt_rsp_instance_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: mgmt_rsp_epoch
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: mgmt_rsp_task_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: mgmt_rsp_request_seq
+    from: component
+    to: client
+    width: '64'
+    required: true
+  - id: mgmt_rsp_context_id
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: mgmt_rsp_generation
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: mgmt_rsp_request_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: mgmt_rsp_status
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: mgmt_rsp_drain_done
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: mgmt_rsp_cleanup_done
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: mgmt_rsp_committed
+    from: component
+    to: client
+    width: '1'
+    required: true
+- id: cap_req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: cap_req_valid
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cap_req_ready
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cap_req_request_id
+    from: client
+    to: component
+    width: '32'
+    required: true
+  - id: cap_req_word_index
+    from: client
+    to: component
+    width: '32'
+    required: true
+- id: cap_rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: cap_rsp_valid
+    from: component
+    to: client
+    width: '1'
+    required: true
+  - id: cap_rsp_ready
+    from: client
+    to: component
+    width: '1'
+    required: true
+  - id: cap_rsp_request_id
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cap_rsp_word_index
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cap_rsp_status
+    from: component
+    to: client
+    width: '16'
+    required: true
+  - id: cap_rsp_data
+    from: component
+    to: client
+    width: '32'
+    required: true
+  - id: cap_rsp_last
+    from: component
+    to: client
+    width: '1'
+    required: true
+capabilities: []
+semantics:
+  transfer: valid && ready；停顿时 valid 和 payload 稳定；取消通过握手丢弃或双端协同 reset，不单边撤 valid。
+  reset: 旧 epoch 响应排空/隔离前不得复用身份；硬复位不伪造 completion。
+  ordering: 每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
+  units: 长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
+  baseline: 仅编码首批 SM3、HMAC-SM3、AES-GCM；其他算法/tuple/replay/secure-call 必须采用新增命名 profile
+    后接入，禁止私有字段扩展。
+  operation_codes:
+  - 1=SM3_DIGEST
+  - 2=HMAC_SM3_GENERATE
+  - 3=HMAC_SM3_VERIFY
+  - 16=AES_GCM
+  mode_codes:
+  - 0=NONE (SM3/HMAC)
+  - 1=GCM_BASE
+  - 2=GCM_EXT
+  direction_codes:
+  - 0=NONE (SM3/HMAC)
+  - 1=ENCRYPT
+  - 2=DECRYPT
+  action_codes:
+  - 0=ONESHOT
+  - 1=INIT
+  - 2=UPDATE
+  - 3=FINAL
+  segment_codes:
+  - 1=PAYLOAD
+  - 2=AAD
+  - 3=NONCE_IV
+  - 4=EXPECTED_TAG
+  - 5=DIGEST_TAG
+  status_codes:
+  - 0=OK
+  - 1=UNSUPPORTED
+  - 2=INVALID_PARAM
+  - 3=SEGMENT_ERROR
+  - 4=LENGTH_ERROR
+  - 5=KEY_DENIED
+  - 6=AUTH_FAIL
+  - 7=CANCELLED
+  - 8=ENTROPY_ERROR
+  - 9=INTERNAL_ERROR
+  - 10=SERVICE_TIMEOUT
+  - 11=DELIVERY_ERROR
+  - 12=DELIVERY_UNKNOWN
+  - 13=TOO_LATE
+  - 14=BUSY
+  detail_codes:
+  - 0=NONE
+  - 1=ID_CONFLICT
+  management_codes:
+  - 1=CANCEL
+  - 2=ZEROIZE
+  - 3=QUIESCE
+  - 4=REVOKE
+  - 5=QUERY
+  scope_codes:
+  - 0=COMMAND
+  - 1=CONTEXT
+  - 2=INSTANCE
+  - 3=OWNER
+  - 4=KEY_EPOCH
+  key_binding_layout: 'entry i 位于 [104*i +: 104]：role[7:0]、object_ref[71:8]、key_epoch[103:72]；role
+    1=MAC_KEY、2=CIPHER_KEY；最多4项，本基线带key操作恰好1项；未用项全0。'
+  segment_layout: 'entry i 位于 [91*i +: 91]：kind[7:0]、subtype[15:8]、present[16]、length_known[17]、length[81:18]、phase_end[82]、reserved[90:83]；最多16项；本profile
+    subtype/reserved=0；有效项present=1/length_known=1；未用项全0。'
+  cmd_atomic: 固定 header、key bindings 与全部 segment descriptors 在同一 cmd 握手原子接受；segment_count=0..16。不得用未握手侧带改变命令。
+  inherit: INIT/ONESHOT inherit=0；UPDATE/FINAL inherit=1 时 mode/direction/policy_epoch/key_count/key_bits/key_bindings/out_len/tag_len/总长字段为0并继承；operation仍须与context匹配。inherit=0时上述锁定字段必须逐项相同。
+  key_length: cmd_key_bits是公开的密钥长度；AES_GCM仅128/192/256，SM3_DIGEST必须0，HMAC为8的正整数倍且不超过MAX_KEY_BYTES*8。KEY_LOAD请求length=key_bits/8，可信服务必须校验对象的完整实际长度相等，禁止读前缀截断后当作另一长度密钥；组件再次核对rsp_total_length、连续fragment和最终字节数，不一致报KEY_DENIED并清除。INIT锁定，继承/显式匹配规则同其他锁定字段。
+  data_rules: 低lane首字节；非末拍keep全1，末拍低位连续且非0；空段无数据拍；last仅终结片段。segment_index引用本命令有效描述符；dout序号为本操作输出顺序，从0开始。
+  input_order: SM3/HMAC PAYLOAD 后可有EXPECTED_TAG(仅verify终结)；GCM NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅decrypt终结)。nonce仅INIT/ONESHOT，tag仅FINAL/ONESHOT；phase_end关闭逻辑阶段。
+  identity: 可信入口分配request_seq；重复活跃task按新seq拒绝，不终结原task。同context最多一个更新；不同context允许乱序完成。
+  completion: 成功cpl在本命令全部输出握手后；失败不等待不存在的成功输出；先隔离/清除。UPDATE auth_valid=0。verify终态auth_valid=1；auth_ok仅成功认证为1。
+  output_security: AEAD decrypt provisional=1且只到可信staging；SECRET普通dout始终禁止，secret字段必须0；不能以标记代替安全服务通道。
+  key_service: key请求/交付采用独立IFC-CRYPTO_SECRET-001，不在普通CCI内复用数据；平台可信client保证nonce/usage责任，managed策略使用独立服务。
+  forward_progress: 至少1条独立mgmt请求credit及响应资源；普通dout满不能耗尽错误完成资源；外部永不响应则隔离/锁定，不宣称取消成功。
+  capability_image: 只读32-bit words：word0=0x00020000；word1=DATA_W；word2=operation bitmap(bit0
+    digest,bit1 hmac-gen,bit2 hmac-verify,bit3 aes-gcm)；word3=mode bitmap(bit0 base,bit1
+    ext)；word4=CONTEXTS；word5=TASK_SLOTS；word6=MAX_MESSAGE_BYTES；word7=MAX_AAD_BYTES；word8=MAX_OUTPUT_BYTES；word9=STAGING_BYTES；word10=SERVICE_WATCHDOG_CYCLES；word11=MAX_KEY_BYTES；word12=key
+    bits mask(bit0 128,bit1 192,bit2 256)；word13=MAX_PREFIX_BYTES,last=1。0..12 last=0；越界INVALID_PARAM/data=0/last=1。能力与manifest必须一致。
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

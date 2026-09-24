@@ -1,0 +1,15 @@
+{
+  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "inputs": {
+    "contract/cci.interface.yaml": "47dc0557877088b587d2494f592b28f59ed32b08a18a6e0e22d7f3d32383360f",
+    "contract/cci_base.profile.yaml": "da312219fc0ce123e3ffa4e250819d1e755888154c428e1ace4870be7c83c2cd"
+  },
+  "outputs": {
+    "doc/aix_cci_interface.md": "734677e5fd2c2d2497302ab64bc8856b2924b3c4e25e2f5f4627e80bb9fab30e",
+    "interface_cci.core": "411ad6ab99d5ae7e250fca145bf0e7a265adf3b486becd246b99c45f7a0d52b5",
+    "rtl/aix_cci_flat_wrapper.sv": "ce7a22ce2cf5250b3acc866646ee1d7f1b2e2773f64a5178d0e2a9798f5981c1",
+    "rtl/aix_cci_if.sv": "de52811f7389f196b5631624402f52f5626accdea9ab7b9a9395a30fc4e573e8",
+    "rtl/aix_cci_pkg.sv": "f4d8b15e07ab0ae43f9e92bf840e46f700026ec9015a10c107f9537cfb66852b"
+  },
+  "schema": "hwif-implementation/1.0"
+}

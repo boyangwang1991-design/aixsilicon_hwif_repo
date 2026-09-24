@@ -1,0 +1,15 @@
+{
+  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "inputs": {
+    "contract/crypto_secret.interface.yaml": "07a0097e2716eabc489b2596986872775e853285a3364dd6c7c3d44a90f0d1e7",
+    "contract/crypto_secret_base.profile.yaml": "9898e27c009cb68ee42ff3deea084ed77d6a5ea1340f23d65b9d40868228b78d"
+  },
+  "outputs": {
+    "doc/aix_crypto_secret_interface.md": "a5f7a29251b18969e87b7f9498de9e9096d7d0477091c0deb4478962efe6529d",
+    "interface_crypto_secret.core": "3fffb58bf2672577a3247da0f43ac7e86ad0880a67bc3f1a9d4cf83953764be4",
+    "rtl/aix_crypto_secret_flat_wrapper.sv": "d1b7a174ad7e0697b3ff3c49b2e8b145e2d5f0871f036960b401681fb5d3dbe5",
+    "rtl/aix_crypto_secret_if.sv": "ab1a003ca8d55d6e3394bea922294d8bc68fc888fe70b4b0558b216e3bd528c6",
+    "rtl/aix_crypto_secret_pkg.sv": "1e597c3eb0c8cbee849c6eb312288f82ba8e189bf42124f755029c204c0f7a0a"
+  },
+  "schema": "hwif-implementation/1.0"
+}

@@ -1,0 +1,15 @@
+{
+  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "inputs": {
+    "contract/crypto_entropy.interface.yaml": "fde0a6acff44d3a2fbcf2fdc59e8c4fc3fbec38a2d90750b1e78b05638b55ca8",
+    "contract/crypto_entropy_base.profile.yaml": "5265e1f607030e5b6500ebc86c4559126bd8308c6c98bf5f34c82d320c71bb4d"
+  },
+  "outputs": {
+    "doc/aix_crypto_entropy_interface.md": "d3085d4397345c7e5ca27fbb2d6112a544c942875155ca61d4d1cbe7cb20d665",
+    "interface_crypto_entropy.core": "91b916b26404168f63f8e02ab4aea540cca41ac5c7cf5ca459020366ce3d91d8",
+    "rtl/aix_crypto_entropy_flat_wrapper.sv": "1cd6edbbec06e241fcb12df05183c3974eb52703fe4c1c2ac34c802fae911010",
+    "rtl/aix_crypto_entropy_if.sv": "920c0db0ebb7002e156f9eb256adceeddcb65a7da587241ea57c913ef657ec99",
+    "rtl/aix_crypto_entropy_pkg.sv": "4f81be075884da875c78f28d8b9843b26d3f877d84516040d0cda7b4a9adb500"
+  },
+  "schema": "hwif-implementation/1.0"
+}

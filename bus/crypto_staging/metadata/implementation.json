@@ -1,0 +1,15 @@
+{
+  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "inputs": {
+    "contract/crypto_staging.interface.yaml": "ab69c8e514895f51b0609b1697951f60ab5141f607ec3befd341ef261b88bdf4",
+    "contract/crypto_staging_base.profile.yaml": "2d1952ed361751fc3944b562b96804007025a438f89676587a3aaf9e25a5fffb"
+  },
+  "outputs": {
+    "doc/aix_crypto_staging_interface.md": "36f20716547290ad7b4b165aea134aa8be68ea7766041178167c32a40e0a8e26",
+    "interface_crypto_staging.core": "c1f035c273cbe9329c4152312538dd28fcf34d23110e30b14b854e71dde87ba3",
+    "rtl/aix_crypto_staging_flat_wrapper.sv": "c0fac5a00bfac385db36d430467a9348628aca6bb695ce01e1320d5a54175059",
+    "rtl/aix_crypto_staging_if.sv": "466cc3b994a1fc98af2e4dda5b6e11762af640b8f821256385a5e60b2c1f17c0",
+    "rtl/aix_crypto_staging_pkg.sv": "88e9be06fad2a49083adab98b18ea57ddfec4596f7be13e5a8365b45ceafb5dd"
+  },
+  "schema": "hwif-implementation/1.0"
+}

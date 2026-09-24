@@ -1,0 +1,16 @@
+profile:
+  id: IFC-PROFILE-CCI-BASE-0-2
+  interface: IFC-CCI-001
+  version: 0.2.0
+  owner: security-crypto
+  lifecycle: draft
+  capabilities: {}
+  parameter_constraints:
+    DATA_W:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+  compatibility_class: cci_v0_2
+  description: 首批公共基线；无实现资格声明；不同宽度必须经已验证 adapter。

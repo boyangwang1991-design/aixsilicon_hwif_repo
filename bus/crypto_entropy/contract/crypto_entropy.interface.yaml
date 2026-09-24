@@ -1,0 +1,196 @@
+schema_version: '1.0'
+interface:
+  id: IFC-CRYPTO_ENTROPY-001
+  name: aix_crypto_entropy
+  family: crypto_entropy
+  semantic_version: 0.2.0
+  owner: security-crypto
+  lifecycle: draft
+protocol_reference:
+  kind: internal
+  document_id: CCS-CONTRACT-0.2
+  revision: '0.2'
+  note: 首批 SM3/HMAC-SM3、AES-GCM 的 CCI-M0-0.2.0 草案；不是 AMBA AXI4-Stream 完整协议声明。
+roles:
+- id: consumer
+- id: source
+parameters:
+- id: DATA_W
+  type: uint
+  default: 128
+  constraints:
+    enum:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+clock_domains:
+- id: clk
+  edge: rising
+reset_domains:
+- id: reset_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  can_interrupt_transactions: true
+  output_during_reset: 所有 valid=0；结果不可访问；释放后擦除/KAT 完成才能准入
+channels:
+- id: req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: req_valid
+    from: consumer
+    to: source
+    width: '1'
+    required: true
+  - id: req_ready
+    from: source
+    to: consumer
+    width: '1'
+    required: true
+  - id: req_owner_id
+    from: consumer
+    to: source
+    width: '32'
+    required: true
+  - id: req_instance_id
+    from: consumer
+    to: source
+    width: '16'
+    required: true
+  - id: req_epoch
+    from: consumer
+    to: source
+    width: '32'
+    required: true
+  - id: req_task_id
+    from: consumer
+    to: source
+    width: '32'
+    required: true
+  - id: req_request_seq
+    from: consumer
+    to: source
+    width: '64'
+    required: true
+  - id: req_context_id
+    from: consumer
+    to: source
+    width: '16'
+    required: true
+  - id: req_generation
+    from: consumer
+    to: source
+    width: '32'
+    required: true
+  - id: req_request_id
+    from: consumer
+    to: source
+    width: '64'
+    required: true
+  - id: req_length
+    from: consumer
+    to: source
+    width: '32'
+    required: true
+- id: rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: rsp_valid
+    from: source
+    to: consumer
+    width: '1'
+    required: true
+  - id: rsp_ready
+    from: consumer
+    to: source
+    width: '1'
+    required: true
+  - id: rsp_owner_id
+    from: source
+    to: consumer
+    width: '32'
+    required: true
+  - id: rsp_instance_id
+    from: source
+    to: consumer
+    width: '16'
+    required: true
+  - id: rsp_epoch
+    from: source
+    to: consumer
+    width: '32'
+    required: true
+  - id: rsp_task_id
+    from: source
+    to: consumer
+    width: '32'
+    required: true
+  - id: rsp_request_seq
+    from: source
+    to: consumer
+    width: '64'
+    required: true
+  - id: rsp_context_id
+    from: source
+    to: consumer
+    width: '16'
+    required: true
+  - id: rsp_generation
+    from: source
+    to: consumer
+    width: '32'
+    required: true
+  - id: rsp_request_id
+    from: source
+    to: consumer
+    width: '64'
+    required: true
+  - id: rsp_status
+    from: source
+    to: consumer
+    width: '16'
+    required: true
+  - id: rsp_data
+    from: source
+    to: consumer
+    width: DATA_W
+    required: true
+  - id: rsp_keep
+    from: source
+    to: consumer
+    width: DATA_W/8
+    required: true
+  - id: rsp_last
+    from: source
+    to: consumer
+    width: '1'
+    required: true
+  - id: rsp_health_ok
+    from: source
+    to: consumer
+    width: '1'
+    required: true
+capabilities: []
+semantics:
+  transfer: valid && ready；停顿时 valid 和 payload 稳定；取消通过握手丢弃或双端协同 reset，不单边撤 valid。
+  reset: 旧 epoch 响应排空/隔离前不得复用身份；硬复位不伪造 completion。
+  ordering: 每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
+  units: 长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
+  status: 使用IFC-CCI-001 status_codes；请求length必须非零且不超过manifest上限。
+  health: 仅health_ok=1且status=OK的有效握手字节可消费；最后拍last且低连续keep，总字节=length；失败rsp无数据(keep=0,last=1)，不是成功零长度随机数。
+  failure: 每请求有限watchdog；耗尽则停顿或ENTROPY_ERROR并清除，不复用随机数、不降级防护。
+  scope: 首批FUNCTIONAL不需熵；定义此接口不授予SCA资格，SCA需要独立profile/熵预算及证据。
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

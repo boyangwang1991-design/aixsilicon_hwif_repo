@@ -1,0 +1,488 @@
+schema_version: '1.0'
+interface:
+  id: IFC-CRYPTO_STAGING-001
+  name: aix_crypto_staging
+  family: crypto_staging
+  semantic_version: 0.2.0
+  owner: security-crypto
+  lifecycle: draft
+protocol_reference:
+  kind: internal
+  document_id: CCS-CONTRACT-0.2
+  revision: '0.2'
+  note: 首批 SM3/HMAC-SM3、AES-GCM 的 CCI-M0-0.2.0 草案；不是 AMBA AXI4-Stream 完整协议声明。
+roles:
+- id: shell
+- id: staging
+parameters:
+- id: DATA_W
+  type: uint
+  default: 128
+  constraints:
+    enum:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+clock_domains:
+- id: clk
+  edge: rising
+reset_domains:
+- id: reset_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  can_interrupt_transactions: true
+  output_during_reset: 所有 valid=0；结果不可访问；释放后擦除/KAT 完成才能准入
+channels:
+- id: req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: req_valid
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: req_ready
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+  - id: req_owner_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: req_instance_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: req_epoch
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: req_task_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: req_request_seq
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: req_context_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: req_generation
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: req_service_version
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: req_request_id
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: req_operation
+    from: shell
+    to: staging
+    width: '8'
+    required: true
+  - id: req_staging_ref
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: req_length
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: req_policy_epoch
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: req_auth_valid
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: req_auth_ok
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+- id: rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: rsp_valid
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+  - id: rsp_ready
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: rsp_owner_id
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: rsp_instance_id
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: rsp_epoch
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: rsp_task_id
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: rsp_request_seq
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: rsp_context_id
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: rsp_generation
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: rsp_request_id
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: rsp_status
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: rsp_staging_ref
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: rsp_reserved_bytes
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: rsp_written_bytes
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: rsp_state
+    from: staging
+    to: shell
+    width: '8'
+    required: true
+  - id: rsp_cleanup_done
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+- id: write
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: write_valid
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: write_ready
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+  - id: write_owner_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: write_instance_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: write_epoch
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: write_task_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: write_request_seq
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: write_context_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: write_generation
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: write_staging_ref
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: write_offset
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: write_data
+    from: shell
+    to: staging
+    width: DATA_W
+    required: true
+  - id: write_keep
+    from: shell
+    to: staging
+    width: DATA_W/8
+    required: true
+  - id: write_last
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+- id: control_req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: control_req_valid
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: control_req_ready
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+  - id: control_req_owner_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: control_req_instance_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: control_req_epoch
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: control_req_task_id
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: control_req_request_seq
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: control_req_context_id
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: control_req_generation
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: control_req_service_version
+    from: shell
+    to: staging
+    width: '16'
+    required: true
+  - id: control_req_request_id
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: control_req_operation
+    from: shell
+    to: staging
+    width: '8'
+    required: true
+  - id: control_req_staging_ref
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: control_req_length
+    from: shell
+    to: staging
+    width: '64'
+    required: true
+  - id: control_req_policy_epoch
+    from: shell
+    to: staging
+    width: '32'
+    required: true
+  - id: control_req_auth_valid
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: control_req_auth_ok
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+- id: control_rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: control_rsp_valid
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+  - id: control_rsp_ready
+    from: shell
+    to: staging
+    width: '1'
+    required: true
+  - id: control_rsp_owner_id
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: control_rsp_instance_id
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: control_rsp_epoch
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: control_rsp_task_id
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: control_rsp_request_seq
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: control_rsp_context_id
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: control_rsp_generation
+    from: staging
+    to: shell
+    width: '32'
+    required: true
+  - id: control_rsp_request_id
+    from: staging
+    to: shell
+    width: '64'
+    required: true
+  - id: control_rsp_status
+    from: staging
+    to: shell
+    width: '16'
+    required: true
+  - id: control_rsp_state
+    from: staging
+    to: shell
+    width: '8'
+    required: true
+  - id: control_rsp_cleanup_done
+    from: staging
+    to: shell
+    width: '1'
+    required: true
+capabilities: []
+semantics:
+  transfer: valid && ready；停顿时 valid 和 payload 稳定；取消通过握手丢弃或双端协同 reset，不单边撤 valid。
+  reset: 旧 epoch 响应排空/隔离前不得复用身份；硬复位不伪造 completion。
+  ordering: 每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
+  units: 长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
+  version: service_version=0x0200；status采用IFC-CCI-001 status_codes。
+  operation_codes:
+  - 1=RESERVE
+  - 2=PREPARE
+  - 3=COMMIT
+  - 4=DESTROY
+  - 5=QUERY
+  state_codes:
+  - 0=NONE
+  - 1=RESERVED
+  - 2=WRITTEN
+  - 3=PREPARED
+  - 4=COMMITTED
+  - 5=DESTROYED
+  - 6=LOCKED
+  - 7=UNKNOWN
+  routing: RESERVE/PREPARE走req/rsp；COMMIT/DESTROY/QUERY走独立control通道，至少1条保留credit；其他组合拒绝。
+  reservation: RESERVE在消息INIT/ONESHOT准入前，按message generation整体length原子预留；聚合预留不得超过可用容量，0长不占字节但仍需事务槽。
+  write: 仅RESERVED可写；绑定owner/instance/epoch/context/generation及staging_ref，允许该消息不同task/seq的UPDATE写入，shell校验其归属。offset连续递增防溢出；last结束当前命令片段，不表示整消息认证。
+  prepare: PREPARE.length等于预留长度和已写字节，auth_valid=auth_ok=1，且可信认证来源匹配FINAL；满足才PREPARED，否则清除/保持不可访问。
+  commit: 只有PREPARED才COMMIT；可信端点原子开放release gate/转交访问权是线性化点。QUERY同request_id幂等确认；已发commit未知不能报告取消成功。COMMITTED后DESTROY返回TOO_LATE。
+  release: COMMIT前CPU/其他DMA/别名/debug均不可读；内部暂存型COMMIT后由可信端点复制到普通输出，复制故障DELIVERY_ERROR/UNKNOWN。本接口不传物理地址，结果目标由可信平台绑定。
+  destroy: DESTROY仅在未commit时清除；cleanup_done确认后返还容量；清除失败LOCKED且容量不归还。外部不响应时隔离，不能假成功。
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional

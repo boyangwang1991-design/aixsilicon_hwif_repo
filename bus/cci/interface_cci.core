@@ -1,0 +1,40 @@
+CAPI=2:
+
+name: aixsilicon:interface:cci:0.2.0
+description: 'CCS cci: contract-derived passive SV views'
+filesets:
+  rtl:
+    files:
+    - rtl/aix_cci_pkg.sv
+    - rtl/aix_cci_if.sv
+    - rtl/aix_cci_flat_wrapper.sv
+    file_type: systemVerilogSource
+  contract:
+    files:
+    - contract/cci.interface.yaml
+    - contract/cci_base.profile.yaml
+    file_type: user
+  smoke:
+    files:
+    - tests/tb_cci.sv
+    file_type: systemVerilogSource
+targets:
+  default:
+    filesets:
+    - rtl
+  contract:
+    filesets:
+    - contract
+  compile_smoke:
+    default_tool: vcs
+    filesets:
+    - rtl
+    - smoke
+    toplevel: tb_cci
+    tools:
+      vcs:
+        vcs_options:
+        - -full64
+        - -sverilog
+        - -timescale=1ns/1ps
+        - +lint=all
