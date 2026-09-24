@@ -4,7 +4,8 @@ profile:
   version: 0.2.0
   owner: security-crypto
   lifecycle: draft
-  capabilities: {}
+  capabilities:
+    chacha_poly: forbidden
   parameter_constraints:
     DATA_W:
     - 32

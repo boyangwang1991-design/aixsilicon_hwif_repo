@@ -1,0 +1,18 @@
+profile:
+  id: IFC-PROFILE-CCI-CHACHA-POLY-0-2
+  interface: IFC-CCI-001
+  version: 0.2.0
+  owner: security-crypto
+  lifecycle: draft
+  capabilities:
+    chacha_poly: required
+  parameter_constraints:
+    DATA_W:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+  compatibility_class: cci_chacha_poly_v0_2
+  description: ChaCha20/Poly1305/AEAD/QUIC-HP operations; counter extension; no implementation
+    qualification claim

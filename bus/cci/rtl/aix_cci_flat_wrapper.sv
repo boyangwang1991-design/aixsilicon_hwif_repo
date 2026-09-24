@@ -28,6 +28,8 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   input logic [(64)-1:0] cmd_aad_total_len_i,
   input logic [(8)-1:0] cmd_segment_count_i,
   input logic [(1456)-1:0] cmd_segments_i,
+  input logic [(32)-1:0] cmd_initial_counter_i,
+  input logic [(1)-1:0] cmd_counter_present_i,
   input logic [(1)-1:0] din_valid_i,
   output logic [(1)-1:0] din_ready_o,
   input logic [(32)-1:0] din_owner_id_i,
@@ -144,6 +146,8 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   assign link.cmd_aad_total_len = cmd_aad_total_len_i;
   assign link.cmd_segment_count = cmd_segment_count_i;
   assign link.cmd_segments = cmd_segments_i;
+  assign link.cmd_initial_counter = cmd_initial_counter_i;
+  assign link.cmd_counter_present = cmd_counter_present_i;
   assign link.din_valid = din_valid_i;
   assign din_ready_o = link.din_ready;
   assign link.din_owner_id = din_owner_id_i;

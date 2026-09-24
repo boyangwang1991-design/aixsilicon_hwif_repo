@@ -1,15 +1,15 @@
 {
-  "generator_sha256": "b39caed4fd8a5478fce636dd417e0f3263e764cc262110a6225e29fb1509bc50",
+  "generator_sha256": "785705690497974d955aa688907fb5ad6ad038b0c3c237aa3e5a693d48d0531b",
   "inputs": {
-    "contract/cci.interface.yaml": "46628f599b593ec8a8365371505de299c2fc308e79faf31ca9312999ab3d109d",
-    "contract/cci_base.profile.yaml": "da312219fc0ce123e3ffa4e250819d1e755888154c428e1ace4870be7c83c2cd"
+    "contract/cci.interface.yaml": "6d28ec7adf517f08e35e5f4259d0cb5eacc4a4525da93a99b3f23c076f514c23",
+    "contract/cci_base.profile.yaml": "b63d4d002214c2f51567faeee43717cd517ff974e2d01569cd6d4f5562ef81e1"
   },
   "outputs": {
-    "doc/aix_cci_interface.md": "008c6bc2dbc1a8a57ee7bb7021c9420f8aa4c66d5cdb5922b197d7a5c6b27b56",
+    "doc/aix_cci_interface.md": "ab09ab315f1b2bf876cd13e820501131cb28e428f9f39fe98373ed5c4661acba",
     "interface_cci.core": "411ad6ab99d5ae7e250fca145bf0e7a265adf3b486becd246b99c45f7a0d52b5",
-    "rtl/aix_cci_flat_wrapper.sv": "ce7a22ce2cf5250b3acc866646ee1d7f1b2e2773f64a5178d0e2a9798f5981c1",
-    "rtl/aix_cci_if.sv": "de52811f7389f196b5631624402f52f5626accdea9ab7b9a9395a30fc4e573e8",
-    "rtl/aix_cci_pkg.sv": "7f28ff842dfbf861eae8448c75343da8ddc6623ce9efd891017f674958ed06bf"
+    "rtl/aix_cci_flat_wrapper.sv": "ef705a1c27ee4184c23ea77c118cf8676e4e47e3213db3a18eaf882c6521b2ff",
+    "rtl/aix_cci_if.sv": "400909957911a2c217d0b28e28865a7f2f946b79072fb6d96acc42d81ce8b4e8",
+    "rtl/aix_cci_pkg.sv": "bd0691b49eece60453a989f0ba1afc4941ab443e757193a82144dba866983475"
   },
   "schema": "hwif-implementation/1.0"
 }

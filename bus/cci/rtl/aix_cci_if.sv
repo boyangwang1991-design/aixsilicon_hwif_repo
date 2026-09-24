@@ -31,6 +31,8 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
   logic [(64)-1:0] cmd_aad_total_len;
   logic [(8)-1:0] cmd_segment_count;
   logic [(1456)-1:0] cmd_segments;
+  logic [(32)-1:0] cmd_initial_counter;
+  logic [(1)-1:0] cmd_counter_present;
   logic [(1)-1:0] din_valid;
   logic [(1)-1:0] din_ready;
   logic [(32)-1:0] din_owner_id;
@@ -149,6 +151,8 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     output cmd_aad_total_len,
     output cmd_segment_count,
     output cmd_segments,
+    output cmd_initial_counter,
+    output cmd_counter_present,
     output din_valid,
     input din_ready,
     output din_owner_id,
@@ -268,6 +272,8 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cmd_aad_total_len,
     input cmd_segment_count,
     input cmd_segments,
+    input cmd_initial_counter,
+    input cmd_counter_present,
     input din_valid,
     output din_ready,
     input din_owner_id,
@@ -387,6 +393,8 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cmd_aad_total_len,
     input cmd_segment_count,
     input cmd_segments,
+    input cmd_initial_counter,
+    input cmd_counter_present,
     input din_valid,
     input din_ready,
     input din_owner_id,
