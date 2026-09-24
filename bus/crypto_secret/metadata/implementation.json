@@ -1,5 +1,5 @@
 {
-  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "generator_sha256": "b39caed4fd8a5478fce636dd417e0f3263e764cc262110a6225e29fb1509bc50",
   "inputs": {
     "contract/crypto_secret.interface.yaml": "07a0097e2716eabc489b2596986872775e853285a3364dd6c7c3d44a90f0d1e7",
     "contract/crypto_secret_base.profile.yaml": "9898e27c009cb68ee42ff3deea084ed77d6a5ea1340f23d65b9d40868228b78d"

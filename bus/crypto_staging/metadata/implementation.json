@@ -1,5 +1,5 @@
 {
-  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "generator_sha256": "b39caed4fd8a5478fce636dd417e0f3263e764cc262110a6225e29fb1509bc50",
   "inputs": {
     "contract/crypto_staging.interface.yaml": "ab69c8e514895f51b0609b1697951f60ab5141f607ec3befd341ef261b88bdf4",
     "contract/crypto_staging_base.profile.yaml": "2d1952ed361751fc3944b562b96804007025a438f89676587a3aaf9e25a5fffb"

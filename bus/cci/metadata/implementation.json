@@ -1,5 +1,5 @@
 {
-  "generator_sha256": "9a4e9c4e729c06960cdd959a831ee44dacf48c463389e29696a1b5404f4527bb",
+  "generator_sha256": "b39caed4fd8a5478fce636dd417e0f3263e764cc262110a6225e29fb1509bc50",
   "inputs": {
     "contract/cci.interface.yaml": "47dc0557877088b587d2494f592b28f59ed32b08a18a6e0e22d7f3d32383360f",
     "contract/cci_base.profile.yaml": "da312219fc0ce123e3ffa4e250819d1e755888154c428e1ace4870be7c83c2cd"
