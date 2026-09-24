@@ -39,6 +39,8 @@ uv run python repos/aixsilicon_hwif_repo/examples/crypto_interfaces/generate_smo
 - VCS `W-2024.09-SP1_Full64`：四个接口 × 五个 DATA_W，**20/20 配置通过**。
 - 每个配置检查全部字段、packed 聚合和通道类型位宽、协议常量及双向连接；覆盖全零、全一、128 组伪随机和逐位移动图样，包括独立管理通道。
 - 工具回归 **30 项通过**，包含只读 drift 检查、不支持的接口拒绝、宽度表达式限制及生成确定性。
+- 四组同接口同位宽判定为 `DIRECT`，四组 64→128 位判定为 `ADAPTER_REQUIRED`，CCI→Secret 判定为 `INCOMPATIBLE`；按判定文本核验，未将判定器退出码当作兼容结论。
+- 官方 schema、SV 一致性、Core 及生成 drift 检查通过。旧 SV 检查器未将契约 `reset_domains` 中的 `reset_n` 计入信号白名单，四个接口各有一条额外信号警告；本目录的严格静态检查已核实该复位端口及其 modport 方向。日志位于 `build/crypto_interfaces/gates/`。
 - 仿真输入内容的 SHA256 保存在 `build/crypto_interfaces/results.json`；日志为同目录 `<family>.log`。静态检查另写 `results_static.json`，不会覆盖仿真证据。
 
 构建证据位于忽略的 `build/` 目录，可用上述命令重新产生。

@@ -49,11 +49,11 @@ req/rsp是按两个角色发送方向聚合的结构，包含各通道的valid/r
 - **ordering**：每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
 - **units**：长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
 - **baseline**：仅编码首批 SM3、HMAC-SM3、AES-GCM；其他算法/tuple/replay/secure-call 必须采用新增命名 profile 后接入，禁止私有字段扩展。
-- **operation_codes**：['1=SM3_DIGEST', '2=HMAC_SM3_GENERATE', '3=HMAC_SM3_VERIFY', '16=AES_GCM']
-- **mode_codes**：['0=NONE (SM3/HMAC)', '1=GCM_BASE', '2=GCM_EXT']
-- **direction_codes**：['0=NONE (SM3/HMAC)', '1=ENCRYPT', '2=DECRYPT']
+- **operation_codes**：['1=SM3_DIGEST', '2=HMAC_SM3_GENERATE', '3=HMAC_SM3_VERIFY', '16=AES_GCM', '32=ASCON_AEAD128_ENC', '33=ASCON_AEAD128_DEC', '34=ASCON_HASH256', '35=ASCON_XOF128', '36=ASCON_CXOF128']
+- **mode_codes**：['0=NONE (SM3/HMAC/Ascon)', '1=GCM_BASE', '2=GCM_EXT']
+- **direction_codes**：['0=NONE (SM3/HMAC/Ascon Hash/XOF/CXOF)', '1=ENCRYPT', '2=DECRYPT']
 - **action_codes**：['0=ONESHOT', '1=INIT', '2=UPDATE', '3=FINAL']
-- **segment_codes**：['1=PAYLOAD', '2=AAD', '3=NONCE_IV', '4=EXPECTED_TAG', '5=DIGEST_TAG']
+- **segment_codes**：['1=PAYLOAD', '2=AAD', '3=NONCE_IV', '4=EXPECTED_TAG', '5=DIGEST_TAG', '6=CUSTOMIZATION']
 - **status_codes**：['0=OK', '1=UNSUPPORTED', '2=INVALID_PARAM', '3=SEGMENT_ERROR', '4=LENGTH_ERROR', '5=KEY_DENIED', '6=AUTH_FAIL', '7=CANCELLED', '8=ENTROPY_ERROR', '9=INTERNAL_ERROR', '10=SERVICE_TIMEOUT', '11=DELIVERY_ERROR', '12=DELIVERY_UNKNOWN', '13=TOO_LATE', '14=BUSY']
 - **detail_codes**：['0=NONE', '1=ID_CONFLICT']
 - **management_codes**：['1=CANCEL', '2=ZEROIZE', '3=QUIESCE', '4=REVOKE', '5=QUERY']
@@ -70,4 +70,5 @@ req/rsp是按两个角色发送方向聚合的结构，包含各通道的valid/r
 - **output_security**：AEAD decrypt provisional=1且只到可信staging；SECRET普通dout始终禁止，secret字段必须0；不能以标记代替安全服务通道。
 - **key_service**：key请求/交付采用独立IFC-CRYPTO_SECRET-001，不在普通CCI内复用数据；平台可信client保证nonce/usage责任，managed策略使用独立服务。
 - **forward_progress**：至少1条独立mgmt请求credit及响应资源；普通dout满不能耗尽错误完成资源；外部永不响应则隔离/锁定，不宣称取消成功。
-- **capability_image**：只读32-bit words：word0=0x00020000；word1=DATA_W；word2=operation bitmap(bit0 digest,bit1 hmac-gen,bit2 hmac-verify,bit3 aes-gcm)；word3=mode bitmap(bit0 base,bit1 ext)；word4=CONTEXTS；word5=TASK_SLOTS；word6=MAX_MESSAGE_BYTES；word7=MAX_AAD_BYTES；word8=MAX_OUTPUT_BYTES；word9=STAGING_BYTES；word10=SERVICE_WATCHDOG_CYCLES；word11=MAX_KEY_BYTES；word12=key bits mask(bit0 128,bit1 192,bit2 256)；word13=MAX_PREFIX_BYTES,last=1。0..12 last=0；越界INVALID_PARAM/data=0/last=1。能力与manifest必须一致。
+- **capability_image**：只读32-bit words：word0=0x00020000；word1=DATA_W；word2=operation bitmap(bit0 digest,bit1 hmac-gen,bit2 hmac-verify,bit3 aes-gcm,bit4 ascon-aead-enc,bit5 ascon-aead-dec,bit6 ascon-hash256,bit7 ascon-xof128,bit8 ascon-cxof128)；word3=mode bitmap(bit0 base,bit1 ext)；word4=CONTEXTS；word5=TASK_SLOTS；word6=MAX_MESSAGE_BYTES；word7=MAX_AAD_BYTES；word8=MAX_OUTPUT_BYTES；word9=STAGING_BYTES；word10=SERVICE_WATCHDOG_CYCLES；word11=MAX_KEY_BYTES；word12=key bits mask(bit0 128,bit1 192,bit2 256)；word13=MAX_PREFIX_BYTES,last=1。0..12 last=0；越界INVALID_PARAM/data=0/last=1。能力与manifest必须一致。
+- **ascon_profile**：Ascon操作使用mode=NONE；ENC/DEC方向必须分别ENCRYPT/DECRYPT，Hash/XOF/CXOF方向NONE。AEAD key_bits=128且CIPHER_KEY恰好1项；Hash族key_count/key_bits=0。AEAD NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅DEC终结)，NONCE_IV仅INIT/ONESHOT。CXOF CUSTOMIZATION subtype=0(S)仅INIT/ONESHOT且先于PAYLOAD；省略表示空S。Hash/XOF仅PAYLOAD。未用/保留字段为零。CCI普通dout不承载未认证明文；Ascon解密走独立crypto_staging。

@@ -10,7 +10,8 @@ protocol_reference:
   kind: internal
   document_id: CCS-CONTRACT-0.2
   revision: '0.2'
-  note: 首批 SM3/HMAC-SM3、AES-GCM 的 CCI-M0-0.2.0 草案；不是 AMBA AXI4-Stream 完整协议声明。
+  note: 首批 SM3/HMAC-SM3、AES-GCM 的 CCI-M0-0.2.0 草案；不是 AMBA AXI4-Stream 完整协议声明。；增加CCS-CONTRACT-0.2
+    Ascon可选操作编码，不改变首批端口或已有编码。
 roles:
 - id: client
 - id: component
@@ -673,12 +674,17 @@ semantics:
   - 2=HMAC_SM3_GENERATE
   - 3=HMAC_SM3_VERIFY
   - 16=AES_GCM
+  - 32=ASCON_AEAD128_ENC
+  - 33=ASCON_AEAD128_DEC
+  - 34=ASCON_HASH256
+  - 35=ASCON_XOF128
+  - 36=ASCON_CXOF128
   mode_codes:
-  - 0=NONE (SM3/HMAC)
+  - 0=NONE (SM3/HMAC/Ascon)
   - 1=GCM_BASE
   - 2=GCM_EXT
   direction_codes:
-  - 0=NONE (SM3/HMAC)
+  - 0=NONE (SM3/HMAC/Ascon Hash/XOF/CXOF)
   - 1=ENCRYPT
   - 2=DECRYPT
   action_codes:
@@ -692,6 +698,7 @@ semantics:
   - 3=NONCE_IV
   - 4=EXPECTED_TAG
   - 5=DIGEST_TAG
+  - 6=CUSTOMIZATION
   status_codes:
   - 0=OK
   - 1=UNSUPPORTED
@@ -738,9 +745,13 @@ semantics:
   key_service: key请求/交付采用独立IFC-CRYPTO_SECRET-001，不在普通CCI内复用数据；平台可信client保证nonce/usage责任，managed策略使用独立服务。
   forward_progress: 至少1条独立mgmt请求credit及响应资源；普通dout满不能耗尽错误完成资源；外部永不响应则隔离/锁定，不宣称取消成功。
   capability_image: 只读32-bit words：word0=0x00020000；word1=DATA_W；word2=operation bitmap(bit0
-    digest,bit1 hmac-gen,bit2 hmac-verify,bit3 aes-gcm)；word3=mode bitmap(bit0 base,bit1
+    digest,bit1 hmac-gen,bit2 hmac-verify,bit3 aes-gcm,bit4 ascon-aead-enc,bit5 ascon-aead-dec,bit6
+    ascon-hash256,bit7 ascon-xof128,bit8 ascon-cxof128)；word3=mode bitmap(bit0 base,bit1
     ext)；word4=CONTEXTS；word5=TASK_SLOTS；word6=MAX_MESSAGE_BYTES；word7=MAX_AAD_BYTES；word8=MAX_OUTPUT_BYTES；word9=STAGING_BYTES；word10=SERVICE_WATCHDOG_CYCLES；word11=MAX_KEY_BYTES；word12=key
     bits mask(bit0 128,bit1 192,bit2 256)；word13=MAX_PREFIX_BYTES,last=1。0..12 last=0；越界INVALID_PARAM/data=0/last=1。能力与manifest必须一致。
+  ascon_profile: Ascon操作使用mode=NONE；ENC/DEC方向必须分别ENCRYPT/DECRYPT，Hash/XOF/CXOF方向NONE。AEAD
+    key_bits=128且CIPHER_KEY恰好1项；Hash族key_count/key_bits=0。AEAD NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅DEC终结)，NONCE_IV仅INIT/ONESHOT。CXOF
+    CUSTOMIZATION subtype=0(S)仅INIT/ONESHOT且先于PAYLOAD；省略表示空S。Hash/XOF仅PAYLOAD。未用/保留字段为零。CCI普通dout不承载未认证明文；Ascon解密走独立crypto_staging。
 views:
   packed_struct: true
   sv_interface: true

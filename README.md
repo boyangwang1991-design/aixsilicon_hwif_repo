@@ -123,5 +123,6 @@ fusesoc core list | grep aixsilicon:interface
 
 ## 8. 状态
 
+- Crypto Component Suite 的 CCI、Secret、Staging、Entropy HWIF 已提供 RTL 视图及五位宽 FuseSoC/VCS 自检，契约保持 draft；见 [实现与验证入口](examples/crypto_interfaces/README.md)。
 - **准入能力已达**：64 接口 `.core`、62 Contract、18 Profile、56+ 派生视图；validate/generate/consistency/compat/core/package 门禁由 `hwif-development-suite` 唯一入口提供（P1–P4 收敛完成，2026-08-17）。
 - 组合优先级、里程碑与任务状态以 workflow 仓 [`docs/todo.md`](../../docs/todo.md) 为准。
