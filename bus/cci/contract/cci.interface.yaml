@@ -186,6 +186,55 @@ channels:
     width: '1'
     required: false
     capability: chacha_poly
+  - id: cmd_rsa_scheme
+    from: client
+    to: component
+    width: '8'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_hash_id
+    from: client
+    to: component
+    width: '8'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_mgf_id
+    from: client
+    to: component
+    width: '8'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_salt_len
+    from: client
+    to: component
+    width: '16'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_input_form
+    from: client
+    to: component
+    width: '8'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_modulus_bits
+    from: client
+    to: component
+    width: '16'
+    required: false
+    capability: rsa
+    default_tieoff: 0
+  - id: cmd_rsa_private_key_format
+    from: client
+    to: component
+    width: '8'
+    required: false
+    capability: rsa
+    default_tieoff: 0
 - id: din
   handshake: ready_valid
   clock: clk
@@ -680,6 +729,9 @@ capabilities:
 - id: chacha_poly
   default: false
   description: ChaCha/Poly named profile; optional raw counter signals must be tied zero by other profiles
+- id: rsa
+  default: false
+  description: RSA PSS, optional PKCS1-v1_5 signature and OAEP named profile with seven cmd-atomic extension fields
 semantics:
   transfer: valid && ready；停顿时 valid 和 payload 稳定；取消通过握手丢弃或双端协同 reset，不单边撤 valid。
   reset: 旧 epoch 响应排空/隔离前不得复用身份；硬复位不伪造 completion。
@@ -688,6 +740,7 @@ semantics:
   baseline: 'CCI 0.2 draft: common channels with named operation profiles; SM3/HMAC/AES/Ascon existing codes unchanged.
     SHA2 profile adds operation codes without changing channel signals or packed aggregate size.
     ChaCha/Poly optional counter fields require named chacha_poly profile; other profiles tie both fields zero.
+    RSA optional command fields require named rsa profile; all non-RSA profiles tie all seven fields zero.
     Added fields change packed aggregate size; consumers must regenerate types and use named fields, not old raw
     bit offsets.'
   operation_codes:
@@ -724,6 +777,12 @@ semantics:
   - 79=HMAC_SHA512_VERIFY
   - 80=HMAC_SHA512_224_VERIFY
   - 81=HMAC_SHA512_256_VERIFY
+  - 96=RSA_PSS_SIGN
+  - 97=RSA_PSS_VERIFY
+  - 98=RSA_PKCS1V15_SIGN
+  - 99=RSA_PKCS1V15_VERIFY
+  - 100=RSA_OAEP_ENCRYPT
+  - 101=RSA_OAEP_DECRYPT
   mode_codes:
   - 0=NONE (SM3/HMAC/Ascon)
   - 1=GCM_BASE
@@ -744,6 +803,11 @@ semantics:
   - 4=EXPECTED_TAG
   - 5=DIGEST_TAG
   - 6=CUSTOMIZATION
+  - 7=SIGNATURE
+  - 8=LABEL
+  - 9=CIPHERTEXT
+  - 10=PREHASH
+  - 11=SECRET_MESSAGE
   status_codes:
   - 0=OK
   - 1=UNSUPPORTED
@@ -826,6 +890,31 @@ semantics:
     dout never carries provisional plaintext. INIT reserves full known message total; FINAL verifies before COMMIT,
     cpl waits endpoint confirmation. Non-final cpl has auth_valid=0. AUTH_FAIL has auth_valid=1/auth_ok=0 and waits
     abort/cleanup.
+  rsa_profile: 'CCI_RSA_0_2: operation 96..101; mode=NONE. PSS/v1.5 use direction=NONE; OAEP uses ENCRYPT/DECRYPT.
+    cmd_rsa_scheme is 1=PSS,2=PKCS1_V1_5_SIG,3=OAEP; hash_id and mgf_id are 1=SHA256,2=SHA384,3=SHA512 and must
+    match; salt_len is 0..hLen and is zero outside PSS; input_form is 1=MESSAGE or 2=PREHASH; modulus_bits is
+    2048/3072/4096; private_key_format is 1=CRT2 and all other values are forbidden in v0.1.0. All seven fields are
+    cmd-atomic and locked across INIT/UPDATE/FINAL; inherit=1 requires them zero and consumes the locked snapshot.
+    Non-RSA operations require all seven fields zero.'
+  rsa_key_bindings: 'key binding role codes: 16=RSA_SIGN_PRIVATE,17=RSA_VERIFY_PUBLIC,18=RSA_ENCRYPT_PUBLIC,
+    19=RSA_DECRYPT_PRIVATE,20=RSA_SECRET_MESSAGE_READ,21=RSA_RESULT_SINK. PSS/v1.5 use exactly one role 16 or 17.
+    OAEP encrypt uses roles 18 and 20; OAEP decrypt uses roles 19 and 21. Each object_ref/key_epoch is independently
+    authorized by IFC-CRYPTO_SECRET-001; cmd_key_bits equals modulus_bits for the RSA key and is not the secret-message length.'
+  rsa_segments: 'MESSAGE uses PAYLOAD and may stream INIT/UPDATE/FINAL. PREHASH is exactly hLen in FINAL/ONESHOT.
+    VERIFY adds SIGNATURE exactly k bytes. OAEP LABEL is optional and precedes SECRET_MESSAGE or CIPHERTEXT;
+    OAEP encrypt declares SECRET_MESSAGE length but its bytes travel only over crypto_secret; OAEP decrypt carries
+    CIPHERTEXT exactly k bytes. SIGNATURE/LABEL/CIPHERTEXT/PREHASH are complete in FINAL/ONESHOT. Segment descriptors
+    and data beats obey common order/length/keep/last rules.'
+  rsa_result_and_failure: 'PSS/v1.5 sign and OAEP encrypt produce exactly k ordinary dout bytes. Signature verify
+    produces no dout and completes with auth_valid=1/auth_ok. OAEP decrypt candidate plaintext never appears on dout;
+    role 21 identifies the protected result sink and cpl exposes result_ref only after secret-service COMMIT.
+    All OAEP format failures collapse to AUTH_FAIL; signature mismatches use auth_valid=1/auth_ok=0; neither exposes
+    recovered encoding, expected digest, partial plaintext or failure position.'
+  rsa_capability_image: 'RSA profile keeps word0..13 baseline meanings, sets word13 last=0 and uses word14:
+    bits0..5=PSS_SIGN/PSS_VERIFY/PKCS1V15_SIGN/PKCS1V15_VERIFY/OAEP_ENCRYPT/OAEP_DECRYPT; word15 modulus bitmap
+    bits0..2=2048/3072/4096; word16 hash bitmap bits0..2=SHA256/384/512; word17 bit0=MESSAGE bit1=PREHASH;
+    word18 bit0=CRT2 and no STANDARD_D bit in v0.1.0; word19 security profile; word20 provider bit0=internal and
+    last=1. Disabled capability bits are zero; out-of-range word reads return INVALID_PARAM/data=0/last=1.'
 views:
   packed_struct: true
   sv_interface: true
