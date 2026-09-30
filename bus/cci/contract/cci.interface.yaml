@@ -10,7 +10,7 @@ protocol_reference:
   kind: internal
   document_id: CCS-CONTRACT-0.2
   revision: '0.2'
-  note: CCI 0.2 draft, named base/Ascon/ChaCha-Poly operation profiles; optional ChaCha counter fields; not a complete
+  note: CCI 0.2 draft, named base/SHA2/Ascon/ChaCha-Poly operation profiles; optional ChaCha counter fields; not a complete
     AMBA AXI4-Stream declaration.
 roles:
 - id: client
@@ -674,6 +674,9 @@ channels:
     width: '1'
     required: true
 capabilities:
+- id: sha2
+  default: false
+  description: SHA-2 六种固定摘要及对应 HMAC 的命名 operation profile；不增加可选信号
 - id: chacha_poly
   default: false
   description: ChaCha/Poly named profile; optional raw counter signals must be tied zero by other profiles
@@ -683,6 +686,7 @@ semantics:
   ordering: 每通道传输顺序固定；不同 request 可乱序响应，必须匹配完整身份与 request_id。
   units: 长度/offset 为 bytes；无效/保留字段为零；未知枚举报 INVALID_PARAM。
   baseline: 'CCI 0.2 draft: common channels with named operation profiles; SM3/HMAC/AES/Ascon existing codes unchanged.
+    SHA2 profile adds operation codes without changing channel signals or packed aggregate size.
     ChaCha/Poly optional counter fields require named chacha_poly profile; other profiles tie both fields zero.
     Added fields change packed aggregate size; consumers must regenerate types and use named fields, not old raw
     bit offsets.'
@@ -702,6 +706,24 @@ semantics:
   - 51=CHACHA20_POLY1305_ENC
   - 52=CHACHA20_POLY1305_DEC
   - 53=QUIC_HP_CHACHA
+  - 64=SHA224_DIGEST
+  - 65=SHA256_DIGEST
+  - 66=SHA384_DIGEST
+  - 67=SHA512_DIGEST
+  - 68=SHA512_224_DIGEST
+  - 69=SHA512_256_DIGEST
+  - 70=HMAC_SHA224_GENERATE
+  - 71=HMAC_SHA256_GENERATE
+  - 72=HMAC_SHA384_GENERATE
+  - 73=HMAC_SHA512_GENERATE
+  - 74=HMAC_SHA512_224_GENERATE
+  - 75=HMAC_SHA512_256_GENERATE
+  - 76=HMAC_SHA224_VERIFY
+  - 77=HMAC_SHA256_VERIFY
+  - 78=HMAC_SHA384_VERIFY
+  - 79=HMAC_SHA512_VERIFY
+  - 80=HMAC_SHA512_224_VERIFY
+  - 81=HMAC_SHA512_256_VERIFY
   mode_codes:
   - 0=NONE (SM3/HMAC/Ascon)
   - 1=GCM_BASE
@@ -758,9 +780,9 @@ semantics:
     subtype/reserved=0；有效项present=1/length_known=1；未用项全0。'
   cmd_atomic: 固定 header、key bindings 与全部 segment descriptors 在同一 cmd 握手原子接受；segment_count=0..16。不得用未握手侧带改变命令。
   inherit: INIT/ONESHOT inherit=0；UPDATE/FINAL inherit=1 时 mode/direction/policy_epoch/key_count/key_bits/key_bindings/out_len/tag_len/总长字段为0并继承；operation仍须与context匹配。inherit=0时上述锁定字段必须逐项相同。
-  key_length: cmd_key_bits是公开的密钥长度；AES_GCM仅128/192/256，SM3_DIGEST必须0，HMAC为8的正整数倍且不超过MAX_KEY_BYTES*8。KEY_LOAD请求length=key_bits/8，可信服务必须校验对象的完整实际长度相等，禁止读前缀截断后当作另一长度密钥；组件再次核对rsp_total_length、连续fragment和最终字节数，不一致报KEY_DENIED并清除。INIT锁定，继承/显式匹配规则同其他锁定字段。
+  key_length: cmd_key_bits是公开的密钥长度；AES_GCM仅128/192/256，SM3/SHA2 DIGEST必须0，SM3 HMAC为8的正整数倍且不超过MAX_KEY_BYTES*8，SHA2 HMAC为128..MAX_KEY_BYTES*8且是8的整数倍。KEY_LOAD请求length=key_bits/8，可信服务必须校验对象的完整实际长度相等，禁止读前缀截断后当作另一长度密钥；组件再次核对rsp_total_length、连续fragment和最终字节数，不一致报KEY_DENIED并清除。INIT锁定，继承/显式匹配规则同其他锁定字段。
   data_rules: 低lane首字节；非末拍keep全1，末拍低位连续且非0；空段无数据拍；last仅终结片段。segment_index引用本命令有效描述符；dout序号为本操作输出顺序，从0开始。
-  input_order: SM3/HMAC PAYLOAD 后可有EXPECTED_TAG(仅verify终结)；GCM NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅decrypt终结)。nonce仅INIT/ONESHOT，tag仅FINAL/ONESHOT；phase_end关闭逻辑阶段。
+  input_order: SM3/SHA2/HMAC PAYLOAD 后可有EXPECTED_TAG(仅verify终结)；GCM NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅decrypt终结)。nonce仅INIT/ONESHOT，tag仅FINAL/ONESHOT；phase_end关闭逻辑阶段。
   identity: 可信入口分配request_seq；重复活跃task按新seq拒绝，不终结原task。同context最多一个更新；不同context允许乱序完成。
   completion: 成功cpl在本命令全部输出握手后；失败不等待不存在的成功输出；先隔离/清除。UPDATE auth_valid=0。verify终态auth_valid=1；auth_ok仅成功认证为1。
   output_security: AEAD decrypt provisional=1且只到可信staging；SECRET普通dout始终禁止，secret字段必须0；不能以标记代替安全服务通道。
@@ -773,6 +795,16 @@ semantics:
     ChaCha profile additionally uses word2 bits9 raw,10 poly-generate,11 poly-verify,12 AEAD-ENC,13 AEAD-DEC,14
     HP; disabled bits zero. Base/Ascon consumers ignore unknown optional capability bits and never select operations
     outside their profile.
+  sha2_profile: 'CCI_SHA2_0_2: operation 64..81；mode=NONE、direction=NONE；DIGEST 要求
+    key_count/key_bits/tag_len=0 且 out_len 等于算法摘要字节数；HMAC GENERATE/VERIFY 恰好一个
+    MAC_KEY binding，key_bits=128..MAX_KEY_BYTES*8 且为8的倍数，tag_len=16..digest_bytes；
+    GENERATE out_len=tag_len，VERIFY out_len=0。输入仅 PAYLOAD，VERIFY 在 FINAL/ONESHOT 最后追加
+    EXPECTED_TAG；所有 nonce/AAD/counter/customization 字段为0或不存在。INIT 锁定精确 operation、
+    key epoch、tag/out length；UPDATE/FINAL 按 inherit 规则匹配。'
+  sha2_capability_image: 'sha2 profile 保持 word0..13 与 base 相同，但 word13 的 last=0；新增
+    word14 为 SHA2 operation bitmap：bit0..5 依次 SHA224/256/384/512/512_224/512_256 DIGEST，
+    bit6..11 为对应 HMAC GENERATE，bit12..17 为对应 HMAC VERIFY，禁用能力位为0，word14 last=1。
+    非 sha2 profile 仍在 word13 last=1，且不得访问 word14。'
   ascon_profile: Ascon操作使用mode=NONE；ENC/DEC方向必须分别ENCRYPT/DECRYPT，Hash/XOF/CXOF方向NONE。AEAD key_bits=128且CIPHER_KEY恰好1项；Hash族key_count/key_bits=0。AEAD
     NONCE_IV→AAD→PAYLOAD→EXPECTED_TAG(仅DEC终结)，NONCE_IV仅INIT/ONESHOT。CXOF CUSTOMIZATION subtype=0(S)仅INIT/ONESHOT且先于PAYLOAD；省略表示空S。Hash/XOF仅PAYLOAD。未用/保留字段为零。CCI普通dout不承载未认证明文；Ascon解密走独立crypto_staging。
   chacha_poly_profile: 'CCI_CHACHA_POLY_0_2: operation 48..53; mode=NONE; raw direction ENCRYPT/DECRYPT (same XOR),

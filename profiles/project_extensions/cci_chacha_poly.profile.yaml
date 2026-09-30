@@ -5,6 +5,7 @@ profile:
   owner: security-crypto
   lifecycle: draft
   capabilities:
+    sha2: forbidden
     chacha_poly: required
   parameter_constraints:
     DATA_W:
