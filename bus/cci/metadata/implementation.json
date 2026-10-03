@@ -1,15 +1,15 @@
 {
   "generator_sha256": "785705690497974d955aa688907fb5ad6ad038b0c3c237aa3e5a693d48d0531b",
   "inputs": {
-    "contract/cci.interface.yaml": "6d28ec7adf517f08e35e5f4259d0cb5eacc4a4525da93a99b3f23c076f514c23",
-    "contract/cci_base.profile.yaml": "b63d4d002214c2f51567faeee43717cd517ff974e2d01569cd6d4f5562ef81e1"
+    "contract/cci.interface.yaml": "c4f02495594eab782d61c5184e92c5faf3d83e9bb356574539d7beafc05d4432",
+    "contract/cci_base.profile.yaml": "61cb840b0cb08acab78537cfe1c7551a5eff83e1c46d720854979890e11b9faa"
   },
   "outputs": {
-    "doc/aix_cci_interface.md": "ab09ab315f1b2bf876cd13e820501131cb28e428f9f39fe98373ed5c4661acba",
+    "doc/aix_cci_interface.md": "199d8555ed12f1f0514f64bffd9cab114fd551a60a72cb45500e9414a0600c55",
     "interface_cci.core": "411ad6ab99d5ae7e250fca145bf0e7a265adf3b486becd246b99c45f7a0d52b5",
-    "rtl/aix_cci_flat_wrapper.sv": "ef705a1c27ee4184c23ea77c118cf8676e4e47e3213db3a18eaf882c6521b2ff",
-    "rtl/aix_cci_if.sv": "400909957911a2c217d0b28e28865a7f2f946b79072fb6d96acc42d81ce8b4e8",
-    "rtl/aix_cci_pkg.sv": "bd0691b49eece60453a989f0ba1afc4941ab443e757193a82144dba866983475"
+    "rtl/aix_cci_flat_wrapper.sv": "da09fd0a00b8f36f2ea577a8b80d1aa03c3bf592800209f0bd320180b691db57",
+    "rtl/aix_cci_if.sv": "ef4b8a2c67fb2e195e2bdfa6d42f69ad158a4e917b99159427f6d2221e942585",
+    "rtl/aix_cci_pkg.sv": "d2773867078e74907c72625c0c88efc609bb30d2527e713a3670f5691e84e64a"
   },
   "schema": "hwif-implementation/1.0"
 }

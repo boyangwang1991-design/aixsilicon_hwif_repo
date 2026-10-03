@@ -30,6 +30,14 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   input logic [(1456)-1:0] cmd_segments_i,
   input logic [(32)-1:0] cmd_initial_counter_i,
   input logic [(1)-1:0] cmd_counter_present_i,
+  input logic [(8)-1:0] cmd_rsa_scheme_i,
+  input logic [(8)-1:0] cmd_rsa_hash_id_i,
+  input logic [(8)-1:0] cmd_rsa_mgf_id_i,
+  input logic [(16)-1:0] cmd_rsa_salt_len_i,
+  input logic [(8)-1:0] cmd_rsa_input_form_i,
+  input logic [(16)-1:0] cmd_rsa_modulus_bits_i,
+  input logic [(8)-1:0] cmd_rsa_private_key_format_i,
+  input logic [(64)-1:0] cmd_replay_ref_i,
   input logic [(1)-1:0] din_valid_i,
   output logic [(1)-1:0] din_ready_o,
   input logic [(32)-1:0] din_owner_id_i,
@@ -43,6 +51,7 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   input logic [(DATA_W)-1:0] din_data_i,
   input logic [(DATA_W/8)-1:0] din_keep_i,
   input logic [(1)-1:0] din_last_i,
+  input logic [(8)-1:0] din_pass_index_i,
   output logic [(1)-1:0] dout_valid_o,
   input logic [(1)-1:0] dout_ready_i,
   output logic [(32)-1:0] dout_owner_id_o,
@@ -118,7 +127,36 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   output logic [(32)-1:0] cap_rsp_word_index_o,
   output logic [(16)-1:0] cap_rsp_status_o,
   output logic [(32)-1:0] cap_rsp_data_o,
-  output logic [(1)-1:0] cap_rsp_last_o
+  output logic [(1)-1:0] cap_rsp_last_o,
+  output logic [(1)-1:0] replay_req_valid_o,
+  input logic [(1)-1:0] replay_req_ready_i,
+  output logic [(32)-1:0] replay_req_owner_id_o,
+  output logic [(16)-1:0] replay_req_instance_id_o,
+  output logic [(32)-1:0] replay_req_epoch_o,
+  output logic [(32)-1:0] replay_req_task_id_o,
+  output logic [(64)-1:0] replay_req_request_seq_o,
+  output logic [(16)-1:0] replay_req_context_id_o,
+  output logic [(32)-1:0] replay_req_generation_o,
+  output logic [(32)-1:0] replay_req_request_id_o,
+  output logic [(64)-1:0] replay_req_replay_ref_o,
+  output logic [(8)-1:0] replay_req_pass_index_o,
+  output logic [(64)-1:0] replay_req_offset_o,
+  output logic [(64)-1:0] replay_req_length_o,
+  input logic [(1)-1:0] replay_rsp_valid_i,
+  output logic [(1)-1:0] replay_rsp_ready_o,
+  input logic [(32)-1:0] replay_rsp_owner_id_i,
+  input logic [(16)-1:0] replay_rsp_instance_id_i,
+  input logic [(32)-1:0] replay_rsp_epoch_i,
+  input logic [(32)-1:0] replay_rsp_task_id_i,
+  input logic [(64)-1:0] replay_rsp_request_seq_i,
+  input logic [(16)-1:0] replay_rsp_context_id_i,
+  input logic [(32)-1:0] replay_rsp_generation_i,
+  input logic [(32)-1:0] replay_rsp_request_id_i,
+  input logic [(64)-1:0] replay_rsp_replay_ref_i,
+  input logic [(8)-1:0] replay_rsp_pass_index_i,
+  input logic [(64)-1:0] replay_rsp_offset_i,
+  input logic [(64)-1:0] replay_rsp_length_i,
+  input logic [(16)-1:0] replay_rsp_status_i
 );
   assign link.cmd_valid = cmd_valid_i;
   assign cmd_ready_o = link.cmd_ready;
@@ -148,6 +186,14 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   assign link.cmd_segments = cmd_segments_i;
   assign link.cmd_initial_counter = cmd_initial_counter_i;
   assign link.cmd_counter_present = cmd_counter_present_i;
+  assign link.cmd_rsa_scheme = cmd_rsa_scheme_i;
+  assign link.cmd_rsa_hash_id = cmd_rsa_hash_id_i;
+  assign link.cmd_rsa_mgf_id = cmd_rsa_mgf_id_i;
+  assign link.cmd_rsa_salt_len = cmd_rsa_salt_len_i;
+  assign link.cmd_rsa_input_form = cmd_rsa_input_form_i;
+  assign link.cmd_rsa_modulus_bits = cmd_rsa_modulus_bits_i;
+  assign link.cmd_rsa_private_key_format = cmd_rsa_private_key_format_i;
+  assign link.cmd_replay_ref = cmd_replay_ref_i;
   assign link.din_valid = din_valid_i;
   assign din_ready_o = link.din_ready;
   assign link.din_owner_id = din_owner_id_i;
@@ -161,6 +207,7 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   assign link.din_data = din_data_i;
   assign link.din_keep = din_keep_i;
   assign link.din_last = din_last_i;
+  assign link.din_pass_index = din_pass_index_i;
   assign dout_valid_o = link.dout_valid;
   assign link.dout_ready = dout_ready_i;
   assign dout_owner_id_o = link.dout_owner_id;
@@ -237,4 +284,33 @@ module aix_cci_flat_wrapper #(parameter int unsigned DATA_W = 128)(
   assign cap_rsp_status_o = link.cap_rsp_status;
   assign cap_rsp_data_o = link.cap_rsp_data;
   assign cap_rsp_last_o = link.cap_rsp_last;
+  assign replay_req_valid_o = link.replay_req_valid;
+  assign link.replay_req_ready = replay_req_ready_i;
+  assign replay_req_owner_id_o = link.replay_req_owner_id;
+  assign replay_req_instance_id_o = link.replay_req_instance_id;
+  assign replay_req_epoch_o = link.replay_req_epoch;
+  assign replay_req_task_id_o = link.replay_req_task_id;
+  assign replay_req_request_seq_o = link.replay_req_request_seq;
+  assign replay_req_context_id_o = link.replay_req_context_id;
+  assign replay_req_generation_o = link.replay_req_generation;
+  assign replay_req_request_id_o = link.replay_req_request_id;
+  assign replay_req_replay_ref_o = link.replay_req_replay_ref;
+  assign replay_req_pass_index_o = link.replay_req_pass_index;
+  assign replay_req_offset_o = link.replay_req_offset;
+  assign replay_req_length_o = link.replay_req_length;
+  assign link.replay_rsp_valid = replay_rsp_valid_i;
+  assign replay_rsp_ready_o = link.replay_rsp_ready;
+  assign link.replay_rsp_owner_id = replay_rsp_owner_id_i;
+  assign link.replay_rsp_instance_id = replay_rsp_instance_id_i;
+  assign link.replay_rsp_epoch = replay_rsp_epoch_i;
+  assign link.replay_rsp_task_id = replay_rsp_task_id_i;
+  assign link.replay_rsp_request_seq = replay_rsp_request_seq_i;
+  assign link.replay_rsp_context_id = replay_rsp_context_id_i;
+  assign link.replay_rsp_generation = replay_rsp_generation_i;
+  assign link.replay_rsp_request_id = replay_rsp_request_id_i;
+  assign link.replay_rsp_replay_ref = replay_rsp_replay_ref_i;
+  assign link.replay_rsp_pass_index = replay_rsp_pass_index_i;
+  assign link.replay_rsp_offset = replay_rsp_offset_i;
+  assign link.replay_rsp_length = replay_rsp_length_i;
+  assign link.replay_rsp_status = replay_rsp_status_i;
 endmodule

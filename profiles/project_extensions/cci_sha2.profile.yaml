@@ -8,6 +8,7 @@ profile:
     sha2: required
     chacha_poly: forbidden
     rsa: forbidden
+    replay: forbidden
   parameter_constraints:
     DATA_W:
     - 32

@@ -33,6 +33,14 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
   logic [(1456)-1:0] cmd_segments;
   logic [(32)-1:0] cmd_initial_counter;
   logic [(1)-1:0] cmd_counter_present;
+  logic [(8)-1:0] cmd_rsa_scheme;
+  logic [(8)-1:0] cmd_rsa_hash_id;
+  logic [(8)-1:0] cmd_rsa_mgf_id;
+  logic [(16)-1:0] cmd_rsa_salt_len;
+  logic [(8)-1:0] cmd_rsa_input_form;
+  logic [(16)-1:0] cmd_rsa_modulus_bits;
+  logic [(8)-1:0] cmd_rsa_private_key_format;
+  logic [(64)-1:0] cmd_replay_ref;
   logic [(1)-1:0] din_valid;
   logic [(1)-1:0] din_ready;
   logic [(32)-1:0] din_owner_id;
@@ -46,6 +54,7 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
   logic [(DATA_W)-1:0] din_data;
   logic [(DATA_W/8)-1:0] din_keep;
   logic [(1)-1:0] din_last;
+  logic [(8)-1:0] din_pass_index;
   logic [(1)-1:0] dout_valid;
   logic [(1)-1:0] dout_ready;
   logic [(32)-1:0] dout_owner_id;
@@ -122,6 +131,35 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
   logic [(16)-1:0] cap_rsp_status;
   logic [(32)-1:0] cap_rsp_data;
   logic [(1)-1:0] cap_rsp_last;
+  logic [(1)-1:0] replay_req_valid;
+  logic [(1)-1:0] replay_req_ready;
+  logic [(32)-1:0] replay_req_owner_id;
+  logic [(16)-1:0] replay_req_instance_id;
+  logic [(32)-1:0] replay_req_epoch;
+  logic [(32)-1:0] replay_req_task_id;
+  logic [(64)-1:0] replay_req_request_seq;
+  logic [(16)-1:0] replay_req_context_id;
+  logic [(32)-1:0] replay_req_generation;
+  logic [(32)-1:0] replay_req_request_id;
+  logic [(64)-1:0] replay_req_replay_ref;
+  logic [(8)-1:0] replay_req_pass_index;
+  logic [(64)-1:0] replay_req_offset;
+  logic [(64)-1:0] replay_req_length;
+  logic [(1)-1:0] replay_rsp_valid;
+  logic [(1)-1:0] replay_rsp_ready;
+  logic [(32)-1:0] replay_rsp_owner_id;
+  logic [(16)-1:0] replay_rsp_instance_id;
+  logic [(32)-1:0] replay_rsp_epoch;
+  logic [(32)-1:0] replay_rsp_task_id;
+  logic [(64)-1:0] replay_rsp_request_seq;
+  logic [(16)-1:0] replay_rsp_context_id;
+  logic [(32)-1:0] replay_rsp_generation;
+  logic [(32)-1:0] replay_rsp_request_id;
+  logic [(64)-1:0] replay_rsp_replay_ref;
+  logic [(8)-1:0] replay_rsp_pass_index;
+  logic [(64)-1:0] replay_rsp_offset;
+  logic [(64)-1:0] replay_rsp_length;
+  logic [(16)-1:0] replay_rsp_status;
   modport client (
     input clk,
     input reset_n,
@@ -153,6 +191,14 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     output cmd_segments,
     output cmd_initial_counter,
     output cmd_counter_present,
+    output cmd_rsa_scheme,
+    output cmd_rsa_hash_id,
+    output cmd_rsa_mgf_id,
+    output cmd_rsa_salt_len,
+    output cmd_rsa_input_form,
+    output cmd_rsa_modulus_bits,
+    output cmd_rsa_private_key_format,
+    output cmd_replay_ref,
     output din_valid,
     input din_ready,
     output din_owner_id,
@@ -166,6 +212,7 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     output din_data,
     output din_keep,
     output din_last,
+    output din_pass_index,
     input dout_valid,
     output dout_ready,
     input dout_owner_id,
@@ -241,7 +288,36 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cap_rsp_word_index,
     input cap_rsp_status,
     input cap_rsp_data,
-    input cap_rsp_last
+    input cap_rsp_last,
+    input replay_req_valid,
+    output replay_req_ready,
+    input replay_req_owner_id,
+    input replay_req_instance_id,
+    input replay_req_epoch,
+    input replay_req_task_id,
+    input replay_req_request_seq,
+    input replay_req_context_id,
+    input replay_req_generation,
+    input replay_req_request_id,
+    input replay_req_replay_ref,
+    input replay_req_pass_index,
+    input replay_req_offset,
+    input replay_req_length,
+    output replay_rsp_valid,
+    input replay_rsp_ready,
+    output replay_rsp_owner_id,
+    output replay_rsp_instance_id,
+    output replay_rsp_epoch,
+    output replay_rsp_task_id,
+    output replay_rsp_request_seq,
+    output replay_rsp_context_id,
+    output replay_rsp_generation,
+    output replay_rsp_request_id,
+    output replay_rsp_replay_ref,
+    output replay_rsp_pass_index,
+    output replay_rsp_offset,
+    output replay_rsp_length,
+    output replay_rsp_status
   );
   modport component (
     input clk,
@@ -274,6 +350,14 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cmd_segments,
     input cmd_initial_counter,
     input cmd_counter_present,
+    input cmd_rsa_scheme,
+    input cmd_rsa_hash_id,
+    input cmd_rsa_mgf_id,
+    input cmd_rsa_salt_len,
+    input cmd_rsa_input_form,
+    input cmd_rsa_modulus_bits,
+    input cmd_rsa_private_key_format,
+    input cmd_replay_ref,
     input din_valid,
     output din_ready,
     input din_owner_id,
@@ -287,6 +371,7 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input din_data,
     input din_keep,
     input din_last,
+    input din_pass_index,
     output dout_valid,
     input dout_ready,
     output dout_owner_id,
@@ -362,7 +447,36 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     output cap_rsp_word_index,
     output cap_rsp_status,
     output cap_rsp_data,
-    output cap_rsp_last
+    output cap_rsp_last,
+    output replay_req_valid,
+    input replay_req_ready,
+    output replay_req_owner_id,
+    output replay_req_instance_id,
+    output replay_req_epoch,
+    output replay_req_task_id,
+    output replay_req_request_seq,
+    output replay_req_context_id,
+    output replay_req_generation,
+    output replay_req_request_id,
+    output replay_req_replay_ref,
+    output replay_req_pass_index,
+    output replay_req_offset,
+    output replay_req_length,
+    input replay_rsp_valid,
+    output replay_rsp_ready,
+    input replay_rsp_owner_id,
+    input replay_rsp_instance_id,
+    input replay_rsp_epoch,
+    input replay_rsp_task_id,
+    input replay_rsp_request_seq,
+    input replay_rsp_context_id,
+    input replay_rsp_generation,
+    input replay_rsp_request_id,
+    input replay_rsp_replay_ref,
+    input replay_rsp_pass_index,
+    input replay_rsp_offset,
+    input replay_rsp_length,
+    input replay_rsp_status
   );
   modport monitor (
     input clk,
@@ -395,6 +509,14 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cmd_segments,
     input cmd_initial_counter,
     input cmd_counter_present,
+    input cmd_rsa_scheme,
+    input cmd_rsa_hash_id,
+    input cmd_rsa_mgf_id,
+    input cmd_rsa_salt_len,
+    input cmd_rsa_input_form,
+    input cmd_rsa_modulus_bits,
+    input cmd_rsa_private_key_format,
+    input cmd_replay_ref,
     input din_valid,
     input din_ready,
     input din_owner_id,
@@ -408,6 +530,7 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input din_data,
     input din_keep,
     input din_last,
+    input din_pass_index,
     input dout_valid,
     input dout_ready,
     input dout_owner_id,
@@ -483,6 +606,35 @@ interface aix_cci_if #(parameter int unsigned DATA_W = 128)(
     input cap_rsp_word_index,
     input cap_rsp_status,
     input cap_rsp_data,
-    input cap_rsp_last
+    input cap_rsp_last,
+    input replay_req_valid,
+    input replay_req_ready,
+    input replay_req_owner_id,
+    input replay_req_instance_id,
+    input replay_req_epoch,
+    input replay_req_task_id,
+    input replay_req_request_seq,
+    input replay_req_context_id,
+    input replay_req_generation,
+    input replay_req_request_id,
+    input replay_req_replay_ref,
+    input replay_req_pass_index,
+    input replay_req_offset,
+    input replay_req_length,
+    input replay_rsp_valid,
+    input replay_rsp_ready,
+    input replay_rsp_owner_id,
+    input replay_rsp_instance_id,
+    input replay_rsp_epoch,
+    input replay_rsp_task_id,
+    input replay_rsp_request_seq,
+    input replay_rsp_context_id,
+    input replay_rsp_generation,
+    input replay_rsp_request_id,
+    input replay_rsp_replay_ref,
+    input replay_rsp_pass_index,
+    input replay_rsp_offset,
+    input replay_rsp_length,
+    input replay_rsp_status
   );
 endinterface : aix_cci_if

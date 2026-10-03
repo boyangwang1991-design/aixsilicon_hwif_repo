@@ -8,6 +8,7 @@ profile:
     sha2: forbidden
     chacha_poly: forbidden
     rsa: required
+    replay: forbidden
   parameter_constraints:
     DATA_W:
     - 32
@@ -16,4 +17,5 @@ profile:
     - 256
     - 512
   compatibility_class: cci_rsa_v0_2
-  description: RSA PSS、可选 PKCS1-v1_5 签名与 OAEP；v0.1.0 consumer scope 固定 CRT2 与 internal SHA-2；无实现资格声明
+  description: RSA PSS、可选 PKCS1-v1_5 签名与 OAEP；v0.1.0 consumer scope 固定 CRT2 与 internal
+    SHA-2；无实现资格声明
