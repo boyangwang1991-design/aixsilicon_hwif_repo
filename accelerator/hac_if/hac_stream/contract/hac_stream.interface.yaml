@@ -1,123 +1,122 @@
-# AIXSILICON HW Interface Contract — hac_stream
-# HAC-STREAM 流式数据接口（L6）。
-schema_version: "1.0"
-
+schema_version: '1.0'
 interface:
-  id: IFC-HAC-STRM-001
-  name: hac_stream
+  id: IFC-HAC_STRM-001
+  name: aix_hac_stream
   family: hac_stream
-  semantic_version: 0.1.0
+  semantic_version: 1.0.0
   owner: hw-platform
   lifecycle: draft
-
 protocol_reference:
   kind: internal
   document_id: AIX-HAC-IF-002
-  revision: "0.1"
-
+  revision: 1.0-draft
 roles:
-  - id: producer
-    aliases: [source]
-  - id: consumer
-    aliases: [sink]
-
+- id: producer
+- id: consumer
 parameters:
-  - id: DATA_W
-    type: uint
-    default: 128
-    constraints:
-      min: 8
-      multiple_of: 8
-  - id: ID_W
-    type: uint
-    default: 4
-    constraints:
-      min: 0
-  - id: USER_W
-    type: uint
-    default: 8
-    constraints:
-      min: 0
-
+- id: DATA_W
+  type: uint
+  default: 128
+  constraints:
+    min: 8
+    multiple_of: 8
+- id: ID_W
+  type: uint
+  default: 4
+  constraints:
+    min: 1
+- id: USER_W
+  type: uint
+  default: 8
+  constraints:
+    min: 1
 clock_domains:
-  - id: clk
-    edge: rising
-
+- id: clk
+  edge: rising
 reset_domains:
-  - id: rst_n
-    polarity: active_low
-    assertion: asynchronous
-    deassertion: synchronous
-    clock: clk
-
+- id: rst_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  output_during_reset: 发送方 valid/req/ack 复位为0；响应及载荷不得为X。复位终止任务由平台恢复记录结算。
+  can_interrupt_transactions: true
 channels:
+- id: data
+  handshake: ready_valid
+  clock: clk
+  reset: rst_n
+  ordering: in_order
+  signals:
+  - id: valid
+    from: producer
+    to: consumer
+    width: '1'
+    required: true
+  - id: ready
+    from: consumer
+    to: producer
+    width: '1'
+    required: true
   - id: data
-    handshake: ready_valid
-    clock: clk
-    reset: rst_n
-    ordering: in_order
-    signals:
-      - id: valid
-        from: producer
-        to: consumer
-        width: "1"
-        required: true
-      - id: ready
-        from: consumer
-        to: producer
-        width: "1"
-        required: true
-      - id: data
-        from: producer
-        to: consumer
-        width: "DATA_W"
-        required: true
-      - id: keep
-        from: producer
-        to: consumer
-        width: "DATA_W/8"
-        required: false
-        capability: keep
-      - id: last
-        from: producer
-        to: consumer
-        width: "1"
-        required: false
-        capability: last
-      - id: id
-        from: producer
-        to: consumer
-        width: "ID_W"
-        required: false
-        capability: id
-      - id: user
-        from: producer
-        to: consumer
-        width: "USER_W"
-        required: false
-        capability: user
-
-capabilities:
+    from: producer
+    to: consumer
+    width: DATA_W
+    required: true
   - id: keep
-    default: true
+    from: producer
+    to: consumer
+    width: DATA_W/8
+    required: false
+    capability: keep
+    default_tieoff: all_ones
   - id: last
-    default: true
+    from: producer
+    to: consumer
+    width: '1'
+    required: false
+    capability: last
+    default_tieoff: 0
   - id: id
-    default: false
+    from: producer
+    to: consumer
+    width: ID_W
+    required: false
+    capability: id
+    default_tieoff: 0
   - id: user
-    default: false
-
+    from: producer
+    to: consumer
+    width: USER_W
+    required: false
+    capability: user
+    default_tieoff: 0
+capabilities:
+- id: keep
+  default: true
+- id: last
+  default: true
+- id: id
+  default: false
+- id: user
+  default: false
 semantics:
-  handshake: "valid/ready same-cycle handshake"
-  backpressure: "valid and payload stable while valid=1 && ready=0"
-  keep_byte: "keep valid per byte; may be trimmed in non-packet mode"
-  last_boundary: "last marks frame/packet/tensor-tile/task data boundary"
-  id_stream: "id associates task, virtual channel or data stream"
-  user_documented: "user carries only protocol-defined sideband fields"
-  no_bidir: "independent input and output channels; no bidirectional single channel"
-
+  source: AIXSILICON HAC organization 1.0, 2026-10-04
+  handshake: valid && ready 同周期消费；valid置位不组合依赖ready；阻塞期间valid与全部载荷保持直到握手。
+  optional_driver: 可选字段启用时由from角色唯一驱动；关闭时由该发送方按default_tieoff驱动，接口视图不无条件绑死。
+  width_policy: 物理宽度参数至少1；关闭的逻辑字段在绑定层省略或常量驱动，不生成负索引向量。
+  axis_subset: data/keep/last/id/user分别映射TDATA/TKEEP/TLAST/TID/TUSER。基础无TSTRB位置字节、TDEST隐式路由或beat级任务交织。
+  keep: 每位对应一个有效Byte，关闭时按全有效处理。基础有效字节从低lane连续；尾拍保留完整元素，不允许零keep握手。
+  boundary: 每条边binding必须唯一指定frame/tile/packet及任务边界数量；last不能同时表示不同粒度。关闭last时binding给固定长度计数。
+  task: 首版每端口仅一个活动job，由Shell上下文关联；id可标识流，但不授权任务交织。
+  format: binding必须定义dtype/符号/精度/舍入/layout/shape/字节序/lane顺序/尾拍及多输入配对。
+  adaptation: 仅格式相同可直连；位宽转换保持元素/边界，转置/量化/广播为显式经过验证模块。
+  lifecycle: sink与输出容量先准备再启动source；route在任务中冻结。取消不单方撤回valid，受控排空/隔离后重同步。
+  unstallable: 不可暂停核须预留整个不可暂停区间容量或具有速率保证的binding；有限FIFO不能承受无限反压。
 views:
-  packed_struct: true
+  packed_struct: false
   sv_interface: true
-  flattened: true
+  flattened: false
   ipxact: optional
+  notes: 本版发布参数化SV interface/doc/IP-XACT；flat生成器目前为占位，不作为可用连接视图发布。可选信号保留物理线，由端点按binding驱动；旧固定宽度package不进入1.0
+    fileset。

@@ -1,61 +1,29 @@
-# HAC-IF — Hardware Accelerator Core Interface
+# HAC-IF — 1.0 draft
 
-> Hardware Accelerator Core Interface Specification & Ecosystem Plan（V0.1，2026-08-13）。
-> 定义一套面向硬件加速核的通用核侧接口 `HAC-IF`，隔离算法计算核心与 SoC 总线、存储、软件控制、时钟复位与安全机制的差异。
+本版对齐 [最终 HAC 组织方案](../../../aixsilicon_ip_repo/ips/accelerator/hac_organization.md)，定义 Compute Engine / Wrapper-Shell / Cluster 的统一执行边界。uDMA 为统一系统搬运服务；Streamer 只负责本地供数。旧 0.1 契约存在不兼容变化，本版 SemVer 为 `1.0.0`、生命周期保持 `draft`。
 
-## 设计目标
+- [总规格与集成规则](spec/hac_if_spec.md)
+- [0.1 → 1.0 迁移及影响](spec/migration_1.0.md)
+- [验证范围与复现](spec/validation_1.0.md)
+- [聚合 FuseSoC core](interface_hac_if.core)
 
-- **总线解耦**：HAC Core 不感知 AXI、CHI 或具体 NoC 协议；
-- **统一集成**：不同来源的计算核经 Wrapper 后使用一致的 Shell；
-- **按需裁剪**：小核无需承担复杂加速器的全部接口成本；
-- **高吞吐**：支持多 Outstanding、乱序响应、Burst 与流式背压；
-- **可验证**：每类接口有明确握手、不变量、超时与错误语义；
-- **可生成**：从 YAML / SystemRDL SSOT 生成 RTL、断言、文档与软件头文件。
-
-## 六大接口族
-
-| 接口族 | 定位 | 目录 |
-|---|---|---|
-| `HAC-CTRL` | 任务启动、接收、完成和取消 | [`hac_ctrl`](hac_ctrl/README.md:1) |
-| `HAC-STREAM` | 流式输入输出 | [`hac_stream`](hac_stream/README.md:1) |
-| `HAC-MEM` | 面向系统地址空间的访存请求/响应 | [`hac_mem`](hac_mem/README.md:1) |
-| `HAC-LMEM` | 本地 SRAM/Scratchpad 访问 | [`hac_lmem`](hac_lmem/README.md:1) |
-| `HAC-EVENT` | 完成、错误、性能及中断事件 | [`hac_event`](hac_event/README.md:1) |
-| `HAC-MGMT` | 复位、功耗、隔离、调试和生命周期 | [`hac_mgmt`](hac_mgmt/README.md:1) |
-
-## Profile
-
-| Profile | 必选接口 | 典型场景 | 推荐系统侧接口 |
+| 家族 | 统一职责 | Contract | 生成规格 |
 |---|---|---|---|
-| `HAC-P0 Control` | CTRL、EVENT | 随机数、校验、小型密码运算 | AXI4-Lite + IRQ |
-| `HAC-P1 Stream` | CTRL、STREAM、EVENT | 视频、音频、包处理、滤波 | AXI4-Lite + AXI4-Stream |
-| `HAC-P2 Memory` | CTRL、MEM、EVENT | GEMM、FFT、压缩、批处理 | AXI4-Lite + AXI4 Master |
-| `HAC-P3 Hybrid` | CTRL、MEM、STREAM、EVENT | AI/DSP 复杂加速器 | AXI4-Lite + AXI4 + AXIS |
-| `HAC-P4 Managed` | P3 + MGMT 增强能力 | 多租户、安全、复杂 SoC | NoC/AXI/一致性扩展 |
+| CTRL | 配置提交、启动、完成、取消 | [YAML](hac_ctrl/contract/hac_ctrl.interface.yaml) | [信号及语义](hac_ctrl/doc/aix_hac_ctrl_spec.md) |
+| STREAM | AXIS兼容子集，数据及边界 | [YAML](hac_stream/contract/hac_stream.interface.yaml) | [信号及语义](hac_stream/doc/aix_hac_stream_spec.md) |
+| MEM | 可选系统访存，读/写五通道 | [YAML](hac_mem/contract/hac_mem.interface.yaml) | [信号及语义](hac_mem/doc/aix_hac_mem_spec.md) |
+| LMEM | 本地存储请求与响应 | [YAML](hac_lmem/contract/hac_lmem.interface.yaml) | [信号及语义](hac_lmem/doc/aix_hac_lmem_spec.md) |
+| EVENT | 必要错误与可选完成镜像/统计 | [YAML](hac_event/contract/hac_event.interface.yaml) | [信号及语义](hac_event/doc/aix_hac_event_spec.md) |
+| MGMT | 排空、受控复位、可选隔离/门控 | [YAML](hac_mgmt/contract/hac_mgmt.interface.yaml) | [信号及语义](hac_mgmt/doc/aix_hac_mgmt_spec.md) |
 
-## 资产
+Contract YAML 是语义唯一真相源，profile 只冻结所属家族能力/参数，不复制信号。生成规格、SV interface、IP-XACT 为派生视图，由统一 HWIF 工具生成后逐字发布到本目录。当前 flat 生成器产物为占位，未列入支持视图；旧固定宽度 package / SVA 已 [归档](archive/0.1.0/README.md)，不参与 1.0 编译。
 
-| 资产 | 路径 |
-|---|---|
-| 协议规格 | [`spec/hac_if_spec.md`](spec/hac_if_spec.md:1) |
-| 配置 SSOT Schema | [`schema/hac_if.schema.json`](schema/hac_if.schema.json:1) |
-| 公共类型包 | [`rtl/hac_if_pkg.sv`](rtl/hac_if_pkg.sv:1) |
-| SVA 基线 | [`sva/hac_if_assertions.sv`](sva/hac_if_assertions.sv:1) |
-| FuseSoC 聚合 Core | [`interface_hac_if.core`](interface_hac_if.core:1) |
+在 workflow 根目录执行：
 
-## 验证归属
-
-- SVA/Protocol Checker、UVM Agent、Scoreboard、Coverage 归 `vip-repo`（`protocol/hac_if`）；
-- Adapter（AP/AXI/AXIS/SRAM）、Shell 组合实现归 `cbb-repo`（`adapters/hac_*` / `components/hac_*`）；
-- 具体 HAC（算法核、专用 Wrapper、Descriptor、IP 寄存器）归 `ip-repo`。
-
-## 依赖
-
-```text
-aixsilicon:interface:common:1.0.0
-aixsilicon:interface:ready_valid:1.0.0
-aixsilicon:interface:event:1.0.0
-aixsilicon:interface:reset:1.0.0
+```bash
+uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/sync_views.py
+uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/sync_views.py --check
+uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/check_contracts.py
 ```
 
-> 依赖方向单向：`IP Repo → CBB Repo → HWIF Repo`，验证依赖 `DV COMMON / VIP`。
+当前交付是契约与接口视图同步，不代表 Shell、Adapter、Checker、软件 ABI 或完整组合已资格验证。协议实现归 CBB/IP owner，协议验证组件归 VIP owner。

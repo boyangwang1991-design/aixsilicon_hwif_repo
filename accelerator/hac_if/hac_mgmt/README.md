@@ -1,45 +1,7 @@
-# HAC-MGMT — 管理接口
+# HAC-MGMT — 1.0 draft
 
-> 复位、功耗、隔离、调试和生命周期管理。推荐（P4 必选增强能力）。
+接口唯一语义源为 [Contract](contract/hac_mgmt.interface.yaml)，信号及语义全文见 [派生规格](doc/aix_hac_mgmt_spec.md)。
 
-## 资产
+可综合接口为 [SV view](rtl/aix_hac_mgmt_if.sv)，提供两个角色的 modport。可选线保留，由发送端按 binding 唯一驱动；关闭能力时使用契约 tieoff。修改 YAML 后在 workflow 根目录运行 `uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/sync_views.py`，禁止手改派生视图。
 
-| 资产 | 路径 |
-|---|---|
-| YAML Contract | [`contract/hac_mgmt.interface.yaml`](contract/hac_mgmt.interface.yaml:1) |
-| SV Package | [`rtl/hac_mgmt_pkg.sv`](rtl/hac_mgmt_pkg.sv:1) |
-| SV Interface | [`rtl/hac_mgmt_if.sv`](rtl/hac_mgmt_if.sv:1) |
-| FuseSoC Core | [`interface_hac_mgmt.core`](interface_hac_mgmt.core:1) |
-
-## 复位与生命周期
-
-- `reset_req/reset_ack`：受控软复位；
-- `drain_req/drain_ack`：停止接收新任务并排空；
-- `quiescent`：可安全关钟/断电；
-- `isolate_req/isolate_ack`：隔离握手；
-- `fatal_state`：需要系统级恢复。
-
-软复位流程：`Power/Reset Manager` → `drain_req` → HAC Shell 停止接收任务 → HAC Core 返回 `quiescent` → `drain_ack` → `reset_req` → `reset_ack`。
-
-## 低功耗
-
-至少支持：
-
-- 空闲指示；
-- 可关钟指示；
-- Retention 能力声明；
-- 进入低功耗前事务排空；
-- 唤醒源声明；
-- 断电域跨越时的隔离要求。
-
-## 调试与性能
-
-统一预留：
-
-- 周期数、忙周期、停顿周期；
-- 读写 Byte 数；
-- 平均/峰值 Outstanding；
-- Stream 背压周期；
-- Cache/SRAM 等待周期；
-- 任务计数和失败计数；
-- 可选 Trace Event 输出。
+组合 profile、系统侧 binding 约束、版本迁移和验证边界见 [总规格](../spec/hac_if_spec.md)。旧 0.1 视图已归档，不在 1.0 fileset 中。

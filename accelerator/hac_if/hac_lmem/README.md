@@ -1,33 +1,7 @@
-# HAC-LMEM — 本地存储接口
+# HAC-LMEM — 1.0 draft
 
-> 面向 HAC 本地 Scratchpad SRAM、Weight/Activation Buffer、Line Buffer、多 Bank 共享存储及外置 ECC SRAM Wrapper 的访问接口。可选。
+接口唯一语义源为 [Contract](contract/hac_lmem.interface.yaml)，信号及语义全文见 [派生规格](doc/aix_hac_lmem_spec.md)。
 
-## 资产
+可综合接口为 [SV view](rtl/aix_hac_lmem_if.sv)，提供两个角色的 modport。可选线保留，由发送端按 binding 唯一驱动；关闭能力时使用契约 tieoff。修改 YAML 后在 workflow 根目录运行 `uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/sync_views.py`，禁止手改派生视图。
 
-| 资产 | 路径 |
-|---|---|
-| YAML Contract | [`contract/hac_lmem.interface.yaml`](contract/hac_lmem.interface.yaml:1) |
-| SV Package | [`rtl/hac_lmem_pkg.sv`](rtl/hac_lmem_pkg.sv:1) |
-| SV Interface | [`rtl/hac_lmem_if.sv`](rtl/hac_lmem_if.sv:1) |
-| FuseSoC Core | [`interface_hac_lmem.core`](interface_hac_lmem.core:1) |
-
-## 推荐字段
-
-- `req_valid/req_ready`；
-- `write`；
-- `bank`；
-- `addr`；
-- `wdata/wstrb`；
-- `rsp_valid/rsp_ready/rdata`；
-- `ecc_corrected/ecc_uncorrectable`；
-- `tag`（用于非固定延迟存储）；
-- `sleep/retention`（仅在 Memory Wrapper 侧出现）。
-
-## 两类 Profile
-
-| Profile | 说明 |
-|---|---|
-| `LMEM-FIXED` | 固定 1 或 2 周期返回，紧耦合单 Bank SRAM |
-| `LMEM-DECOUPLED` | 请求/响应解耦，仲裁、多 Bank、可变延迟存储 |
-
-> HAC Core 原则上不直接绑定 Foundry Macro 端口，由 `LMEM Adapter`（CBB Repo）完成 Macro 适配、ECC 与修复控制。
+组合 profile、系统侧 binding 约束、版本迁移和验证边界见 [总规格](../spec/hac_if_spec.md)。旧 0.1 视图已归档，不在 1.0 fileset 中。

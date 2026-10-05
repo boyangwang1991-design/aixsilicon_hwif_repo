@@ -1,33 +1,7 @@
-# HAC-STREAM — 流式数据接口
+# HAC-STREAM — 1.0 draft
 
-> 高吞吐流式输入输出，支持独立输入和输出通道，按 Profile 可选（P1/P3）。
+接口唯一语义源为 [Contract](contract/hac_stream.interface.yaml)，信号及语义全文见 [派生规格](doc/aix_hac_stream_spec.md)。
 
-## 资产
+可综合接口为 [SV view](rtl/aix_hac_stream_if.sv)，提供两个角色的 modport。可选线保留，由发送端按 binding 唯一驱动；关闭能力时使用契约 tieoff。修改 YAML 后在 workflow 根目录运行 `uv run python repos/aixsilicon_hwif_repo/accelerator/hac_if/scripts/sync_views.py`，禁止手改派生视图。
 
-| 资产 | 路径 |
-|---|---|
-| YAML Contract | [`contract/hac_stream.interface.yaml`](contract/hac_stream.interface.yaml:1) |
-| SV Package | [`rtl/hac_stream_pkg.sv`](rtl/hac_stream_pkg.sv:1) |
-| SV Interface | [`rtl/hac_stream_if.sv`](rtl/hac_stream_if.sv:1) |
-| FuseSoC Core | [`interface_hac_stream.core`](interface_hac_stream.core:1) |
-
-## 基线信号
-
-- `valid/ready/data/keep/last/id/user`
-
-## 语义要点
-
-- 标准 `valid/ready` 同周期握手；
-- 被背压时 `valid` 及 Payload 保持稳定；
-- `keep` 按 Byte 有效，非包模式可裁剪；
-- `last` 标识帧、包、Tensor Tile 或任务数据边界；
-- `id` 可关联任务、Virtual Channel 或数据流；
-- `user` 只承载协议已定义的旁带字段，禁止无文档私用；
-- 支持独立输入和输出通道，不定义双向单通道；
-- 不要求与 AXI4-Stream 信号名称相同，但基础语义应可直接映射。
-
-## 推荐扩展
-
-- Packet 模式；Fixed-frame 模式；
-- Tensor 元数据扩展（shape、dtype、tile index）；
-- Credit-based Adapter；多虚通道；CRC/Parity 旁带状态。
+组合 profile、系统侧 binding 约束、版本迁移和验证边界见 [总规格](../spec/hac_if_spec.md)。旧 0.1 视图已归档，不在 1.0 fileset 中。

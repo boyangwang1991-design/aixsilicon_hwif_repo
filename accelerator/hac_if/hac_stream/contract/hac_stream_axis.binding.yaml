@@ -1,0 +1,41 @@
+binding:
+  interface: aixsilicon:interface:hac_stream:1.0.0
+  target: AMBA-AXI4-Stream-contiguous-byte-subset
+  kind: docs
+  role_map:
+    producer: transmitter
+    consumer: receiver
+  signal_map:
+  - contract_signal: valid
+    target_signal: TVALID
+    role: producer
+    direction: output
+  - contract_signal: ready
+    target_signal: TREADY
+    role: producer
+    direction: input
+  - contract_signal: data
+    target_signal: TDATA
+    role: producer
+    direction: output
+  - contract_signal: keep
+    target_signal: TKEEP
+    role: producer
+    direction: output
+  - contract_signal: last
+    target_signal: TLAST
+    role: producer
+    direction: output
+  - contract_signal: id
+    target_signal: TID
+    role: producer
+    direction: output
+  - contract_signal: user
+    target_signal: TUSER
+    role: producer
+    direction: output
+  parameters:
+    DATA_W: TDATA width; positive multiple of 8
+    ID_W: physical TID width >=1; optional capability
+    USER_W: physical TUSER width >=1; algorithm binding defines meaning
+  description: 静态pin语义映射，不提供adapter RTL。仅连续低Byte keep、完整元素、约定last边界、无TSTRB/TDEST/任务交织子集可以直连；时钟/复位对应ACLK/ARESETn，具体位宽/能力/格式见实例binding。

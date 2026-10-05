@@ -1,0 +1,29 @@
+CAPI=2:
+
+name: aixsilicon:interface:hac_lmem:0.1.0
+description: AIXSILICON HAC-LMEM local storage interface contract and views
+
+filesets:
+  rtl:
+    depend:
+      - aixsilicon:interface:common:1.0.0
+      - aixsilicon:interface:hac_if:0.1.0
+    files:
+      - rtl/hac_lmem_pkg.sv
+      - rtl/hac_lmem_if.sv
+    file_type: systemVerilogSource
+
+  contract:
+    files:
+      - contract/hac_lmem.interface.yaml: {copyto: metadata/hac_lmem.interface.yaml}
+    file_type: user
+
+targets:
+  default:
+    filesets: [rtl]
+
+  contract:
+    filesets: [contract]
+
+  lint:
+    filesets: [rtl]

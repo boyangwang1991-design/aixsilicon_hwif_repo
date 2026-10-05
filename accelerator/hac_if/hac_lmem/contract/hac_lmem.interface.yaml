@@ -1,166 +1,182 @@
-# AIXSILICON HW Interface Contract — hac_lmem
-# HAC-LMEM 本地存储接口（L6）。
-schema_version: "1.0"
-
+schema_version: '1.0'
 interface:
-  id: IFC-HAC-LMEM-001
-  name: hac_lmem
+  id: IFC-HAC_LMEM-001
+  name: aix_hac_lmem
   family: hac_lmem
-  semantic_version: 0.1.0
+  semantic_version: 1.0.0
   owner: hw-platform
   lifecycle: draft
-
 protocol_reference:
   kind: internal
   document_id: AIX-HAC-IF-004
-  revision: "0.1"
-
+  revision: 1.0-draft
 roles:
-  - id: core
-    aliases: [initiator]
-  - id: lmem
-    aliases: [target, sram_wrapper]
-
+- id: core
+- id: lmem
 parameters:
-  - id: DATA_W
-    type: uint
-    default: 64
-    constraints:
-      min: 8
-      multiple_of: 8
-  - id: ADDR_W
-    type: uint
-    default: 16
-    constraints:
-      min: 1
-  - id: BANK_W
-    type: uint
-    default: 0
-    constraints:
-      min: 0
-  - id: TAG_W
-    type: uint
-    default: 4
-    constraints:
-      min: 0
-
+- id: DATA_W
+  type: uint
+  default: 64
+  constraints:
+    min: 8
+    multiple_of: 8
+- id: ADDR_W
+  type: uint
+  default: 16
+  constraints:
+    min: 1
+- id: BANK_W
+  type: uint
+  default: 1
+  constraints:
+    min: 1
+- id: TAG_W
+  type: uint
+  default: 4
+  constraints:
+    min: 1
+- id: MAX_OUTSTANDING
+  type: uint
+  default: 1
+  constraints:
+    min: 1
+- id: READ_LATENCY
+  type: uint
+  default: 1
+  constraints:
+    min: 1
+    max: 2
 clock_domains:
-  - id: clk
-    edge: rising
-
+- id: clk
+  edge: rising
 reset_domains:
-  - id: rst_n
-    polarity: active_low
-    assertion: asynchronous
-    deassertion: synchronous
-    clock: clk
-
+- id: rst_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  output_during_reset: 发送方 valid/req/ack 复位为0；响应及载荷不得为X。复位终止任务由平台恢复记录结算。
+  can_interrupt_transactions: true
 channels:
-  - id: req
-    handshake: ready_valid
-    clock: clk
-    reset: rst_n
-    ordering: in_order
-    signals:
-      - id: req_valid
-        from: core
-        to: lmem
-        width: "1"
-        required: true
-      - id: req_ready
-        from: lmem
-        to: core
-        width: "1"
-        required: true
-      - id: write
-        from: core
-        to: lmem
-        width: "1"
-        required: true
-      - id: bank
-        from: core
-        to: lmem
-        width: "BANK_W"
-        required: false
-        capability: multi_bank
-      - id: addr
-        from: core
-        to: lmem
-        width: "ADDR_W"
-        required: true
-      - id: wdata
-        from: core
-        to: lmem
-        width: "DATA_W"
-        required: true
-      - id: wstrb
-        from: core
-        to: lmem
-        width: "DATA_W/8"
-        required: true
-      - id: tag
-        from: core
-        to: lmem
-        width: "TAG_W"
-        required: false
-        capability: decoupled
-
-  - id: rsp
-    handshake: ready_valid
-    clock: clk
-    reset: rst_n
-    ordering: per_tag
-    signals:
-      - id: rsp_valid
-        from: lmem
-        to: core
-        width: "1"
-        required: true
-      - id: rsp_ready
-        from: core
-        to: lmem
-        width: "1"
-        required: true
-      - id: rdata
-        from: lmem
-        to: core
-        width: "DATA_W"
-        required: true
-      - id: tag
-        from: lmem
-        to: core
-        width: "TAG_W"
-        required: false
-        capability: decoupled
-      - id: ecc_corrected
-        from: lmem
-        to: core
-        width: "1"
-        required: false
-        capability: ecc
-      - id: ecc_uncorrectable
-        from: lmem
-        to: core
-        width: "1"
-        required: false
-        capability: ecc
-
+- id: req
+  handshake: ready_valid
+  clock: clk
+  reset: rst_n
+  ordering: in_order
+  signals:
+  - id: req_valid
+    from: core
+    to: lmem
+    width: '1'
+    required: true
+  - id: req_ready
+    from: lmem
+    to: core
+    width: '1'
+    required: true
+  - id: write
+    from: core
+    to: lmem
+    width: '1'
+    required: true
+  - id: bank
+    from: core
+    to: lmem
+    width: BANK_W
+    required: false
+    capability: multi_bank
+    default_tieoff: 0
+  - id: addr
+    from: core
+    to: lmem
+    width: ADDR_W
+    required: true
+  - id: wdata
+    from: core
+    to: lmem
+    width: DATA_W
+    required: true
+  - id: wstrb
+    from: core
+    to: lmem
+    width: DATA_W/8
+    required: true
+  - id: req_tag
+    from: core
+    to: lmem
+    width: TAG_W
+    required: false
+    capability: decoupled
+    default_tieoff: 0
+- id: rsp
+  handshake: ready_valid
+  clock: clk
+  reset: rst_n
+  ordering: in_order
+  signals:
+  - id: rsp_valid
+    from: lmem
+    to: core
+    width: '1'
+    required: true
+  - id: rsp_ready
+    from: core
+    to: lmem
+    width: '1'
+    required: true
+  - id: rdata
+    from: lmem
+    to: core
+    width: DATA_W
+    required: true
+  - id: rsp_status
+    from: lmem
+    to: core
+    width: '4'
+    required: true
+  - id: rsp_tag
+    from: lmem
+    to: core
+    width: TAG_W
+    required: false
+    capability: decoupled
+    default_tieoff: 0
+  - id: ecc_corrected
+    from: lmem
+    to: core
+    width: '1'
+    required: false
+    capability: ecc
+    default_tieoff: 0
+  - id: ecc_uncorrectable
+    from: lmem
+    to: core
+    width: '1'
+    required: false
+    capability: ecc
+    default_tieoff: 0
 capabilities:
-  - id: multi_bank
-    default: false
-  - id: decoupled
-    default: false
-  - id: ecc
-    default: false
-
+- id: multi_bank
+  default: false
+- id: decoupled
+  default: false
+- id: ecc
+  default: false
 semantics:
-  fixed_profile: "LMEM-FIXED returns in fixed 1 or 2 cycles, tightly coupled single-bank SRAM"
-  decoupled_profile: "LMEM-DECOUPLED decouples request/response for arbitration, multi-bank, variable latency"
-  no_macro_binding: "HAC Core must not bind Foundry macro ports directly; LMEM Adapter handles macro adaptation/ECC/repair"
-  sleep_retention_wrapper: "sleep/retention appear only on the Memory Wrapper side"
-
+  source: AIXSILICON HAC organization 1.0, 2026-10-04
+  handshake: valid && ready 同周期消费；valid置位不组合依赖ready；阻塞期间valid与全部载荷保持直到握手。
+  optional_driver: 可选字段启用时由from角色唯一驱动；关闭时由该发送方按default_tieoff驱动，接口视图不无条件绑死。
+  width_policy: 物理宽度参数至少1；关闭的逻辑字段在绑定层省略或常量驱动，不生成负索引向量。
+  address: addr为bank内Byte偏移；请求按DATA_W/8对齐，write=1写/0读，wstrb为有效Byte。读wdata/wstrb为0。范围与bank合法性由binding明确。
+  completion: 读和写每次req握手都有一次rsp；写rsp表示本地副作用及错误已确定，rdata在写rsp无语义为0。status编码同MEM，0成功。
+  fixed: decoupled=false，MAX_OUTSTANDING=1；请求后READ_LATENCY周期产生rsp_valid，背压时响应保持。接收请求前预留响应存储，不把无ready宏响应直接接过来。
+  decoupled: decoupled=true，可变延迟，响应按请求顺序；每个req_tag在rsp消费前唯一。MAX_OUTSTANDING限制未消费响应数。
+  ecc: ecc_corrected为已纠正提示；uncorrectable必须伴随非0rsp_status且数据不可消费。两者不得同时置1。
+  macro: Core不绑定foundry宏；宏延迟/ECC/retention由Memory Wrapper映射，未完成访问计入排空。
 views:
-  packed_struct: true
+  packed_struct: false
   sv_interface: true
-  flattened: true
+  flattened: false
   ipxact: optional
+  notes: 本版发布参数化SV interface/doc/IP-XACT；flat生成器目前为占位，不作为可用连接视图发布。可选信号保留物理线，由端点按binding驱动；旧固定宽度package不进入1.0
+    fileset。
