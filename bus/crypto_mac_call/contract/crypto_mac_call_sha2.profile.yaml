@@ -1,0 +1,16 @@
+profile:
+  id: IFC-PROFILE-CRYPTO-MAC-CALL-SHA2-0-1
+  interface: IFC-CRYPTO_MAC_CALL-001
+  version: 0.1.0
+  owner: security-crypto
+  lifecycle: draft
+  capabilities: {}
+  parameter_constraints:
+    DATA_W:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+  compatibility_class: crypto_mac_call_sha2_v0_1
+  description: 可信HMAC/KDF child预留、执行、公开参数和受保护结果；不宣称RTL资格

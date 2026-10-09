@@ -1,0 +1,15 @@
+{
+  "generator_sha256": "9df107c5e50a52c2c3a778527e096636645d7f48a516e6c17998f84538cfc2fc",
+  "inputs": {
+    "contract/crypto_mac_call.interface.yaml": "1e0ce56aa7489d2298eb74ce22857e4e8294460f75c057abbc5400986cd93d0f",
+    "contract/crypto_mac_call_sha2.profile.yaml": "319a46e01445147989496d8fce3a2af75bacef66347b5e1dea0762604e49194e"
+  },
+  "outputs": {
+    "doc/aix_crypto_mac_call_interface.md": "abba9e5872b45d136b0d1e0e170b51681260d20e41a9ff5fe5ea2e65bc9753d2",
+    "interface_crypto_mac_call.core": "a817b59dbdf618e646986e1f339fc575e41f224a1a0d721d91d6a1a6ca44b40b",
+    "rtl/aix_crypto_mac_call_flat_wrapper.sv": "6630a2e7337026fb3b562d2d737f4d9851612b6f9c21ae9c3ec139d822dea818",
+    "rtl/aix_crypto_mac_call_if.sv": "d612bb1559a7eea9dfbd96f6bdac40028f8eba6b04416910c9617a4ca697bb57",
+    "rtl/aix_crypto_mac_call_pkg.sv": "95c0722fbe98c7861767575f63b98e7c2389c91f32ef3e3cfc26a90555501279"
+  },
+  "schema": "hwif-implementation/1.0"
+}

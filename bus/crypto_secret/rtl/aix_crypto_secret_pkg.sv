@@ -22,6 +22,8 @@ package aix_crypto_secret_pkg;
   localparam int unsigned USE_WRAP = 5;
   localparam int unsigned USE_UNWRAP = 6;
   localparam int unsigned USE_HP = 7;
+  localparam int unsigned USE_SIGN = 8;
+  localparam int unsigned USE_VERIFY = 9;
   localparam int unsigned OBJECT_STATE_NONE = 0;
   localparam int unsigned OBJECT_STATE_PREPARED = 1;
   localparam int unsigned OBJECT_STATE_WRITTEN = 2;

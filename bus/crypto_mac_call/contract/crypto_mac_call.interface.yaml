@@ -1,0 +1,579 @@
+schema_version: '1.0'
+interface:
+  id: IFC-CRYPTO_MAC_CALL-001
+  name: aix_crypto_mac_call
+  family: crypto_mac_call
+  semantic_version: 0.1.0
+  owner: security-crypto
+  lifecycle: draft
+protocol_reference:
+  kind: internal
+  document_id: CRYPTO-MAC-CALL-0.1/CCS-03
+  revision: '0.1'
+  note: 可信KDF/HMAC child调用；规格见bus/crypto_mac_call/README.md；不是普通CCI。
+roles:
+- id: caller
+- id: callee
+parameters:
+- id: DATA_W
+  type: uint
+  default: 128
+  constraints:
+    enum:
+    - 32
+    - 64
+    - 128
+    - 256
+    - 512
+clock_domains:
+- id: clk
+  edge: rising
+reset_domains:
+- id: reset_n
+  polarity: active_low
+  assertion: asynchronous
+  deassertion: synchronous
+  clock: clk
+  can_interrupt_transactions: true
+  output_during_reset: 所有valid=0；无伪completion；恢复前换epoch并完成隔离/清除。
+channels:
+- id: req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: req_valid
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+  - id: req_ready
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: req_owner_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_instance_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: req_epoch
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_task_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_request_seq
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: req_context_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: req_generation
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_invocation_id
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: req_action
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: req_lease_token
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: req_algorithm
+    from: caller
+    to: callee
+    width: '3'
+    required: true
+  - id: req_operation
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: req_template
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: req_policy_epoch
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_key_source
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: req_key_ref
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: req_key_epoch
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_key_length
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_tag_length
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: req_part_count
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: req_message_parts
+    from: caller
+    to: callee
+    width: '696'
+    required: true
+  - id: req_iteration
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: req_result_sink_ref
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+- id: rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: rsp_valid
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: rsp_ready
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+  - id: rsp_owner_id
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: rsp_instance_id
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: rsp_epoch
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: rsp_task_id
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: rsp_request_seq
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_context_id
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: rsp_generation
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: rsp_invocation_id
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_action
+    from: callee
+    to: caller
+    width: '8'
+    required: true
+  - id: rsp_lease_token
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_status
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: rsp_auth_valid
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: rsp_auth_ok
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: rsp_result_ref
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_result_epoch
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: rsp_result_bytes
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_consumed_public
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_consumed_secret
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_produced
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: rsp_cleanup_done
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: rsp_object_state
+    from: callee
+    to: caller
+    width: '8'
+    required: true
+- id: public_data
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: public_data_valid
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+  - id: public_data_ready
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: public_data_owner_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: public_data_instance_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: public_data_epoch
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: public_data_task_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: public_data_request_seq
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: public_data_context_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: public_data_generation
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: public_data_invocation_id
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: public_data_lease_token
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: public_data_source
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: public_data_offset
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: public_data_data
+    from: caller
+    to: callee
+    width: DATA_W
+    required: true
+  - id: public_data_keep
+    from: caller
+    to: callee
+    width: DATA_W/8
+    required: true
+  - id: public_data_last
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+- id: control_req
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: control_req_valid
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+  - id: control_req_ready
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: control_req_owner_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: control_req_instance_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: control_req_epoch
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: control_req_task_id
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: control_req_request_seq
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: control_req_context_id
+    from: caller
+    to: callee
+    width: '16'
+    required: true
+  - id: control_req_generation
+    from: caller
+    to: callee
+    width: '32'
+    required: true
+  - id: control_req_invocation_id
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: control_req_lease_token
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+  - id: control_req_action
+    from: caller
+    to: callee
+    width: '8'
+    required: true
+  - id: control_req_control_id
+    from: caller
+    to: callee
+    width: '64'
+    required: true
+- id: control_rsp
+  handshake: ready_valid
+  clock: clk
+  reset: reset_n
+  ordering: in_order
+  signals:
+  - id: control_rsp_valid
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: control_rsp_ready
+    from: caller
+    to: callee
+    width: '1'
+    required: true
+  - id: control_rsp_owner_id
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: control_rsp_instance_id
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: control_rsp_epoch
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: control_rsp_task_id
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: control_rsp_request_seq
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: control_rsp_context_id
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: control_rsp_generation
+    from: callee
+    to: caller
+    width: '32'
+    required: true
+  - id: control_rsp_invocation_id
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: control_rsp_lease_token
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: control_rsp_control_id
+    from: callee
+    to: caller
+    width: '64'
+    required: true
+  - id: control_rsp_status
+    from: callee
+    to: caller
+    width: '16'
+    required: true
+  - id: control_rsp_committed
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: control_rsp_cleanup_done
+    from: callee
+    to: caller
+    width: '1'
+    required: true
+  - id: control_rsp_object_state
+    from: callee
+    to: caller
+    width: '8'
+    required: true
+capabilities: []
+semantics:
+  transfer: valid && ready；停顿中保持valid/payload，取消经drain或双端reset，不单边撤回。
+  namespace: 父owner/instance/epoch/task/request_seq/context/generation完整保留；invocation_id独立64-bit；physical
+    MAC bank/CORE tag独立于父context。
+  admission: RESERVE先冻结参数并预留child/响应/服务credit，caller取得lease后才能提交父任务；EXECUTE仅身份/调用ID/lease/action非零，不能TOCTOU改参数。
+  actions:
+  - 0=RESERVE
+  - 1=EXECUTE
+  - 2=RELEASE
+  - 3=CANCEL
+  - 4=QUERY
+  templates:
+  - '0=PROTECTED_HMAC: REF key及一项SECRET消息，支持GEN/VERIFY'
+  - '1=HKDF_EXTRACT: PUBLIC_PARAMETER key及一项SECRET IKM，GEN only'
+  - '2=HKDF_EXPAND: REF PRK，T_prev(若iteration>1)/PUBLIC info/COUNTER，GEN only'
+  key_sources:
+  - '0=REF: key_ref!=0，key_length精确完整长度，普通MAC最少16 B'
+  - '1=PUBLIC_PARAMETER: 仅EXTRACT；key_ref/key_epoch=0，key_length可0或短，禁止普通软件直达'
+  parts_layout: 每part232 bits，低part先；bit[7:0]=kind，[71:8]=object_ref，[103:72]=object_epoch，[167:104]=offset，[231:168]=length。三项上限，未用项0。
+  part_kinds:
+  - '1=PUBLIC: ref/epoch/offset=0，数据来自公开info通道'
+  - '2=SECRET: ref!=0，逐range/epoch/use检查，仅provider READ'
+  - '3=COUNTER: 仅EXPAND尾项，length=1，其余字段0；byte由iteration内部产生'
+  public_sources:
+  - 1=SALT，精确key_length且仅EXTRACT
+  - 2=INFO，精确PUBLIC part长度且仅EXPAND
+  - 3=EXPECTED_TAG，精确tag_length且仅PROTECTED_HMAC VERIFY
+  public_data: 低lane先，非末拍keep全1，末拍从低lane连续，last恰为声明长度；长度0不发beat，外国tuple丢弃。
+  authorization: 端点仅连接可信KDF/组件，不接软件descriptor；固定template限制秘密执行图。普通use=MAC；KDF use=DERIVE，逐provider角色、policy/key/object
+    epoch及父授权校验；公开salt不能冒充key对象。
+  result: GEN仅private sink PREPARE/WRITE/COMMIT；ACTIVE后返回ref/epoch/长度，不返回data。VERIFY先USAGE_RESERVE，不退款、固定声明长度比较、无Tag出口。
+  cancel: 独立control credit；提交确认后TOO_LATE与原成功终态分开，ACK丢失QUERY同一事务，UNKNOWN隔离且禁止重算。
+  cleanup: 终结rsp cleanup_done依赖所有task/cache/staging/egress bank实际清除或协同reset；RESERVE确认不表示算法终结。
+  service_ids: provider physical request_id由内部独立nonce分配，保留caller完整invocation_id；结果事务PREPARE/WRITE/COMMIT/QUERY共用同一transaction
+    ID。
+  version: 0.1.0 draft；命名SHA2 profile才允许装配；接口生成不构成实现资格。
+compatibility:
+  api_major: 0
+  description: 与CCI及crypto_secret provider-client分离，不替换既有端口。
+views:
+  packed_struct: true
+  sv_interface: true
+  flattened: true
+  ipxact: optional
